@@ -3,7 +3,7 @@
 		"Team-id": 1,
 		"Axie-01": {
 			"Axie-id": 1,
-			"Type": "Plant",
+			"Type": "plant",
 			"Health": 61,
 			"Speed": 31,
 			"Skill": 31,
@@ -15,7 +15,7 @@
 		},
 		"Axie-02": {
 			"Axie-id": 2,
-			"Type": "Plant",
+			"Type": "plant",
 			"Health": 61,
 			"Speed": 31,
 			"Skill": 31,
@@ -30,7 +30,7 @@
 		"Team-id": 2,
 		"Axie-01": {
 			"Axie-id": 3,
-			"Type": "Plant",
+			"Type": "plant",
 			"Health": 56,
 			"Speed": 33,
 			"Skill": 31,
@@ -42,7 +42,7 @@
 		},
 		"Axie-02": {
 			"Axie-id": 4,
-			"Type": "Aqua",
+			"Type": "aqua",
 			"Health": 44,
 			"Speed": 52,
 			"Skill": 35,
@@ -57,7 +57,100 @@
 		"Team-id": 3,
 		"Axie-01": {
 			"Axie-id": 5,
-			"Type": "",
+			"Type": "plant",
+			"Health": 56,
+			"Speed": 32,
+			"Skill": 31,
+			"Morale": 43,
+			"Cards": [
+				"goda",
+				"beech"
+			]
+		},
+		"Axie-02": {
+			"Axie-id": 6,
+			"Type": "beast",
+			"Health": 35,
+			"Speed": 39,
+			"Skill": 31,
+			"Morale": 59,
+			"Cards": [
+				"confident",
+				"dual blade"
+			]
+		}
+	},
+	"Team-04": {
+		"Team-id": 4,
+		"Axie-01": {
+			"Axie-id": 7,
+			"Type": "aqua",
+			"Health": 44,
+			"Speed": 52,
+			"Skill": 35,
+			"Morale": 33,
+			"Cards": [
+				"piranha",
+				"arco"
+			]
+		},
+		"Axie-02": {
+			"Axie-id": 8,
+			"Type": "plant",
+			"Health": 56,
+			"Speed": 33,
+			"Skill": 31,
+			"Morale": 44,
+			"Cards": [
+				"goda",
+				"beech"
+			]
+		}
+	},
+	"Team-05": {
+		"Team-id": 5,
+		"Axie-01": {
+			"Axie-id": 9,
+			"Type": "plant",
+			"Health": 55,
+			"Speed": 34,
+			"Skill": 31,
+			"Morale": 44,
+			"Cards": [
+				"goda",
+				"beech"
+			]
+		},
+		"Axie-02": {
+			"Axie-id": 10,
+			"Type": "plant",
+			"Health": 55,
+			"Speed": 35,
+			"Skill": 31,
+			"Morale": 45,
+			"Cards": [
+				"goda",
+				"beech"
+			]
+		}
+	},
+	"Team-06": {
+		"Team-id": 6,
+		"Axie-01": {
+			"Axie-id": 11,
+			"Type": "plant",
+			"Health": 56,
+			"Speed": 32,
+			"Skill": 31,
+			"Morale": 45,
+			"Cards": [
+				"goda",
+				"beech"
+			]
+		},
+		"Axie-02": {
+			"Axie-id": 12,
+			"Type": "aqua",
 			"Health": 43,
 			"Speed": 52,
 			"Skill": 35,
@@ -66,10 +159,25 @@
 				"piranha",
 				"arco"
 			]
+		}
+	},
+	"Team-07": {
+		"Team-id": 7,
+		"Axie-01": {
+			"Axie-id": 13,
+			"Type": "plant",
+			"Health": 61,
+			"Speed": 31,
+			"Skill": 31,
+			"Morale": 41,
+			"Cards": [
+				"zigzag",
+				"cactus"
+			]
 		},
 		"Axie-02": {
-			"Axie-id": 6,
-			"Type": "",
+			"Axie-id": 14,
+			"Type": "plant",
 			"Health": 56,
 			"Speed": 32,
 			"Skill": 31,
@@ -80,138 +188,30 @@
 			]
 		}
 	},
-	"Team-04": {
-		"Team-id": 4,
-		"Axie-01": {
-			"Axie-id": 7,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
-			"Cards": [
-				"card_1",
-				"card_2"
-			]
-		},
-		"Axie-02": {
-			"Axie-id": 8,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
-			"Cards": [
-				"card_1",
-				"card_2"
-			]
-		}
-	},
-	"Team-05": {
-		"Team-id": 5,
-		"Axie-01": {
-			"Axie-id": 9,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
-			"Cards": [
-				"card_1",
-				"card_2"
-			]
-		},
-		"Axie-02": {
-			"Axie-id": 10,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
-			"Cards": [
-				"card_1",
-				"card_2"
-			]
-		}
-	},
-	"Team-06": {
-		"Team-id": 6,
-		"Axie-01": {
-			"Axie-id": 11,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
-			"Cards": [
-				"card_1",
-				"card_2"
-			]
-		},
-		"Axie-02": {
-			"Axie-id": 12,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
-			"Cards": [
-				"card_1",
-				"card_2"
-			]
-		}
-	},
-	"Team-07": {
-		"Team-id": 7,
-		"Axie-01": {
-			"Axie-id": 13,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
-			"Cards": [
-				"card_1",
-				"card_2"
-			]
-		},
-		"Axie-02": {
-			"Axie-id": 14,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
-			"Cards": [
-				"card_1",
-				"card_2"
-			]
-		}
-	},
 	"Team-08": {
 		"Team-id": 8,
 		"Axie-01": {
 			"Axie-id": 15,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
+			"Type": "aqua",
+			"Health": 43,
+			"Speed": 53,
+			"Skill": 35,
+			"Morale": 33,
 			"Cards": [
-				"card_1",
-				"card_2"
+				"risky fish",
+				"oranda"
 			]
 		},
 		"Axie-02": {
 			"Axie-id": 16,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
+			"Type": "plant",
+			"Health": 59,
+			"Speed": 31,
+			"Skill": 31,
+			"Morale": 43,
 			"Cards": [
-				"card_1",
-				"card_2"
+				"zigzag",
+				"cactus"
 			]
 		}
 	},
@@ -219,26 +219,26 @@
 		"Team-id": 9,
 		"Axie-01": {
 			"Axie-id": 17,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
+			"Type": "plant",
+			"Health": 56,
+			"Speed": 32,
+			"Skill": 31,
+			"Morale": 45,
 			"Cards": [
-				"card_1",
-				"card_2"
+				"goda",
+				"beech"
 			]
 		},
 		"Axie-02": {
 			"Axie-id": 18,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
+			"Type": "plant",
+			"Health": 59,
+			"Speed": 31,
+			"Skill": 31,
+			"Morale": 43,
 			"Cards": [
-				"card_1",
-				"card_2"
+				"zigzag",
+				"cactus"
 			]
 		}
 	},
@@ -246,26 +246,26 @@
 		"Team-id": 10,
 		"Axie-01": {
 			"Axie-id": 19,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
+			"Type": "beast",
+			"Health": 32,
+			"Speed": 40,
+			"Skill": 31,
+			"Morale": 61,
 			"Cards": [
-				"card_1",
-				"card_2"
+				"confident",
+				"dual blade"
 			]
 		},
 		"Axie-02": {
 			"Axie-id": 20,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
+			"Type": "plant",
+			"Health": 58,
+			"Speed": 32,
+			"Skill": 31,
+			"Morale": 43,
 			"Cards": [
-				"card_1",
-				"card_2"
+				"goda",
+				"beech"
 			]
 		}
 	},
@@ -273,26 +273,26 @@
 		"Team-id": 11,
 		"Axie-01": {
 			"Axie-id": 21,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
+			"Type": "beast",
+			"Health": 31,
+			"Speed": 41,
+			"Skill": 31,
+			"Morale": 61,
 			"Cards": [
-				"card_1",
-				"card_2"
+				"goda",
+				"dual blade"
 			]
 		},
 		"Axie-02": {
 			"Axie-id": 22,
-			"Type": "",
-			"Health": 5,
-			"Speed": 5,
-			"Skill": 5,
-			"Morale": 5,
+			"Type": "plant",
+			"Health": 58,
+			"Speed": 32,
+			"Skill": 31,
+			"Morale": 43,
 			"Cards": [
-				"card_1",
-				"card_2"
+				"herbivore",
+				"beech"
 			]
 		}
 	},
