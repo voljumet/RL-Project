@@ -1,2 +1,2 @@
 # RL-Project
-Reinforcement Learning project based using Axie-Infinity as inspiration for game engine and learning process
+Reinforcement Learning project using Axie-Infinity as inspiration for game engine and learning process
