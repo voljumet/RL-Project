@@ -17,6 +17,8 @@ struct axie{
     unsigned int skill = 0;
     int bodypart_1 [2] = {0,0};
     int bodypart_2 [2] = {0,0};
+    enum position {front,rear};
+    card cards[2];
 };
 
 struct player{
@@ -24,6 +26,13 @@ struct player{
     axie axies [2];
     unsigned int energy = 0; // allows player to use skills
     unsigned int rank = 0; // rank of player
+};
+
+struct card{
+    string type = "";
+    int damage = 0;
+    int defence = 0;
+    enum status {usable, unusable};
 };
 
 player createPlayer(int axie1, int axie2){
