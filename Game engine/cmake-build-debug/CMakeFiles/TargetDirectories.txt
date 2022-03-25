@@ -1,3 +1,7 @@
-/Users/alex/Library/Mobile Documents/com~apple~CloudDocs/UiA/IKT441 - REF LEARN/Project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/alex/Library/Mobile Documents/com~apple~CloudDocs/UiA/IKT441 - REF LEARN/Project/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/alex/Library/Mobile Documents/com~apple~CloudDocs/UiA/IKT441 - REF LEARN/Project/cmake-build-debug/CMakeFiles/Project.dir
+/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/Game engine/cmake-build-debug/CMakeFiles/install/local.dir
+/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/Game engine/cmake-build-debug/CMakeFiles/install/strip.dir
+/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/Game engine/cmake-build-debug/CMakeFiles/install.dir
+/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/Game engine/cmake-build-debug/CMakeFiles/list_install_components.dir
+/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/Game engine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/Game engine/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/Game engine/cmake-build-debug/CMakeFiles/Project.dir
