@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include "json/json.h"
-#include "json/value.h"
+#include <json/json.h>
 using namespace std::chrono;
 using namespace std;
 
@@ -37,23 +36,6 @@ struct player{
 
 
 
-player createPlayer(int axie1, int axie2){
-    player p;
-
-    p.axies[0].type = "plant";
-    p.axies->cards[0].type = "plant";
-    p.axies->cards->damage = 100;
-    p.axies->cards->defence = 30;
-
-    p.axies[0].cards[0].status = card::unusable;
-    p.axies[0].cards[1].status = card::unusable;
-    p.axies[0].cards[2].status = card::unusable;
-    p.axies[0].cards[3].status = card::unusable;
-
-
-
-    return p;
-}
 /*
 vector<int> sortTurnOrder(const player& player1, const player& player2){
     std::vector<int> turnOrder;
@@ -75,8 +57,8 @@ vector<int> sortTurnOrder(const player& player1, const player& player2){
 void gameloop(){
     int axies [2];
     cin >> axies[0] >> axies[1];
-    player player1 = createPlayer(111,222);
-    player player2 = createPlayer(444,555);
+    //player player1 = createPlayer(111,222);
+    //player player2 = createPlayer(444,555);
 
 //    check speed of axies to set turn order
 
@@ -206,28 +188,52 @@ public:
 };
 
 
+player createPlayer(Json::Value &team){
+    player p;
+
+    for (int i = 0; i < 2 ; ++i) {
+        string axie = "Axie-0";
+        axie += to_string(i);
+        p.id = team["Team-id"].asInt();
+        p.axies[i].id = team["Axie-0"+to_string(i+1)]["Axie-id"].asInt(); // Pluss 1 because we start i with 0, and Axie in the Json file is either 01 or 02
+        p.axies[i].type = team["Axie-0"+to_string(i+1)]["Type"].asString();
+        p.axies[i].health = team["Axie-0"+to_string(i+1)]["Health"].asInt();
+        p.axies[i].speed = team["Axie-0"+to_string(i+1)]["Speed"].asInt();
+        p.axies[i].skill = team["Axie-0"+to_string(i+1)]["Skill"].asInt();
+        p.axies[i].morale = team["Axie-0"+to_string(i+1)]["Morale"].asInt();
+        p.axies[i].cards[0].type = team["Axie-0"+to_string(i+1)]["Cards"][0].asString();
+        p.axies[i].cards[1].type = team["Axie-0"+to_string(i+1)]["Cards"][1].asString();
+
+        p.axies[i].cards[0].status = card::unusable;
+        p.axies[i].cards[1].status = card::unusable;
+    }
+
+
+    return p;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 int main() {
     ifstream file("/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/axie_teams.json");
     Json::Reader reader;
     Json::Value obj;
     reader.parse(file, obj);
-    cout << "All teams: \n" << obj[0] << endl;
 
     int axies [2];
-    player player1 = createPlayer(111,222);
-    player player2 = createPlayer(444,555);
+    int i = 3;
+    player player1 = createPlayer(obj["Team-01"] );
+    player player2 = createPlayer(obj["Team-02"] );
 
     StateController stateController;
-    stateController.Init(player1, player2);
+    //stateController.Init(player1, player2);
     string str = "N";
     while (str[0] != 'q')
     {
         stateController.Update();
         cin >> str;
         cout << endl;
-        if (str[0] == 'a' || str[0] == 'c'){stateController.TransitionTo(str[0], player1, player2);}
+      //  if (str[0] == 'a' || str[0] == 'c'){stateController.TransitionTo(str[0], player1, player2);}
     }
     //gameloop();
     return 0;
