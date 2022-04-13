@@ -54,35 +54,7 @@ vector<int> sortTurnOrder(const player& player1, const player& player2){
 }
  */
 
-void gameloop(){
-    int axies [2];
-    cin >> axies[0] >> axies[1];
-    //player player1 = createPlayer(111,222);
-    //player player2 = createPlayer(444,555);
 
-//    check speed of axies to set turn order
-
-   // std::vector<int> turnOrder = sortTurnOrder(player1, player2);
-
-
-    int choose_card;
-
-    cin >> choose_card;
-    switch (choose_card) {
-        case 1:
-            cout << "You chose 1" << endl;
-            break;
-        case 2:
-            cout << "You chose 2" << endl;
-            break;
-        case 3:
-            cout << "You chose 3" << endl;
-            break;
-        default:
-            cout << "You chose something else" << endl;
-            break;
-    }
-}
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -256,43 +228,62 @@ vector<card> getUnusableCards(axie axie1, axie axie2, axie axie3, axie axie4){
     return unusableCards;
 }
 
+void gameloop(){
+
+
+
+    int choose_card;
+
+    cin >> choose_card;
+    switch (choose_card) {
+        case 1:
+            cout << "You chose 1" << endl;
+            break;
+        case 2:
+            cout << "You chose 2" << endl;
+            break;
+        case 3:
+            cout << "You chose 3" << endl;
+            break;
+        default:
+            cout << "You chose something else" << endl;
+            break;
+    }
+}
+
 int main() {
+   // gameloop();
+    // 8 cards in total, randomly picks four cards, divided between two axies.
+    // 8 cards, 0,1,2,3,4,5,6,7, pick four cards (ex, 0,5,2,3) where (0,1,2,3) is for axie 1 and (4,5,6,7) is for axie 2
+
+    // print the four cards in terminal so that the user can see.
+    // function that select cards based in user inputs. NP: check energy
+
+    int axies [2];
     ifstream file("/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/axie_teams.json");
     Json::Reader reader;
     Json::Value obj;
     reader.parse(file, obj);
 
 
-    int axies [2];
-    int i = 3;
     player player1 = createPlayer(obj["Team-01"] );
     player player2 = createPlayer(obj["Team-02"] );
 
     StateController stateController;
     stateController.Init(player1, player2);
 
-
-
-
-    // 8 cards in total, randomly picks four cards, divided between two axies.
-    // 8 cards, 0,1,2,3,4,5,6,7, pick four cards (ex, 0,5,2,3) where (0,1,2,3) is for axie 1 and (4,5,6,7) is for axie 2
-
-    // print the four cards in terminal so that the user can see.
-    // function that select cards based in user inputs. NP: check energy
-    string str = "N";
+    string str = "";
     while (str[0] != 'q')
     {
         stateController.Update();
-        cin >> str;
-        cout << endl;
-        vector<card> unusableCards = getUnusableCards(player1.axies[0], player1.axies[1], player2.axies[0], player2.axies[1]);
-        // print out unusable cards for each axie with axie name
-        for (int i = 0; i < unusableCards.size(); ++i) {
-            cout << unusableCards[i].type << " ";
-        }
+        cout << "Enter q to quit" << endl;
+        cout << "Enter a to change to attack state" << endl;
+        cout << "Enter c to change to card selection state" << endl;
 
-      //  if (str[0] == 'a' || str[0] == 'c'){stateController.TransitionTo(str[0], player1, player2);}
+        cin >> str;
+
+      if (str[0] == 'a' || str[0] == 'c'){stateController.TransitionTo(str[0], player1, player2);}
     }
-    //gameloop();
+
     return 0;
 }
