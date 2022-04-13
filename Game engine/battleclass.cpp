@@ -8,6 +8,7 @@
 
 
 using namespace std::chrono;
+using namespace std;
 
 struct axie{
     unsigned int id = 0;
@@ -67,6 +68,18 @@ void axieAttack(axie attacker, axie defender, int damage){
     if(defender.health <= 0){
         axie.alive = false
     }
+void damageMultiplyer(axie attacker){
+    double multiplyer = 1;
+    if(attacker.bodypart_1.type == attacker.type){
+        if(attacker.bodypart_2.type == attacker.type){
+
+        }
+        multiplyer *= 0.1;
+    }
+}
+
+void axieAttack(axie attacker, axie defender, int damage){
+
 };
 
 int reward(int r){

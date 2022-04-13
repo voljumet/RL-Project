@@ -3,6 +3,8 @@
 #include <fstream>
 #include <json/json.h>
 #include "main.h"
+#include "battleclass.h"
+
 
 
 //// RNG
