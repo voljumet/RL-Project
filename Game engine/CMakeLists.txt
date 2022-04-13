@@ -3,5 +3,5 @@ project(Project)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Project main.cpp jsoncpp.cpp)
+add_executable(Project main.cpp include/jsoncpp.cpp main.h printer.cpp printer.h)
 include_directories(include)
