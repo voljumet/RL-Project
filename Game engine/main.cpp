@@ -296,6 +296,15 @@ public:
     }
 };
 
+void fetch_card(){
+    ifstream file("/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/axie_cards.json");
+    Json::Reader reader;
+    Json::Value obj;
+    reader.parse(file, obj);
+//find attribute name of the JSON obj
+
+
+}
 
 player createPlayer(Json::Value &team){
     player p;
@@ -345,6 +354,7 @@ player createPlayer(Json::Value &team){
 
 
 int main() {
+    fetch_card();
     int axies [2];
     ifstream file("/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/axie_teams.json");
     Json::Reader reader;
