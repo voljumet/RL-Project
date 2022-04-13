@@ -76,7 +76,7 @@ license you like.
 #include "json/json.h"
 
 #ifndef JSON_IS_AMALGAMATION
-#error "Compile with -I PATH_TO_JSON_DIRECTORY"
+//#error "Compile with -I PATH_TO_JSON_DIRECTORY"
 #endif
 
 
@@ -93,7 +93,7 @@ license you like.
 #define LIB_JSONCPP_JSON_TOOL_H_INCLUDED
 
 #if !defined(JSON_IS_AMALGAMATION)
-#include <json/config.h>
+#include "json/config.h"
 #endif
 
 // Also support old flag NO_LOCALE_SUPPORT
@@ -243,10 +243,10 @@ Iter fixZerosInTheEnd(Iter begin, Iter end, unsigned int precision) {
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
 #if !defined(JSON_IS_AMALGAMATION)
-#include "json_tool.h"
-#include <json/assertions.h>
-#include <json/reader.h>
-#include <json/value.h>
+//#include "json_tool.h"
+#include "json/assertions.h"
+#include "json/reader.h"
+#include "json/value.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <algorithm>
 #include <cassert>
@@ -2430,9 +2430,9 @@ ValueIterator& ValueIterator::operator=(const SelfType& other) {
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
 #if !defined(JSON_IS_AMALGAMATION)
-#include <json/assertions.h>
-#include <json/value.h>
-#include <json/writer.h>
+#include "json/assertions.h"
+#include "json/value.h"
+#include "json/writer.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <algorithm>
 #include <cassert>
@@ -2620,7 +2620,7 @@ static inline void releaseStringValue(char* value, unsigned) { free(value); }
 // //////////////////////////////////////////////////////////////////
 #if !defined(JSON_IS_AMALGAMATION)
 
-#include "json_valueiterator.inl"
+//#include "json_valueiterator.inl"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
 namespace Json {
@@ -4078,8 +4078,8 @@ Value& Path::make(Value& root) const {
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
 #if !defined(JSON_IS_AMALGAMATION)
-#include "json_tool.h"
-#include <json/writer.h>
+//#include "json_tool.h"
+#include "json/writer.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <algorithm>
 #include <cassert>
