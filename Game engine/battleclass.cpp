@@ -8,7 +8,6 @@
 
 
 using namespace std::chrono;
-using namespace std;
 
 struct axie{
     unsigned int id = 0;
@@ -20,6 +19,7 @@ struct axie{
     unsigned int skill = 0;
     int playedCards[2];
     string strenght = "";
+    bool alive = true;
 
     enum position {front,rear};
     card cards[4];
@@ -73,13 +73,35 @@ void damageMultiplyer(axie attacker){
     if(attacker.bodypart_1.type == attacker.type){
         if(attacker.bodypart_2.type == attacker.type){
 
-        }
-        multiplyer *= 0.1;
+    //determines any class advantage/disadvantage based on axie type
+    if(attacker.strenght == defender.type){
+        damage += 15;
+    }else if(defender.strenght == attacker.type){
+        damage -= 15;
+    }else{
+        break;
     }
+
+    //determines any card advantage based on axie type and card type
+    for(int playedcards : attacker.playedCards) {
+        if (attacker.cards[playedcards].type == attacker.type){
+            damage += 10;
+        }else{
+            break;
+        }
+    }
+    int numberofPlayed = sizeof(attacker.playedcards)/sizeof(attacker.playedcards[0])
+    if(attacker.playedCards >=2){
+        damage += (attacker.skill * 0.55 * numberofPlayed)
+    }
+
 }
 
 void axieAttack(axie attacker, axie defender, int damage){
-
+    defender.health -= damage;
+    if(defender.health <= 0){
+        axie.alive = false
+    }
 };
 
 int reward(int r){

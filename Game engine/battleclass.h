@@ -12,8 +12,6 @@ public:
     void axieattack();
     void setStrenght();
     void battle();
-    void damagemultiplyer();
-    void axieattack();
     int reward();
 
 };
