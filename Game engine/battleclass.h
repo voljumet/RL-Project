@@ -8,8 +8,10 @@
 
 class battleclass {
 public:
-    void damagemultiplyer();
+    void damageCalculator();
     void axieattack();
+    void setStrenght();
+    void battle();
     int reward();
 
 };
