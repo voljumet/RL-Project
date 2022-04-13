@@ -1,25 +1,12 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
+#include "battleclass.h"
+
 
 using namespace std::chrono;
 using namespace std;
 
-
-
-struct axie{
-    unsigned int id = 0;
-    string type = "";
-//    int because if health <= 0 -> dead
-    int health = 0;
-    unsigned int morale = 0;
-    unsigned int speed = 0;
-    unsigned int skill = 0;
-    int bodypart_1 [2] = {0,0};
-    int bodypart_2 [2] = {0,0};
-    enum position {front,rear};
-    card cards[2];
-};
 
 struct player{
     unsigned int id = 0;
@@ -58,6 +45,14 @@ vector<int> sortTurnOrder(const player& player1, const player& player2){
     sort(turnOrder.begin(), turnOrder.end());
 
     return turnOrder;
+}
+
+
+
+player Battlestate(player p1, player p2){
+    turnorder = sortTurnOrder(p1, p2);
+    //axieAttack(1st in turnorder, 1st position in opposing team)
+
 }
 
 void gameloop(){
