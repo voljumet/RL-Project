@@ -33,9 +33,11 @@ public:
         string type = "";
     //    int because if health <= 0 -> dead
         int health = 0;
+        bool alive = true;
         unsigned int morale = 0;
         unsigned int speed = 0;
         unsigned int skill = 0;
+        string strenght = "";
         int bodypart_1 [2] = {0,0};
         int bodypart_2 [2] = {0,0};
         enum position {front,rear}
