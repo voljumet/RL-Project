@@ -3,29 +3,8 @@
 #include <fstream>
 #include <json/json.h>
 #include "main.h"
-using namespace std::chrono;
 
 
-/*
-vector<int> sortTurnOrder(const player& player1, const player& player2){
-    std::vector<int> turnOrder;
-
-    for_each(player1.axies[0], player1.axies[2], [&turnOrder](const axie& a){
-        turnOrder.push_back(a.speed);
-    });
-
-    for_each(player2.axies[0], player2.axies[2], [&turnOrder](const axie& a){
-        turnOrder.push_back(a.speed);
-    });
-
-    sort(turnOrder.begin(), turnOrder.end());
-
-    return turnOrder;
-}
- */
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // funtion that select four random numbers between 0 and 7, and a number can not be repeated
 // if the number is repeated, it will be replaced by another number
@@ -47,8 +26,7 @@ vector<int> selectFourNumbers(){
 }
 
 
-vector<int>  showAvailabeCards(main::player &p)
-{
+vector<int> showAvailabeCards(main::player &p) {
     vector<int> usableCards = selectFourNumbers();
     // check if the number is between 0 and 3, if so find the card that have the same card id
 
@@ -65,8 +43,7 @@ vector<int>  showAvailabeCards(main::player &p)
     return usableCards;
 }
 
-void showUsedCards(main::player &p)
-{
+void showUsedCards(main::player &p) {
     //find cards that are used and show them for echa axie in the player
     for (int i = 0; i < 4; ++i) {
         if(p.axies[0].cards[i].status == main::card::used){
@@ -81,17 +58,14 @@ void showUsedCards(main::player &p)
 
 
 
-class Card_Selection_State: public State
-{
+class Card_Selection_State: public State {
 public:
-    void UpdateState()  override
-    {
+    void UpdateState()  override{
         cout << "Cads are selected!"<< endl;
     };
 
-    void SelectCards(main::player &p1, main::player &p2)
-    {
-
+    void SelectCards(main::player &p1, main::player &p2){
+        //print the cards that are available to pick from
         vector<int> randomSelectCards =  showAvailabeCards(p1);
         int input;
         cout << "Choose cards for player 1 !" << endl;
@@ -167,34 +141,29 @@ public:
         showUsedCards(p2);
     }
     // Constructor
-    Card_Selection_State(main::player &p1, main::player &p2)
-    {
+    Card_Selection_State(main::player &p1, main::player &p2){
         cout << "Card_Selection_State is created!" << endl;
         SelectCards(p1, p2);
 
     }
     ~Card_Selection_State(){
-        cout << "Card_Selection_State is discreated!" << endl;
+        cout << "Card_Selection_State is discarded" << endl;
     };
 };
 
 
-class Attack_State: public State
-{
+class Attack_State: public State{
 public:
-    void UpdateState() override
-    {
+    void UpdateState() override{
         cout << "attack done"  << endl;
     }
-    void PrintPlayer(main::player &p1, main::player &p2)
-    {
+    void PrintPlayer(main::player &p1, main::player &p2){
         cout << "Player1: "<< p1.axies->cards[0].status << endl;
         cout << "Player2: "<< p2.axies->type << endl;
     }
 
     // Constructor
-    Attack_State(main::player &p1, main::player &p2)
-    {
+    Attack_State(main::player &p1, main::player &p2){
         cout << "Attack_State is created" << endl;
         p1.id = 30;
         p2.id = 50;
@@ -206,31 +175,26 @@ public:
     };
 };
 
-class StateController
-{
+class StateController{
 private:
     State* currentState = nullptr;
 
 public:
-    void Init(main::player &p1, main::player &p2)
-    {
+    void Init(main::player &p1, main::player &p2){
         currentState = new Card_Selection_State(p1,p2);
     }
 
-    void Update()
-    {
+    void Update(){
         currentState->UpdateState();
     }
 
-    void TransitionTo (char c, main::player &p1, main::player &p2)
-    {
+    void TransitionTo (char c, main::player &p1, main::player &p2){
         delete currentState;
         if(c == 'a'){currentState = new Attack_State(p1, p2);}
         if(c == 'c'){currentState = new Card_Selection_State(p1, p2);}
     }
 
-    ~StateController()
-    {
+    ~StateController(){
         delete currentState;
     }
 };
@@ -284,61 +248,10 @@ main::player createPlayer(Json::Value &team){
         p.axies[i].cards[3].id = 7;
         }
     }
-
-
     return p;
 }
 
 // create a function that check if all cards status for each axie is used if true, then change the status to unusable
-
-//#include <map>
-//#include <set>
-//#include <algorithm>
-
-
-// Function to convert a map<key,value> to a multimap<value,key>
-multimap<int, int> invert(map<int, int> & mymap)
-{
-    multimap<int, int> multiMap;
-
-    map<int, int> :: iterator it;
-    for (it=mymap.begin(); it!=mymap.end(); it++)
-    {
-        multiMap.insert(make_pair(it->second, it->first));
-    }
-
-    return multiMap;
-}
-
-//int main()
-//{
-    // make the map
-//    map<string, int> mymap = {
-//            {"coconut", 10}, {"apple", 5}, {"peach", 30}, {"mango", 8}
-//    };
-//    cout << "The map, sorted by keys, is: " << endl;
-//    map<int, int> :: iterator it;
-//    for (it=mymap.begin(); it!=mymap.end(); it++)
-//    {
-//        cout << it->first << ": " << it->second << endl;
-//    }
-//    cout << endl;
-
-    // invert mymap using the invert function created above
-//    multimap<int, string> newmap = invert(mymap);
-
-    // print the multimap
-//    cout << "The map, sorted by value is: " << endl;
-//    multimap<int, string> :: iterator iter;
-//    for (iter=newmap.begin(); iter!=newmap.end(); iter++)
-//    {
-//        // printing the second value first because the
-//        // order of (key,value) is reversed in the multimap
-//        cout << iter->second << ": " << iter->first << endl;
-//    }
-
-//    return 0;
-//}
 
 
 std::vector<main::axie> sort_axies(main::player &playa1, main::player &playa2){
@@ -396,18 +309,15 @@ string rest(main::player &playa1, main::player &playa2, vector<main::axie> axies
         s_position << i + 1;
         s_health << axies[i].health;
 
-               if(playa1.axies[0].id == axies[i].id){
+        if(playa1.axies[0].id == axies[i].id)
             first = position(axies[i], true, s_position.str() + ":" + axies[i].type + ":" + s_health.str());
-        } else if(playa2.axies[0].id == axies[i].id){
+        else if(playa2.axies[0].id == axies[i].id)
             second = position(axies[i], false, s_position.str() + ":" + axies[i].type + ":" + s_health.str());
-        } else if(playa1.axies[1].id == axies[i].id){
+        else if(playa1.axies[1].id == axies[i].id)
             third = position(axies[i], true, s_position.str() + ":" + axies[i].type + ":" + s_health.str());
-        } else if(playa2.axies[1].id == axies[i].id){
+        else if(playa2.axies[1].id == axies[i].id)
             fourth = position(axies[i], false, s_position.str() + ":" + axies[i].type + ":" + s_health.str());
-        }
     }
-
-
 
     string print = "\n"+first +"     "+ second + "\n"+ third +"     "+ fourth;
     return "          |                         |"+print;
@@ -415,53 +325,41 @@ string rest(main::player &playa1, main::player &playa2, vector<main::axie> axies
 
 void printer(main::player &playa1, main::player &playa2, int round){
     cout << "Round: " << round << " - (attack order : type : health)"<< endl;
-    // create vector from player
-    vector<main::axie> axies;
+    cout << "Energy: " << playa1.energy << endl;
 
     // sort axies
-    axies = sort_axies(playa1, playa2);
-    //pint axie placement to terminal
-    string printer = rest(playa1,playa2,axies);
-
+    vector<main::axie> axies = sort_axies(playa1, playa2);
 
     // print axie states + placements
-    cout << printer << endl;
+    cout << rest(playa1, playa2, axies) << endl;
     cout << endl;
-
-    // print energy
-
-    // print
-
 }
 
 int main() {
-    fetch_card();
-    int axies [2];
     ifstream file("../../axie_teams.json");
     Json::Reader reader;
     Json::Value obj;
     reader.parse(file, obj);
+    vector<main::player> players;
 
-    // ask user to choose axie team
-    string axie_team;
-    cout << "Choose your axie team ()" << endl;
-    cin >> axie_team;
-    // ask user to choose another axie team
-    string axie_team2;
-    cout << "Choose your second axie team" << endl;
-    cin >> axie_team2;
+    // ask user to choose Axie teamzzz
+    for (int i = 0; i < 2; i++) {
+        int axie_team;
+        string team = "";
+        cout << "Choose your axie team: (1-20)" << endl;
+        cin >> axie_team;
+        if (axie_team <= 9)
+            team ="0";
+        players.push_back(createPlayer(obj["Team-" +team+to_string(axie_team)]));
+    }
 
-    main::player player1 = createPlayer(obj["Team-" +axie_team] );
-    main::player player2 = createPlayer(obj["Team-" +axie_team2] );
-
-    printer(player1, player2, 1);
+    printer(players[0], players[1], 1);
 
     StateController stateController;
-    stateController.Init(player1, player2);
+    stateController.Init(players[0], players[1]);
 
-    string str = "";
-    while (str[0] != 'q')
-    {
+    string str = " ";
+    while (str[0] != 'q'){
         stateController.Update();
         cout << "Enter q to quit" << endl;
         cout << "Enter a to change to attack state" << endl;
@@ -469,7 +367,7 @@ int main() {
 
         cin >> str;
 
-      if (str[0] == 'a' || str[0] == 'c'){stateController.TransitionTo(str[0], player1, player2);}
+      if (str[0] == 'a' || str[0] == 'c'){stateController.TransitionTo(str[0], players[0], players[1]);}
     }
 
     return 0;
