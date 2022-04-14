@@ -4,14 +4,15 @@
 
 #ifndef RL_PROJECT_BATTLECLASS_H
 #define RL_PROJECT_BATTLECLASS_H
+#include "Main.h"
 
 
-class battleclass {
+class BattleClass : public Main {
 public:
-    void damageCalculator();
+    void damageCalculator(Main::axie &attacker, Main::axie &defender, Main::player &player1, Main::player &player2);
     void axieattack();
     void setStrenght();
-    void battle();
+    void battle(player &player1, player &player2);
     int reward();
 
 };

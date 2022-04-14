@@ -12,9 +12,10 @@ class State {
 public:
     virtual void UpdateState() = 0;
     virtual ~State(){};
+
 };
 
-class main {
+class Main {
 public:
     struct card{
         int id = 999;
@@ -48,6 +49,10 @@ public:
         unsigned int energy = 0; // allows player use cards in battle
         unsigned int rank = 0; // player rank
     };
+    std::vector<Main::axie> sort_axies(player &playa1, player &playa2);
+    string axiePosition(axie &axie, bool is_first, string stats);
+    string printAxies(player &playa1, player &playa2, vector<axie> axies);
+    void PrintGameBoard(player &player1, player &player2, int round);
 };
 
 #endif //GAME_ENGINE_MAIN_H
