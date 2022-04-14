@@ -19,7 +19,6 @@ struct axie{
     unsigned int skill = 0;
     int playedCards[2];
     string strenght = "";
-    bool alive = true;
 
     enum position {front,rear};
     card cards[4];
