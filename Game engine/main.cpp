@@ -342,7 +342,7 @@ int main() {
     reader.parse(file, obj);
     vector<main::player> players;
 
-    // ask user to choose Axie teamzzz
+    // ask user to choose Axie teams
     for (int i = 0; i < 2; i++) {
         int axie_team;
         string team = "";
