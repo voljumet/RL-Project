@@ -195,7 +195,7 @@ public:
 class Attack_State: public State{
 public:
     void UpdateState() override{
-        cout << "attack done"  << endl;
+        cout << "attack done" << endl;
     }
     void PrintPlayer(main::player &p1, main::player &p2){
         cout << "Player1: " << p1.axies->cards[0].card_status << endl;

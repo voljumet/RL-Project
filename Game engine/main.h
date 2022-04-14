@@ -33,10 +33,12 @@ public:
         unsigned int id = 0;
         string type = "";
         int health = 0;
+        bool alive = true;
         unsigned int morale = 0;
         unsigned int speed = 0;
         unsigned int skill = 0;
         enum position {front,back} position = front;
+        string strenght = "";
         card cards[4];
     };
 
