@@ -19,7 +19,6 @@ struct axie{
     unsigned int skill = 0;
     int playedCards[2];
     string strenght = "";
-    bool alive = true;
 
     enum position {front,rear};
     card cards[4];
@@ -55,7 +54,8 @@ void damageCalculator(axie attacker, axie defender){
             break;
         }
     }
-    int numberofPlayed = sizeof(attacker.playedcards)/sizeof(attacker.playedcards[0])
+    //must be rewritten to fit new card struct and axie struct
+    int numberofPlayed = sizeof(attacker.playedcards)/sizeof(attacker.playedcards[0]);
     if(attacker.playedCards >=2){
         damage += (attacker.skill * 0.55 * numberofPlayed)
     }
