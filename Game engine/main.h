@@ -21,6 +21,7 @@ class main {
 public:
     struct card{
         int id ;
+        string name = "";
         string type = "";
         int damage = 0;
         int defence = 0;

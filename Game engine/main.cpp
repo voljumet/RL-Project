@@ -199,53 +199,43 @@ public:
     }
 };
 
-void fetch_card(){
-    ifstream file("/Users/peshangalo/Documents/Master/First_Year/Second Semester/RL/RL-Project/axie_cards.json");
-    Json::Reader reader;
-    Json::Value obj;
-    reader.parse(file, obj);
-//find attribute name of the JSON obj
-
-
-}
-
 main::player createPlayer(Json::Value &team){
     main::player p;
 
     for (int i = 0; i < 2 ; ++i) {
-        p.id = i;
         p.energy = 2;
-        string axie = "Axie-0";
-        axie += to_string(i);
+//        string axie = "Axie-0";
+//        axie += to_string(i);
         p.id = team["Team-id"].asInt();
-        p.axies[i].id = team["Axie-0"+to_string(i+1)]["Axie-id"].asInt(); // Pluss 1 because we start i with 0, and Axie in the Json file is either 01 or 02
-        p.axies[i].type = team["Axie-0"+to_string(i+1)]["Type"].asString();
-        p.axies[i].health = team["Axie-0"+to_string(i+1)]["Health"].asInt();
-        p.axies[i].speed = team["Axie-0"+to_string(i+1)]["Speed"].asInt();
-        p.axies[i].skill = team["Axie-0"+to_string(i+1)]["Skill"].asInt();
-        p.axies[i].morale = team["Axie-0"+to_string(i+1)]["Morale"].asInt();
-        p.axies[i].cards[0].type = team["Axie-0"+to_string(i+1)]["Cards"][0].asString();
-        p.axies[i].cards[1].type = team["Axie-0"+to_string(i+1)]["Cards"][1].asString();
-        p.axies[i].cards[2].type = team["Axie-0"+to_string(i+1)]["Cards"][0].asString();
-        p.axies[i].cards[3].type = team["Axie-0"+to_string(i+1)]["Cards"][1].asString();
 
-        p.axies[i].cards[0].status = main::card::unusable;
-        p.axies[i].cards[1].status = main::card::unusable;
-        p.axies[i].cards[2].status = main::card::unusable;
-        p.axies[i].cards[3].status = main::card::unusable;
+        // Pluss 1 because we start i with 0, and Axie in the Json file is either 01 or 02
+        p.axies[i].id = team["Axie-0" + to_string(i + 1)]["Axie-id"].asInt();
+        p.axies[i].type = team["Axie-0" + to_string(i + 1)]["Type"].asString();
+        p.axies[i].health = team["Axie-0" + to_string(i + 1)]["Health"].asInt();
+        p.axies[i].speed = team["Axie-0" + to_string(i + 1)]["Speed"].asInt();
+        p.axies[i].skill = team["Axie-0" + to_string(i + 1)]["Skill"].asInt();
+        p.axies[i].morale = team["Axie-0" + to_string(i + 1)]["Morale"].asInt();
 
-        if ( i == 0){
+        for (int k = 0; k < 2; ++k) {
+            p.axies[i].cards[k].type = team["Axie-0" + to_string(i + 1)]["Cards"][k]["type"].asString();
+            p.axies[i].cards[k].name = team["Axie-0" + to_string(i + 1)]["Cards"][k]["name"].asString();
+            p.axies[i].cards[k].damage = team["Axie-0" + to_string(i + 1)]["Cards"][k]["attack"].asInt();
+            p.axies[i].cards[k].defence = team["Axie-0" + to_string(i + 1)]["Cards"][k]["defence"].asInt();
+            p.axies[i].cards[k].status = main::card::unusable;
 
-        p.axies[i].cards[0].id = 0;
-        p.axies[i].cards[1].id = 1;
-        p.axies[i].cards[2].id = 2;
-        p.axies[i].cards[3].id = 3;
         }
-        else{
-        p.axies[i].cards[0].id = 4;
-        p.axies[i].cards[1].id = 5;
-        p.axies[i].cards[2].id = 6;
-        p.axies[i].cards[3].id = 7;
+
+        p.axies[i].cards[2] = p.axies[i].cards[0];
+        p.axies[i].cards[3] = p.axies[i].cards[1];
+
+        int num = 0;
+        if (i == 1) {
+            num = 4;
+        }
+
+        for (int j = 0; j < 4; ++j) {
+            p.axies[i].cards[j].id = j + num;
+
         }
     }
     return p;
@@ -272,16 +262,6 @@ std::vector<main::axie> sort_axies(main::player &playa1, main::player &playa2){
     return axies_to_sort;
 }
 
-//function that returns multiple strings
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
-}
 
 string position(main::axie axie, bool is_first, string stats){
     string pos;
@@ -344,13 +324,16 @@ int main() {
 
     // ask user to choose Axie teams
     for (int i = 0; i < 2; i++) {
+        stringstream ss;
         int axie_team;
         string team = "";
         cout << "Choose your axie team: (1-20)" << endl;
         cin >> axie_team;
+        ss << axie_team;
         if (axie_team <= 9)
             team ="0";
-        players.push_back(createPlayer(obj["Team-" +team+to_string(axie_team)]));
+        string omfg = "Team-" +team+ss.str();
+        players.push_back(createPlayer(obj[omfg]));
     }
 
     printer(players[0], players[1], 1);
