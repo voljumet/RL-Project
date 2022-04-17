@@ -49,6 +49,7 @@ public:
         unsigned int energy = 0; // allows player use cards in battle
         unsigned int rank = 0; // player rank
     };
+
     std::vector<Main::axie> sort_axies(player &playa1, player &playa2);
     string axiePosition(axie &axie, bool is_first, string stats);
     string printAxies(player &playa1, player &playa2, vector<axie> axies);

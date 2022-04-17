@@ -10,11 +10,12 @@
 class BattleClass : public Main {
 public:
     void damageCalculator(Main::axie &attacker, Main::axie &defender, Main::player &player1, Main::player &player2);
+    std::vector<Main::axie> sort_axies_by_speed(player &player);
     void axieattack();
-    void setStrenght();
     void battle(player &player1, player &player2);
     int reward();
 
+    void setStrength(Main::axie &a);
 };
 
 

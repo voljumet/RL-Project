@@ -76,6 +76,10 @@ std::vector<Main::axie> Main::sort_axies(player &playa1, player &playa2){
     return axies_to_sort;
 }
 
+//// returns Axies sorted by speed, fastest to slowest for one player
+
+
+
 //// returns the position for each axie as a string
 string Main::axiePosition(axie &axie, bool is_first, string stats){
     string pos;
@@ -139,11 +143,13 @@ public:
         // print the cards that are available to chose for attack
         vector<int> cards_drawn = showCardsDrawn(player);
         int input;
-        cout << "Choose cards for player " << player.id << endl;
+        cout << "Choose cards for player, enter 0 to skip " << player.id << endl;
 
         //// what if player has saved energy? can he spend too many cards at once?
         for (int i = 0; i < player.energy; ++i) {
             cin >>input;
+            if (input == 0)
+                break;
             if (input == 1){
                 if (cards_drawn[0] <= 3){
                     player.axies[0].cards[cards_drawn[0]].card_status = Main::card::chosen_for_attack;
@@ -209,13 +215,12 @@ public:
 
     // Constructor
     Attack_State(Main::player &p1, Main::player &p2){
-        BattleClass battleclass;
-        battleclass.battle(p1, p2);
         cout << "Attack_State is created" << endl;
-
         p1.id = 5;
         p2.id = 12;
         PrintPlayer(p1,p2);
+        BattleClass battleclass;
+        battleclass.battle(p1, p2);
     }
 
     ~Attack_State(){
@@ -285,7 +290,7 @@ Main::player createPlayer(int team_id){
             player.axies[axie_num].cards[card_num].damage = team[json_team]["Cards"][card_num]["attack"].asInt();
             player.axies[axie_num].cards[card_num].defence = team[json_team]["Cards"][card_num]["defence"].asInt();
 
-            player.axies[axie_num].cards[card_num].card_status = Main::card::wait_for_restock;
+            // player.axies[axie_num].cards[card_num].card_status = Main::card::wait_for_restock;
         }
 
         // Copies the two loaded cards to give each axie 4 cards
