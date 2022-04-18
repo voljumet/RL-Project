@@ -32,7 +32,7 @@ std::vector<Main::axie> BattleClass::sort_axies_by_speed(player &playa){
 }
 
 
-void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defender_axie, Main::player &p1, Main::player &p2) {
+void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defender_axie, Main::player &p1, Main::player &p2, int num) {
     // the damage is the attacker card base damage
     // how to know which card is attacking?
     // the attacker card is the card that is on the top of the stack?
@@ -87,13 +87,23 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
         std::cout << "The defender_axie axie  is dead" << std::endl;
     }
     for (int i = 0; i < 4; ++i) {
-        if (attacker_axie.id == p1.axies[i].id) {
-            p1.axies[i] = attacker_axie;
+        if (num == 1) {
+            if (attacker_axie.id == p1.axies[i].id) {
+                p1.axies[i] = attacker_axie;
+            }
+            if (defender_axie.id == p2.axies[i].id) {
+                p2.axies[i] = defender_axie;
+            }
         }
-        if (defender_axie.id == p2.axies[i].id) {
-            p2.axies[i] = defender_axie;
+        if (num == 2) {
+            if (attacker_axie.id == p2.axies[i].id) {
+                p2.axies[i] = attacker_axie;
+            }
+            if (defender_axie.id == p1.axies[i].id) {
+                p1.axies[i] = defender_axie;
+            }
         }
-        }
+    }
 
 }
 void BattleClass::battle(Main::player &p1, Main::player &p2){
@@ -120,24 +130,26 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
     cout << "Player 2 defender Axie 1 is " << defender_axie_player2.type << endl;
 
     //// while at least one axie on each player is alive
-    while ((p1.axies[0].alive || p1.axies[1].alive)  && (p2.axies[0].alive || p2.axies[1].alive))
+    if ((p1.axies[0].alive || p1.axies[1].alive)  && (p2.axies[0].alive || p2.axies[1].alive))
     {
         /// sends attacker, defender and p1 and p2 to damage calculator, reason to send p2 is to use defence cards!
         // for each axie in player1_axies_sorted and player2_axies_sorted, send the axie to the damage calculator
         for (int i = 0; i < 2 ; ++i) {
             /// set strength of each axie before calculating damage
-            battleclass.setStrength(player1_axies_sorted[i]);
-            battleclass.setStrength(player2_axies_sorted[i]);
-            battleclass.damageCalculator(player1_axies_sorted[i], player2_axies_sorted[i], p1, p2);
+            battleclass.setStrength(player1_axies_sorted[0]);
+            battleclass.setStrength(player2_axies_sorted[0]);
+            // the 1 at end represents the player number, 1 is player 1, 2 is player 2
+            // There may be better way to do this
+            battleclass.damageCalculator(player1_axies_sorted[0], player2_axies_sorted[0], p1, p2,1);
         }
         for (int i = 0; i < 2 ; ++i) {
             /// set strength of each axie before calculating damage
-            battleclass.setStrength(player2_axies_sorted[i]);
-            battleclass.setStrength(player1_axies_sorted[i]);
-            battleclass.damageCalculator(player2_axies_sorted[i], player1_axies_sorted[i], p1, p2);
+            battleclass.setStrength(player2_axies_sorted[0]);
+            battleclass.setStrength(player1_axies_sorted[0]);
+            battleclass.damageCalculator(player2_axies_sorted[0], player1_axies_sorted[0], p1, p2,2);
         }
 
-       //// change state in Main to card_selection state
+       //// change the state in Main to card_selection state using state controller
     }
 
     //battleclass.damageCalculator(attacker_axie_player1,defender_axie_player2, p1, p2);

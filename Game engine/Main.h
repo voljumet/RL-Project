@@ -15,6 +15,8 @@ public:
 
 };
 
+
+
 class Main {
 public:
     struct card{
@@ -55,5 +57,7 @@ public:
     string printAxies(player &playa1, player &playa2, vector<axie> axies);
     void PrintGameBoard(player &player1, player &player2, int round);
 };
+
+
 
 #endif //GAME_ENGINE_MAIN_H

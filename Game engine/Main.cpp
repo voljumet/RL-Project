@@ -216,11 +216,12 @@ public:
     // Constructor
     Attack_State(Main::player &p1, Main::player &p2){
         cout << "Attack_State is created" << endl;
-        p1.id = 5;
-        p2.id = 12;
-        PrintPlayer(p1,p2);
+        //PrintPlayer(p1,p2);
         BattleClass battleclass;
         battleclass.battle(p1, p2);
+        // call transition function
+
+
     }
 
     ~Attack_State(){
