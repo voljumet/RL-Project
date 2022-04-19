@@ -8,7 +8,7 @@
 
 
 //// RNG
-vector<int> selectFourNumbers(){
+vector<int> Main::selectFourNumbers(){
     // function that select four random numbers between 0 and 7, and a number can not be repeated
     // if the number is repeated, it will be replaced by another number
     // the number of numbers will be 4 and the range is 0 to 7
@@ -28,7 +28,7 @@ vector<int> selectFourNumbers(){
 }
 
 //// returns cards that CAN be chosen by player
-vector<int> showCardsDrawn(Main::player &p) {
+vector<int> Main::showCardsDrawn(Main::player &p) {
     vector<int> cards_drawn = selectFourNumbers();
     // check if the number is between 0 and 3, if so find the card that have the same card id
     Main::axie &_axie1 = p.axies[0];
@@ -49,7 +49,7 @@ vector<int> showCardsDrawn(Main::player &p) {
 }
 
 //// prints the cards that ARE chosen by player
-void PrintChosenCards(Main::player &p) {
+void Main::PrintChosenCards(Main::player &p) {
     //find cards that are chosen_for_attack and show them for echa axie in the player
     for (int i = 0; i < 4; ++i) {
         if(p.axies[0].cards[i].card_status == Main::card::chosen_for_attack){
@@ -75,9 +75,6 @@ std::vector<Main::axie> Main::sort_axies(player &playa1, player &playa2){
     });
     return axies_to_sort;
 }
-
-//// returns Axies sorted by speed, fastest to slowest for one player
-
 
 
 //// returns the position for each axie as a string
@@ -136,12 +133,13 @@ void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round)
 class Card_Selection_State: public State {
 public:
     void UpdateState()  override{
-        cout << "Cads are selected!"<< endl;
+        cout << "Cards are selected!"<< endl;
     };
 
     void SelectCards(Main::player &player){
+        Main main;
         // print the cards that are available to chose for attack
-        vector<int> cards_drawn = showCardsDrawn(player);
+        vector<int> cards_drawn = main.showCardsDrawn(player);
         int input;
         cout << "Choose cards for player, enter 0 to skip " << player.id << endl;
 
@@ -180,13 +178,13 @@ public:
                 }
             }
         }
-        PrintChosenCards(player);
+        main.PrintChosenCards(player);
     };
 
     // Constructor
     Card_Selection_State(Main::player &p1, Main::player &p2){
         Main main;
-        PrintChosenCards(p1);
+        main.PrintChosenCards(p1);
         cout << "Card_Selection_State is created!" << endl;
         cout << "----------------------------------------------------" << endl;
         main.PrintGameBoard(p1, p2, 1);
@@ -221,7 +219,6 @@ public:
         battleclass.battle(p1, p2);
         // call transition function
 
-
     }
 
     ~Attack_State(){
@@ -243,10 +240,15 @@ public:
         currentState->UpdateState();
     }
 
-    void TransitionTo (char c, Main::player &p1, Main::player &p2){
+    void TransitionTo (string c, Main::player &p1, Main::player &p2){
         delete currentState;
-        if(c == 'a'){currentState = new Attack_State(p1, p2);}
-        if(c == 'c'){currentState = new Card_Selection_State(p1, p2);}
+
+        if(c == "attack"){
+            currentState = new Attack_State(p1, p2);
+        }
+        if(c == "choose cards"){
+            currentState = new Card_Selection_State(p1, p2);
+        }
     }
 
     ~StateController(){
@@ -255,7 +257,7 @@ public:
 };
 
 //// Create player with axies and cards, reads from JSON file.
-Main::player createPlayer(int team_id){
+Main::player Main::createPlayer(int team_id){
     ifstream file("../../axie_teams.json");
     Json::Reader reader;
     Json::Value obj;
@@ -283,6 +285,9 @@ Main::player createPlayer(int team_id){
         player.axies[axie_num].speed = team[json_team]["Speed"].asInt();
         player.axies[axie_num].skill = team[json_team]["Skill"].asInt();
         player.axies[axie_num].morale = team[json_team]["Morale"].asInt();
+        if (team[json_team]["placement"].asString() == "back"){
+            player.axies[axie_num].position = Main::axie::position::back;
+        }
 
         // loads two cards for each axie
         for (int card_num = 0; card_num < 2; ++card_num) {
@@ -316,29 +321,34 @@ Main::player createPlayer(int team_id){
 
 int main() {
     vector<Main::player> players;
+    Main main;
+    StateController stateController;
 
     // ask user to choose Axie teams
     for (int i = 0; i < 2; i++) {
         int axie_team;
         cout << "Choose your axie team: (1-20)" << endl;
         cin >> axie_team;
-        players.push_back(createPlayer(axie_team));
+        players.push_back(main.createPlayer(axie_team));
     }
 
-    StateController stateController;
     stateController.Init(players[0], players[1]);
+    int game_round = 1;
 
-    string str = " ";
-    while (str[0] != 'q'){
+
+    string str = "choose cards";
+    while (game_round != 0){
         stateController.Update();
-        cout << "Enter q to quit" << endl;
-        cout << "Enter a to change to attack state" << endl;
-        cout << "Enter c to change to card selection state" << endl;
-        cin >> str;
 
-      if (str[0] == 'a' || str[0] == 'c'){
-          stateController.TransitionTo(str[0], players[0], players[1]);
-      }
+        // stateConroller.TransitionTo returns value 0 if game is over
+        stateController.TransitionTo(str, players[0], players[1]);
+
+        if (str == "attack"){
+            str = "choose cards";
+        } else if (str == "choose cards") {
+            str = "attack";
+            game_round++;
+        }
     }
     return 0;
 }
