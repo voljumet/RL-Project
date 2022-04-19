@@ -5,6 +5,8 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
+#include <string>
+#include <map>
 
 using namespace std::chrono;
 
@@ -32,12 +34,11 @@ std::vector<Main::axie> BattleClass::sort_axies_by_speed(player &playa){
 }
 
 
-void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defender_axie, Main::player &p1, Main::player &p2, int num) {
+void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie defender_axie, Main::player &p1, Main::player &p2,int num) {
     // the damage is the attacker card base damage
     // how to know which card is attacking?
     // the attacker card is the card that is on the top of the stack?
     // could damage be the sum of both cards base damage?
-
     int total_damage = 0;
 
     for (int i = 0; i < 4; ++i) {
@@ -80,13 +81,11 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
     defender_axie.health -= total_damage;
         if (defender_axie.health <= 0) {
            defender_axie.alive = false;
-        if (attacker_axie.health <= 0) {
-            attacker_axie.alive = false;
-        }
+
         // print out the defender_axie axie dead
         std::cout << "The defender_axie axie  is dead" << std::endl;
     }
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 2; ++i) {
         if (num == 1) {
             if (attacker_axie.id == p1.axies[i].id) {
                 p1.axies[i] = attacker_axie;
@@ -106,6 +105,54 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
     }
 
 }
+
+
+Main::axie Find_defender_axie(Main::player p){
+    //// find the defending axie taking the position in account.  /// done
+    for (auto & i : p.axies) {
+        int front = 0;
+        int back = 0;
+        for (auto & i : p.axies){
+            if(i.position == Main::axie::position::front && i.alive){
+                front += 1;
+            }
+            if(i.position == Main::axie::position::back && i.alive){
+                back += 1;
+            }
+
+        }
+        // if front is 2, then chose an axie randomly
+        if (front == 2) {
+            srand(time(0));
+            int random_num = rand() % 2;
+            if (random_num == 0) {
+                return p.axies[0];
+            }
+            else {
+                return p.axies[1];
+            }
+        }
+
+        // if back is 2, then chose an axie randomly
+        if (back == 2) {
+            srand(time(0));
+            int random_num = rand() % 2;
+            if (random_num == 0) {
+                return p.axies[0];
+            }
+            else {
+                return p.axies[1];
+            }
+        }
+        if (i.alive && front != 2) {
+            if(i.position == Main::axie::position::front){
+                return  i;
+            }else if (i.position == Main::axie::position::back){
+                return  i;
+            }
+        }
+    }
+}
 void BattleClass::battle(Main::player &p1, Main::player &p2){
     BattleClass battleclass;
     Main main;
@@ -119,37 +166,59 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
     vector<axie> player1_axies_sorted = battleclass.sort_axies_by_speed(p1);
     vector<axie> player2_axies_sorted = battleclass.sort_axies_by_speed(p2);
 
+    vector<axie> sorted_axies = main.sort_axies(p1, p2);
 
-    /// find the first attacking axie from player 1
-    axie attacker_axie_player1 = player1_axies_sorted[0];
-    /// find the first defending axie from player 2
-    axie defender_axie_player2 = player2_axies_sorted[0];
+    // for each axie in the sorted axxie, check if any axie has a card that is chosen_for_attack, if not pop from the sorted_axie vector
+    for (int i = 0; i < sorted_axies.size(); i++) {
+        int num = 0;
+        for (auto & card : sorted_axies[i].cards) {
+            if(!card.chosen_for_attack){
+               num += 1;
+                // check if num is 4 then erase the axie from the sorted_axie vector
+                if (num == 4) {
+                    sorted_axies.erase(sorted_axies.begin() + i);
+                }
+            }
+        }
+    }
 
-    // print out the attacker and defender axies
-    cout << "Player 1 attacker Axie 1 is " << attacker_axie_player1.type << endl;
-    cout << "Player 2 defender Axie 1 is " << defender_axie_player2.type << endl;
+    // create a mapping with axie as key and player as value
+    std::map<int, Main::player> axie_player_map;
+
+    for (int i = 0; i < sorted_axies.size(); i++) {
+        for (int j = 0; j < 2; j++){
+            if (sorted_axies[i].id == p1.axies[j].id) {
+                axie_player_map.insert(pair<int, Main::player>(sorted_axies[i].id, p1));
+            }
+            if (sorted_axies[i].id == p2.axies[j].id) {
+                axie_player_map.insert(pair<int, Main::player>(sorted_axies[i].id, p2));
+            }
+        }
+    }
+
 
     //// while at least one axie on each player is alive
-    if ((p1.axies[0].alive || p1.axies[1].alive)  && (p2.axies[0].alive || p2.axies[1].alive))
-    {
-        /// sends attacker, defender and p1 and p2 to damage calculator, reason to send p2 is to use defence cards!
-        // for each axie in player1_axies_sorted and player2_axies_sorted, send the axie to the damage calculator
-        for (int i = 0; i < 2 ; ++i) {
-            /// set strength of each axie before calculating damage
-            battleclass.setStrength(player1_axies_sorted[0]);
-            battleclass.setStrength(player2_axies_sorted[0]);
-            // the 1 at end represents the player number, 1 is player 1, 2 is player 2
-            // There may be better way to do this
-            battleclass.damageCalculator(player1_axies_sorted[0], player2_axies_sorted[0], p1, p2,1);
-        }
-        for (int i = 0; i < 2 ; ++i) {
-            /// set strength of each axie before calculating damage
-            battleclass.setStrength(player2_axies_sorted[0]);
-            battleclass.setStrength(player1_axies_sorted[0]);
-            battleclass.damageCalculator(player2_axies_sorted[0], player1_axies_sorted[0], p1, p2,2);
-        }
 
-       //// change the state in Main to card_selection state using state controller
+
+    for (int i = 0; i < sorted_axies.size() ; i++){
+        if ((p1.axies[0].alive || p1.axies[1].alive)  && (p2.axies[0].alive || p2.axies[1].alive)) {
+            setStrength(sorted_axies[i]);
+
+            // if axie_player_map[sorted_axies[i]] value is player one, then player one attacks
+
+            Main::axie defender_axie;
+            int attackNum;
+            cout << axie_player_map[sorted_axies[i].id].id << endl;
+            if (axie_player_map[sorted_axies[i].id].id == p1.id){
+                defender_axie = Find_defender_axie(p2);
+                attackNum = 1;
+            } else {
+                defender_axie = Find_defender_axie(p1);
+                attackNum = 2;
+            }
+
+            battleclass.damageCalculator(sorted_axies[i], defender_axie, p1, p2, attackNum);
+        }
     }
 
     //battleclass.damageCalculator(attacker_axie_player1,defender_axie_player2, p1, p2);

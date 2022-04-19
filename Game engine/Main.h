@@ -40,7 +40,7 @@ public:
         unsigned int morale = 0;
         unsigned int speed = 0;
         unsigned int skill = 0;
-        enum position {front,back} position = front;
+        enum position {front,back} position = back;
         string strenght = "";
         card cards[4];
     };
