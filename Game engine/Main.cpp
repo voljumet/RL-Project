@@ -33,9 +33,11 @@ vector<int> Main::showCardsDrawn(Main::player &p) {
     // check if the number is between 0 and 3, if so find the card that have the same card id
     Main::axie &_axie1 = p.axies[0];
     Main::axie &_axie2 = p.axies[1];
-    cout << "player " << p.id << " is choosing cards:" << endl;
+    cout << "player-id " << p.id << " is choosing cards:" << endl;
     for (int i = 0; i < 4; ++i) {
         int uc_num = cards_drawn[i];
+        
+/// NEEDS MORE CODE TO CHECK ORDER OF AXIES, instead of printing Axie 1 or 2
         if(uc_num >= 0 && uc_num <= 3){
             _axie1.cards[uc_num].card_status = Main::card::can_be_chosen;
             cout << "Axie 1: " << _axie1.cards[uc_num].type <<" - dmg:" << _axie1.cards[uc_num].damage <<" - def:"  << _axie1.cards[uc_num].defence << endl;
@@ -141,7 +143,7 @@ public:
         // print the cards that are available to chose for attack
         vector<int> cards_drawn = main.showCardsDrawn(player);
         int input;
-        cout << "Choose cards for player, enter 0 to skip " << player.id << endl;
+        cout << "Choose cards, enter 0 to skip " << endl;
 
         //// what if player has saved energy? can he spend too many cards at once?
         for (int i = 0; i < player.energy; ++i) {
@@ -185,11 +187,12 @@ public:
     Card_Selection_State(Main::player &p1, Main::player &p2){
         Main main;
         main.PrintChosenCards(p1);
-        cout << "Card_Selection_State is created!" << endl;
+//        cout << "Card_Selection_State is created!" << endl;
         cout << "----------------------------------------------------" << endl;
         main.PrintGameBoard(p1, p2, 1);
         cout << "----------------------------------------------------" << endl;
         SelectCards(p1);
+        cout << "----------------------------------------------------" << endl;
         SelectCards(p2);
 
     }
@@ -285,7 +288,7 @@ Main::player Main::createPlayer(int team_id){
         player.axies[axie_num].speed = team[json_team]["Speed"].asInt();
         player.axies[axie_num].skill = team[json_team]["Skill"].asInt();
         player.axies[axie_num].morale = team[json_team]["Morale"].asInt();
-        if (team[json_team]["placement"].asString() == "back"){
+        if (team[json_team]["Placement"].asString() == "back"){
             player.axies[axie_num].position = Main::axie::position::back;
         }
 
