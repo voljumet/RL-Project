@@ -65,26 +65,26 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie defende
         }
     }
 
-    // print out total_damage
-    if(total_damage == 0){
-        total_damage = 100;
-    }
-    std::cout << "total_damage: " << total_damage << std::endl;
+//    std::cout << "total_damage: " << total_damage << std::endl;
 
     //// reduce the health of the defender_axie by total_damage, and check if health is less than 0, then set axie.alive to false
-    for (int i = 0; i < 4 ; ++i) {
-        if (defender_axie.cards[i].card_status == Main::card::chosen_for_attack) {
-            defender_axie.health += defender_axie.cards[i].defence;
+    for (auto & i : defender_axie.cards) {
+        if (i.card_status == Main::card::chosen_for_attack) {
+            total_damage -= i.defence;
+            if (total_damage < 0){
+                total_damage = 0;
+            }
         }
     }
 
     defender_axie.health -= total_damage;
-        if (defender_axie.health <= 0) {
-           defender_axie.alive = false;
+    if (defender_axie.health <= 0) {
+        defender_axie.alive = false;
 
         // print out the defender_axie axie dead
-        std::cout << "The defender_axie axie  is dead" << std::endl;
+        std::cout << "The defender_axie axie is dead" << std::endl;
     }
+
     for (int i = 0; i < 2; ++i) {
         if (num == 1) {
             if (attacker_axie.id == p1.axies[i].id) {
