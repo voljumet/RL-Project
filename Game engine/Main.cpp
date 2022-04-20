@@ -82,6 +82,9 @@ std::vector<Main::axie> Main::sort_axies(player &playa1, player &playa2){
 //// returns the position for each axie as a string
 string Main::axiePosition(axie &axie, bool is_first, string stats){
     string pos;
+    if (!axie.alive){
+        stats = "dead";
+    }
     if (is_first){
         if (axie.position == Main::axie::front){
             pos = "          |"+ stats +"";
@@ -106,14 +109,16 @@ string Main::printAxies(player &playa1, player &playa2, vector<axie> axies){
         s_position << i + 1;
         s_health << axies[i].health;
 
-        if(playa1.axies[0].id == axies[i].id)
-            first_axie = axiePosition(axies[i], true, s_position.str() + ":" + axies[i].type + ":" + s_health.str());
+        if(playa1.axies[0].id == axies[i].id){
+            first_axie = axiePosition(axies[i], true, (s_position.str() + ":" + axies[i].type + ":" + s_health.str()));
+
+        }
         else if(playa2.axies[0].id == axies[i].id)
-            second_axie = axiePosition(axies[i], false, s_position.str() + ":" + axies[i].type + ":" + s_health.str());
+            second_axie = axiePosition(axies[i], false, (s_position.str() + ":" + axies[i].type + ":" + s_health.str()));
         else if(playa1.axies[1].id == axies[i].id)
-            third_axie = axiePosition(axies[i], true, s_position.str() + ":" + axies[i].type + ":" + s_health.str());
+            third_axie = axiePosition(axies[i], true, (s_position.str() + ":" + axies[i].type + ":" + s_health.str()));
         else if(playa2.axies[1].id == axies[i].id)
-            fourth_axie = axiePosition(axies[i], false, s_position.str() + ":" + axies[i].type + ":" + s_health.str());
+            fourth_axie = axiePosition(axies[i], false, (s_position.str() + ":" + axies[i].type + ":" + s_health.str()));
     }
     return first_axie + "     " + second_axie + "\n" + third_axie + "     " + fourth_axie;
 }
