@@ -8,6 +8,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 41,
+			"Placement": "front",
 			"Cards": [{
  
 					"name": "serious",
@@ -29,6 +30,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 41,
+			"Placement": "front",
 			"Cards": [{
  
 					"name": "serious",
@@ -53,6 +55,7 @@
 			"Speed": 33,
 			"Skill": 31,
 			"Morale": 44,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -75,6 +78,7 @@
 			"Speed": 52,
 			"Skill": 35,
 			"Morale": 33,
+			"Placement": "back",
 			"Cards": [
 				{
 	 
@@ -100,6 +104,7 @@
 			"Speed": 32,
 			"Skill": 31,
 			"Morale": 43,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -122,6 +127,7 @@
 			"Speed": 39,
 			"Skill": 31,
 			"Morale": 59,
+			"Placement": "back",
 			"Cards": [{
  
 					"name": "confident",
@@ -146,6 +152,7 @@
 			"Speed": 52,
 			"Skill": 35,
 			"Morale": 33,
+			"Placement": "back",
 			"Cards": [
 				{
 	 
@@ -168,6 +175,7 @@
 			"Speed": 33,
 			"Skill": 31,
 			"Morale": 44,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -193,6 +201,7 @@
 			"Speed": 34,
 			"Skill": 31,
 			"Morale": 44,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -215,6 +224,7 @@
 			"Speed": 35,
 			"Skill": 31,
 			"Morale": 45,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -240,6 +250,7 @@
 			"Speed": 32,
 			"Skill": 31,
 			"Morale": 45,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -262,6 +273,7 @@
 			"Speed": 52,
 			"Skill": 35,
 			"Morale": 34,
+			"Placement": "back",
 			"Cards": [
 				{
 	 
@@ -287,6 +299,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 41,
+			"Placement": "front",
 			"Cards": [{
  
 					"name": "zigzag",
@@ -308,6 +321,7 @@
 			"Speed": 32,
 			"Skill": 31,
 			"Morale": 45,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -333,6 +347,7 @@
 			"Speed": 53,
 			"Skill": 35,
 			"Morale": 33,
+			"Placement": "back",
 			"Cards": [
 				{
 	 
@@ -355,6 +370,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 43,
+			"Placement": "front",
 			"Cards": [{
  
 					"name": "zigzag",
@@ -379,6 +395,7 @@
 			"Speed": 32,
 			"Skill": 31,
 			"Morale": 45,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -401,6 +418,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 43,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -426,6 +444,7 @@
 			"Speed": 40,
 			"Skill": 31,
 			"Morale": 61,
+			"Placement": "back",
 			"Cards": [{
  
 					"name": "confident",
@@ -447,6 +466,7 @@
 			"Speed": 32,
 			"Skill": 31,
 			"Morale": 43,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -472,6 +492,7 @@
 			"Speed": 41,
 			"Skill": 31,
 			"Morale": 61,
+			"Placement": "back",
 			"Cards": [
 				{
 	 
@@ -494,6 +515,7 @@
 			"Speed": 32,
 			"Skill": 31,
 			"Morale": 43,
+			"Placement": "front",
 			"Cards": [{
  
 					"name": "herbivore",
@@ -518,6 +540,7 @@
 			"Speed": 54,
 			"Skill": 35,
 			"Morale": 30,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -540,6 +563,7 @@
 			"Speed": 52,
 			"Skill": 35,
 			"Morale": 33,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -565,6 +589,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 41,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -587,6 +612,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 41,
+			"Placement": "front",
 			"Cards": [{
  
 					"name": "zigzag",
@@ -611,6 +637,7 @@
 			"Speed": 32,
 			"Skill": 31,
 			"Morale": 45,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -633,6 +660,7 @@
 			"Speed": 33,
 			"Skill": 31,
 			"Morale": 47,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -658,6 +686,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 41,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -680,6 +709,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 41,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -705,6 +735,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 41,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -727,6 +758,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 43,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -752,6 +784,7 @@
 			"Speed": 52,
 			"Skill": 35,
 			"Morale": 34,
+			"Placement": "back",
 			"Cards": [
 				{
 	 
@@ -774,6 +807,7 @@
 			"Speed": 32,
 			"Skill": 31,
 			"Morale": 45,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -799,6 +833,7 @@
 			"Speed": 52,
 			"Skill": 35,
 			"Morale": 34,
+			"Placement": "back",
 			"Cards": [{
  
 					"name": "risky fish",
@@ -820,6 +855,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 43,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -845,6 +881,7 @@
 			"Speed": 31,
 			"Skill": 31,
 			"Morale": 43,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -867,6 +904,7 @@
 			"Speed": 52,
 			"Skill": 35,
 			"Morale": 33,
+			"Placement": "back",
 			"Cards": [
 				{
 	 
@@ -892,6 +930,7 @@
 			"Speed": 34,
 			"Skill": 31,
 			"Morale": 44,
+			"Placement": "front",
 			"Cards": [
 				{
 	 
@@ -914,6 +953,7 @@
 			"Speed": 35,
 			"Skill": 31,
 			"Morale": 45,
+			"Placement": "front",
 			"Cards": [
 				{
 	 

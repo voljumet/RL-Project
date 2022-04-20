@@ -12,9 +12,12 @@ class State {
 public:
     virtual void UpdateState() = 0;
     virtual ~State(){};
+
 };
 
-class main {
+
+
+class Main {
 public:
     struct card{
         int id = 999;
@@ -33,10 +36,12 @@ public:
         unsigned int id = 0;
         string type = "";
         int health = 0;
+        bool alive = true;
         unsigned int morale = 0;
         unsigned int speed = 0;
         unsigned int skill = 0;
         enum position {front,back} position = front;
+        string strenght = "";
         card cards[4];
     };
 
@@ -46,6 +51,17 @@ public:
         unsigned int energy = 0; // allows player use cards in battle
         unsigned int rank = 0; // player rank
     };
+
+    std::vector<Main::axie> sort_axies(player &playa1, player &playa2);
+    string axiePosition(axie &axie, bool is_first, string stats);
+    string printAxies(player &playa1, player &playa2, vector<axie> axies);
+    void PrintGameBoard(player &player1, player &player2, int round);
+    std::vector<int> selectFourNumbers();
+    std::vector<int> showCardsDrawn(Main::player &p);
+    void PrintChosenCards(Main::player &p);
+    player createPlayer(int team_id);
 };
+
+
 
 #endif //GAME_ENGINE_MAIN_H
