@@ -142,36 +142,43 @@ public:
         Main main;
         // print the cards that are available to chose for attack
         vector<int> cards_drawn = main.showCardsDrawn(player);
-        int input;
+        int choose_card_input;
         cout << "Choose cards, enter 0 to skip " << endl;
 
-        //// what if player has saved energy? can he spend too many cards at once?
+//// what if player has saved energy? can he spend too many cards at once?
         for (int i = 0; i < player.energy; ++i) {
-            cin >>input;
-            if (input == 0)
+            cin >> choose_card_input;
+            if (choose_card_input == 0)
                 break;
-            if (input == 1){
+
+            if (choose_card_input == 1){
                 if (cards_drawn[0] <= 3){
                     player.axies[0].cards[cards_drawn[0]].card_status = Main::card::chosen_for_attack;
                 }
                 else if (cards_drawn[0] >= 4 && cards_drawn[0] <= 7){
                     player.axies[1].cards[cards_drawn[0] - 4].card_status = Main::card::chosen_for_attack;
                 }
-            } else if (input == 2){
+            }
+
+            else if (choose_card_input == 2){
                 if (cards_drawn[1] <= 3){
                     player.axies[0].cards[cards_drawn[1]].card_status = Main::card::chosen_for_attack;
                 }
                 else if (cards_drawn[1] >= 4 && cards_drawn[1] <= 7){
                     player.axies[1].cards[cards_drawn[1] - 4].card_status = Main::card::chosen_for_attack;
                 }
-            } else if (input == 3){
+            }
+
+            else if (choose_card_input == 3){
                 if (cards_drawn[2] <= 3){
                     player.axies[0].cards[cards_drawn[2]].card_status = Main::card::chosen_for_attack;
                 }
                 else if (cards_drawn[2] >= 4 && cards_drawn[2] <= 7){
                     player.axies[1].cards[cards_drawn[2] - 4].card_status = Main::card::chosen_for_attack;
                 }
-            } else if (input == 4){
+            }
+
+            else if (choose_card_input == 4){
                 if (cards_drawn[3] <= 3){
                     player.axies[0].cards[cards_drawn[3]].card_status = Main::card::chosen_for_attack;
                 }
@@ -179,6 +186,7 @@ public:
                     player.axies[1].cards[cards_drawn[3] - 4].card_status = Main::card::chosen_for_attack;
                 }
             }
+            player.energy -= 1;
         }
         main.PrintChosenCards(player);
     };
