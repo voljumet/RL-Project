@@ -138,45 +138,55 @@ void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round)
 
 //// Card selection state
 class Card_Selection_State: public State {
+    Main main;
 public:
     void UpdateState()  override{
         cout << "Cards are selected!"<< endl;
     };
 
     void SelectCards(Main::player &player){
-        Main main;
         // print the cards that are available to chose for attack
         vector<int> cards_drawn = main.showCardsDrawn(player);
-        int input;
+        int choose_card_input;
         cout << "Choose cards, enter 0 to skip " << endl;
 
-        //// what if player has saved energy? can he spend too many cards at once?
-        for (int i = 0; i < player.energy; ++i) {
-            cin >>input;
-            if (input == 0)
+//// what if player has saved energy? can he spend too many cards at once?
+        for (int i = 0; i < 4; ++i) {
+            if (player.energy == 0)
                 break;
-            if (input == 1){
+
+            cin >> choose_card_input;
+            if (choose_card_input == 0)
+                break;
+
+            if (choose_card_input == 1){
                 if (cards_drawn[0] <= 3){
                     player.axies[0].cards[cards_drawn[0]].card_status = Main::card::chosen_for_attack;
                 }
                 else if (cards_drawn[0] >= 4 && cards_drawn[0] <= 7){
                     player.axies[1].cards[cards_drawn[0] - 4].card_status = Main::card::chosen_for_attack;
                 }
-            } else if (input == 2){
+            }
+
+            else if (choose_card_input == 2){
                 if (cards_drawn[1] <= 3){
                     player.axies[0].cards[cards_drawn[1]].card_status = Main::card::chosen_for_attack;
                 }
                 else if (cards_drawn[1] >= 4 && cards_drawn[1] <= 7){
                     player.axies[1].cards[cards_drawn[1] - 4].card_status = Main::card::chosen_for_attack;
                 }
-            } else if (input == 3){
+            }
+
+            else if (choose_card_input == 3){
                 if (cards_drawn[2] <= 3){
                     player.axies[0].cards[cards_drawn[2]].card_status = Main::card::chosen_for_attack;
                 }
                 else if (cards_drawn[2] >= 4 && cards_drawn[2] <= 7){
                     player.axies[1].cards[cards_drawn[2] - 4].card_status = Main::card::chosen_for_attack;
                 }
-            } else if (input == 4){
+            }
+
+            else if (choose_card_input == 4){
                 if (cards_drawn[3] <= 3){
                     player.axies[0].cards[cards_drawn[3]].card_status = Main::card::chosen_for_attack;
                 }
@@ -184,13 +194,13 @@ public:
                     player.axies[1].cards[cards_drawn[3] - 4].card_status = Main::card::chosen_for_attack;
                 }
             }
+            player.energy -= 1;
         }
         main.PrintChosenCards(player);
     };
 
     // Constructor
     Card_Selection_State(Main::player &p1, Main::player &p2){
-        Main main;
         main.PrintChosenCards(p1);
 //        cout << "Card_Selection_State is created!" << endl;
         cout << "----------------------------------------------------" << endl;
@@ -208,12 +218,13 @@ public:
 
 //// Attack state
 class Attack_State: public State{
+    Main main;
+    BattleClass battleclass;
 public:
     void UpdateState() override{
         cout << "attack done" << endl;
     }
     void PrintPlayer(Main::player &p1, Main::player &p2){
-        Main main;
         main.PrintGameBoard(p1, p2, 1);
 //        cout << "Player1: " << p1.axies->cards[0].card_status << endl;
 //        cout << "Player2: "<< p2.axies->type << endl;
@@ -222,11 +233,8 @@ public:
     // Constructor
     Attack_State(Main::player &p1, Main::player &p2){
         cout << "Attack_State is created" << endl;
-        //PrintPlayer(p1,p2);
-        BattleClass battleclass;
-        battleclass.battle(p1, p2);
-        // call transition function
 
+        battleclass.battle(p1, p2);
     }
 
     ~Attack_State(){
