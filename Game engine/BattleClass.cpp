@@ -221,13 +221,15 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
         }
     }
 
-    //battleclass.damageCalculator(attacker_axie_player1,defender_axie_player2, p1, p2);
 
     Main::PrintGameBoard(p1, p2,2);
     //attack the defender axie (the front axie of opposing team)
     //axieAttack(a1, a2, damage);
 
-    //repeat until one player is dead.
+    /// replenish players energy after attack round
+    int energy_replenishment = 2;
+    p1.energy += energy_replenishment;
+    p2.energy += energy_replenishment;
 
 }
 

@@ -133,20 +133,23 @@ void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round)
 
 //// Card selection state
 class Card_Selection_State: public State {
+    Main main;
 public:
     void UpdateState()  override{
         cout << "Cards are selected!"<< endl;
     };
 
     void SelectCards(Main::player &player){
-        Main main;
         // print the cards that are available to chose for attack
         vector<int> cards_drawn = main.showCardsDrawn(player);
         int choose_card_input;
         cout << "Choose cards, enter 0 to skip " << endl;
 
 //// what if player has saved energy? can he spend too many cards at once?
-        for (int i = 0; i < player.energy; ++i) {
+        for (int i = 0; i < 4; ++i) {
+            if (player.energy == 0)
+                break;
+
             cin >> choose_card_input;
             if (choose_card_input == 0)
                 break;
@@ -193,7 +196,6 @@ public:
 
     // Constructor
     Card_Selection_State(Main::player &p1, Main::player &p2){
-        Main main;
         main.PrintChosenCards(p1);
 //        cout << "Card_Selection_State is created!" << endl;
         cout << "----------------------------------------------------" << endl;
@@ -211,12 +213,13 @@ public:
 
 //// Attack state
 class Attack_State: public State{
+    Main main;
+    BattleClass battleclass;
 public:
     void UpdateState() override{
         cout << "attack done" << endl;
     }
     void PrintPlayer(Main::player &p1, Main::player &p2){
-        Main main;
         main.PrintGameBoard(p1, p2, 1);
 //        cout << "Player1: " << p1.axies->cards[0].card_status << endl;
 //        cout << "Player2: "<< p2.axies->type << endl;
@@ -225,11 +228,8 @@ public:
     // Constructor
     Attack_State(Main::player &p1, Main::player &p2){
         cout << "Attack_State is created" << endl;
-        //PrintPlayer(p1,p2);
-        BattleClass battleclass;
-        battleclass.battle(p1, p2);
-        // call transition function
 
+        battleclass.battle(p1, p2);
     }
 
     ~Attack_State(){
