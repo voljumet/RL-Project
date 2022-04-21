@@ -224,10 +224,7 @@ public:
 //        main.PrintChosenCards(p1);
 //        cout << "Card_Selection_State is created!" << endl;
 
-        Main main;
         vector<Main::axie> sorted_a = main.sort_axies(p1, p2);
-//        cout << "----------------------------------------------------" << endl;
-//        main.PrintGameBoard(p1, p2, 1);
         cout << "----------------------------------------------------" << endl;
         SelectCards(p1,sorted_a);
         cout << "----------------------------------------------------" << endl;
@@ -361,6 +358,7 @@ int main() {
     Main main;
     StateController stateController;
 
+
     // ask user to choose Axie teams
     for (int i = 0; i < 2; i++) {
         int axie_team;
@@ -381,6 +379,9 @@ int main() {
 
         // stateConroller.TransitionTo returns value 0 if game is over
         stateController.TransitionTo(str, players[0], players[1]);
+        if ((!players[0].axies[0].alive && !players[0].axies[1].alive) || (!players[1].axies[0].alive && !players[1].axies[1].alive))
+            break;
+
 
         if (str == "attack"){
             str = "choose cards";
@@ -390,5 +391,12 @@ int main() {
             game_round++;
         }
     }
+
+        if (!players[0].axies[0].alive && !players[0].axies[1].alive) {
+            cout << "Player 2 has won!" << endl;
+        }
+        else if (!players[1].axies[0].alive && !players[1].axies[1].alive) {
+            cout << "Player 1 has won!" << endl;
+        }
     return 0;
 }
