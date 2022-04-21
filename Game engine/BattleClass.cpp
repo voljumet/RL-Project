@@ -34,7 +34,7 @@ std::vector<Main::axie> BattleClass::sort_axies_by_speed(player &playa){
 }
 
 
-void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie defender_axie, Main::player &p1, Main::player &p2,int num) {
+void BattleClass::damageCalculator(Main::axie* attacker_axie, Main::axie* defender_axie, Main::player &p1, Main::player &p2,int num) {
     // the damage is the attacker card base damage
     // how to know which card is attacking?
     // the attacker card is the card that is on the top of the stack?
@@ -42,33 +42,32 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie defende
     int total_damage = 0;
 
     for (int i = 0; i < 4; ++i) {
-
         //// base damage needs to reset for each card
         int base_damage = 0;
-        if (attacker_axie.cards[i].card_status == Main::card::chosen_for_attack) {
+        if (attacker_axie->cards[i].card_status == Main::card::chosen_for_attack) {
             //// base damage is the card damage
-            base_damage = attacker_axie.cards[i].damage;
-            total_damage = base_damage;
+            base_damage = attacker_axie->cards[i].damage;
+            total_damage += base_damage;
             ////  If the Axie type is the same as the axie card type, the card will deal an extra 10% damage
-            if (attacker_axie.cards[i].type == attacker_axie.type) {
-                total_damage = base_damage + (base_damage * 0.1);
+            if (attacker_axie->cards[i].type == attacker_axie->type) {
+                total_damage += base_damage + (base_damage * 0.1);
             }
             ////If the card class is strong against the Axie class, it will deal +15% bonus damage. Or -15% if it’s the other way.
-            if (attacker_axie.strenght == defender_axie.type) {
-                total_damage = base_damage + (base_damage * 0.15);
-            } else if (attacker_axie.type == defender_axie.strenght) {
-                total_damage = base_damage - (base_damage * 0.15);
+            if (attacker_axie->strenght == defender_axie->type) {
+                total_damage += base_damage + (base_damage * 0.15);
+            } else if (attacker_axie->type == defender_axie->strenght) {
+                total_damage += base_damage - (base_damage * 0.15);
             }
 
             //// set the used card to wait_for_restock
-            attacker_axie.cards[i].card_status = Main::card::wait_for_restock;
+            attacker_axie->cards[i].card_status = Main::card::wait_for_restock;
         }
     }
 
 //    std::cout << "total_damage: " << total_damage << std::endl;
 
     //// reduce the health of the defender_axie by total_damage, and check if health is less than 0, then set axie.alive to false
-    for (auto & i : defender_axie.cards) {
+    for (auto & i : defender_axie->cards) {
         if (i.card_status == Main::card::chosen_for_attack) {
             total_damage -= i.defence;
             if (total_damage < 0){
@@ -77,32 +76,32 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie defende
         }
     }
 
-    defender_axie.health -= total_damage;
-    if (defender_axie.health <= 0) {
-        defender_axie.alive = false;
+    defender_axie->health -= total_damage;
+    if (defender_axie->health <= 0) {
+        defender_axie->alive = false;
 
         // print out the defender_axie axie dead
         std::cout << "The defender_axie axie is dead" << std::endl;
     }
 
-    for (int i = 0; i < 2; ++i) {
-        if (num == 1) {
-            if (attacker_axie.id == p1.axies[i].id) {
-                p1.axies[i] = attacker_axie;
-            }
-            if (defender_axie.id == p2.axies[i].id) {
-                p2.axies[i] = defender_axie;
-            }
-        }
-        if (num == 2) {
-            if (attacker_axie.id == p2.axies[i].id) {
-                p2.axies[i] = attacker_axie;
-            }
-            if (defender_axie.id == p1.axies[i].id) {
-                p1.axies[i] = defender_axie;
-            }
-        }
-    }
+//    for (int i = 0; i < 2; ++i) {
+//        if (num == 1) {
+//            if (attacker_axie->id == p1.axies[i].id) {
+//                p1.axies[i] = attacker_axie;
+//            }
+//            if (defender_axie->id == p2.axies[i].id) {
+//                p2.axies[i] = defender_axie;
+//            }
+//        }
+//        if (num == 2) {
+//            if (attacker_axie->id == p2.axies[i].id) {
+//                p2.axies[i] = attacker_axie;
+//            }
+//            if (defender_axie->id == p1.axies[i].id) {
+//                p1.axies[i] = defender_axie;
+//            }
+//        }
+//    }
 
 }
 
@@ -208,7 +207,7 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
 
             Main::axie defender_axie;
             int attackNum;
-            cout << axie_player_map[sorted_axies[i].id].id << endl;
+//            cout << axie_player_map[sorted_axies[i].id].id << endl;
             if (axie_player_map[sorted_axies[i].id].id == p1.id){
                 defender_axie = Find_defender_axie(p2);
                 attackNum = 1;
@@ -217,12 +216,12 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
                 attackNum = 2;
             }
 
-            battleclass.damageCalculator(sorted_axies[i], defender_axie, p1, p2, attackNum);
+            battleclass.damageCalculator(&sorted_axies[i], &defender_axie, p1, p2, attackNum);
         }
     }
 
 
-    Main::PrintGameBoard(p1, p2,2);
+//    Main::PrintGameBoard(p1, p2,2);
     //attack the defender axie (the front axie of opposing team)
     //axieAttack(a1, a2, damage);
 

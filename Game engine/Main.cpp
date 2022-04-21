@@ -201,7 +201,7 @@ public:
 
     // Constructor
     Card_Selection_State(Main::player &p1, Main::player &p2){
-        main.PrintChosenCards(p1);
+//        main.PrintChosenCards(p1);
 //        cout << "Card_Selection_State is created!" << endl;
         cout << "----------------------------------------------------" << endl;
         main.PrintGameBoard(p1, p2, 1);
@@ -225,7 +225,7 @@ public:
         cout << "attack done" << endl;
     }
     void PrintPlayer(Main::player &p1, Main::player &p2){
-        main.PrintGameBoard(p1, p2, 1);
+//        main.PrintGameBoard(p1, p2, 1);
 //        cout << "Player1: " << p1.axies->cards[0].card_status << endl;
 //        cout << "Player2: "<< p2.axies->type << endl;
     }
@@ -233,7 +233,6 @@ public:
     // Constructor
     Attack_State(Main::player &p1, Main::player &p2){
         cout << "Attack_State is created" << endl;
-
         battleclass.battle(p1, p2);
     }
 
