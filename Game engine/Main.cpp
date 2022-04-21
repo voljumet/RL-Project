@@ -26,9 +26,27 @@ vector<int> Main::selectFourNumbers(){
     }
     return random_number;
 }
+int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
+    int num = 0;
+    for (int j = 0; j < 4; ++j) {
+        if (a.id == axies[0].id) {
+            num = 1;
+            return num;
+        } else if (a.id == axies[1].id) {
+            num = 2;
+            return num;
+        } else if (a.id == axies[2].id) {
+            num = 3;
+            return num;
+        } else if (a.id == axies[3].id) {
+            num = 4;
+            return num;
+        }
+    }
+}
 
 //// returns cards that CAN be chosen by player
-vector<int> Main::showCardsDrawn(Main::player &p) {
+vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &axies) {
     vector<int> cards_drawn = selectFourNumbers();
     // check if the number is between 0 and 3, if so find the card that have the same card id
     Main::axie &_axie1 = p.axies[0];
@@ -40,15 +58,17 @@ vector<int> Main::showCardsDrawn(Main::player &p) {
 /// NEEDS MORE CODE TO CHECK ORDER OF AXIES, instead of printing Axie 1 or 2
         if(uc_num >= 0 && uc_num <= 3){
             _axie1.cards[uc_num].card_status = Main::card::can_be_chosen;
-            cout << "Axie 1: " << _axie1.cards[uc_num].type <<" - dmg:" << _axie1.cards[uc_num].damage <<" - def:"  << _axie1.cards[uc_num].defence << endl;
+            cout << "Axie "<< Main::returnOrderNum(_axie1,axies)  <<":"<< _axie1.cards[uc_num].type <<" - dmg:" << _axie1.cards[uc_num].damage <<" - def:"  << _axie1.cards[uc_num].defence << endl;
 
         } else if(uc_num >= 4 && uc_num <= 7){
             _axie2.cards[uc_num].card_status = Main::card::can_be_chosen;
-            cout << "Axie 2: " << _axie2.cards[uc_num-4].type <<" - dmg:"  << _axie2.cards[uc_num-4].damage <<" - def:"  << _axie2.cards[uc_num-4].defence << endl;
+            cout << "Axie "<< Main::returnOrderNum(_axie2,axies)  <<":"<< _axie2.cards[uc_num-4].type <<" - dmg:"  << _axie2.cards[uc_num-4].damage <<" - def:"  << _axie2.cards[uc_num-4].defence << endl;
         }
     }
     return cards_drawn;
 }
+
+
 
 //// prints the cards that ARE chosen by player
 void Main::PrintChosenCards(Main::player &p) {
@@ -58,7 +78,7 @@ void Main::PrintChosenCards(Main::player &p) {
             cout << "Player " << p.id << ", card from Axie 1 is " << p.axies[0].cards[i].type <<" Chosen" << endl;
         }
         if(p.axies[1].cards[i].card_status == Main::card::chosen_for_attack){
-            cout << "Player " << p.id << " Axie 2 card " << p.axies[1].cards[i].id << " is " << p.axies[1].cards[i].type<<" Chosen" << endl;
+            cout << "Player " << p.id  << " Axie 2 card " << p.axies[1].cards[i].id << " is " << p.axies[1].cards[i].type<<" Chosen" << endl;
         }
     }
 }
@@ -144,9 +164,9 @@ public:
 //        cout << "Cards are selected!"<< endl;
     };
 
-    void SelectCards(Main::player &player){
+    void SelectCards(Main::player &player, vector<Main::axie> axies){
         // print the cards that are available to chose for attack
-        vector<int> cards_drawn = main.showCardsDrawn(player);
+        vector<int> cards_drawn = main.showCardsDrawn(player, axies);
         int choose_card_input;
         cout << "Choose cards, enter 0 to skip " << endl;
 
@@ -203,12 +223,15 @@ public:
     Card_Selection_State(Main::player &p1, Main::player &p2){
 //        main.PrintChosenCards(p1);
 //        cout << "Card_Selection_State is created!" << endl;
+
+        Main main;
+        vector<Main::axie> sorted_a = main.sort_axies(p1, p2);
 //        cout << "----------------------------------------------------" << endl;
 //        main.PrintGameBoard(p1, p2, 1);
         cout << "----------------------------------------------------" << endl;
-        SelectCards(p1);
+        SelectCards(p1,sorted_a);
         cout << "----------------------------------------------------" << endl;
-        SelectCards(p2);
+        SelectCards(p2,sorted_a);
 
     }
     ~Card_Selection_State(){
@@ -233,7 +256,6 @@ public:
     // Constructor
     Attack_State(Main::player &p1, Main::player &p2){
 //        cout << "Attack_State is created" << endl;
-
         battleclass.battle(p1, p2);
     }
 
