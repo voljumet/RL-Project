@@ -219,7 +219,7 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
 
             Main::axie defender_axie;
             int attackNum;
-//            cout << axie_player_map[sorted_axies[i].id].id << endl;
+//            cout << "player-id" << axie_player_map[sorted_axies[i].id].id << endl;
             if (axie_player_map[sorted_axies[i].id].id == p1.id){
                 defender_axie = Find_defender_axie(p2);
                 attackNum = 1;
@@ -233,7 +233,6 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
     }
 
 
-//    Main::PrintGameBoard(p1, p2,2);
     //attack the defender axie (the front axie of opposing team)
     //axieAttack(a1, a2, damage);
 
