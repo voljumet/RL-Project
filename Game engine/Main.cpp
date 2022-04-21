@@ -55,7 +55,7 @@ void Main::PrintChosenCards(Main::player &p) {
     //find cards that are chosen_for_attack and show them for echa axie in the player
     for (int i = 0; i < 4; ++i) {
         if(p.axies[0].cards[i].card_status == Main::card::chosen_for_attack){
-            cout << "Player " << p.id << " Axie 1 card " << p.axies[0].cards[i].id << " is " << p.axies[0].cards[i].type<<" Chosen" << endl;
+            cout << "Player " << p.id << ", card from Axie 1 is " << p.axies[0].cards[i].type <<" Chosen" << endl;
         }
         if(p.axies[1].cards[i].card_status == Main::card::chosen_for_attack){
             cout << "Player " << p.id << " Axie 2 card " << p.axies[1].cards[i].id << " is " << p.axies[1].cards[i].type<<" Chosen" << endl;
@@ -129,7 +129,7 @@ void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round)
         Main main;
 
         vector<Main::axie> axies = main.sort_axies(playa1, playa2);
-
+        cout << "----------------------------------------------------" << endl;
         cout << "Round: " << round << " - (attack order : type : health)" << endl;
         cout << "Energy: " << playa1.energy << endl;
         cout << "   back   |           front          |   back" << endl;
@@ -141,7 +141,7 @@ class Card_Selection_State: public State {
     Main main;
 public:
     void UpdateState()  override{
-        cout << "Cards are selected!"<< endl;
+//        cout << "Cards are selected!"<< endl;
     };
 
     void SelectCards(Main::player &player){
@@ -196,15 +196,15 @@ public:
             }
             player.energy -= 1;
         }
-        main.PrintChosenCards(player);
+//        main.PrintChosenCards(player);
     };
 
     // Constructor
     Card_Selection_State(Main::player &p1, Main::player &p2){
-        main.PrintChosenCards(p1);
+//        main.PrintChosenCards(p1);
 //        cout << "Card_Selection_State is created!" << endl;
-        cout << "----------------------------------------------------" << endl;
-        main.PrintGameBoard(p1, p2, 1);
+//        cout << "----------------------------------------------------" << endl;
+//        main.PrintGameBoard(p1, p2, 1);
         cout << "----------------------------------------------------" << endl;
         SelectCards(p1);
         cout << "----------------------------------------------------" << endl;
@@ -212,7 +212,7 @@ public:
 
     }
     ~Card_Selection_State(){
-        cout << "Card_Selection_State is discarded" << endl;
+//        cout << "Card_Selection_State is discarded" << endl;
     };
 };
 
@@ -224,21 +224,21 @@ public:
     void UpdateState() override{
         cout << "attack done" << endl;
     }
-    void PrintPlayer(Main::player &p1, Main::player &p2){
-        main.PrintGameBoard(p1, p2, 1);
+//    void PrintPlayer(Main::player &p1, Main::player &p2){
+//        main.PrintGameBoard(p1, p2, 1);
 //        cout << "Player1: " << p1.axies->cards[0].card_status << endl;
 //        cout << "Player2: "<< p2.axies->type << endl;
-    }
+//    }
 
     // Constructor
     Attack_State(Main::player &p1, Main::player &p2){
-        cout << "Attack_State is created" << endl;
+//        cout << "Attack_State is created" << endl;
 
         battleclass.battle(p1, p2);
     }
 
     ~Attack_State(){
-        cout << "Attack_State is discarded!" << endl;
+//        cout << "Attack_State is discarded!" << endl;
     };
 };
 
@@ -261,8 +261,7 @@ public:
 
         if(c == "attack"){
             currentState = new Attack_State(p1, p2);
-        }
-        if(c == "choose cards"){
+        } else if(c == "choose cards"){
             currentState = new Card_Selection_State(p1, p2);
         }
     }
@@ -348,19 +347,22 @@ int main() {
         players.push_back(main.createPlayer(axie_team));
     }
 
-    stateController.Init(players[0], players[1]);
     int game_round = 1;
+    main.PrintGameBoard(players[0],players[1],game_round);
 
+    stateController.Init(players[0], players[1]);
 
-    string str = "choose cards";
+    string str = "attack";
     while (game_round != 0){
         stateController.Update();
+
 
         // stateConroller.TransitionTo returns value 0 if game is over
         stateController.TransitionTo(str, players[0], players[1]);
 
         if (str == "attack"){
             str = "choose cards";
+            main.PrintGameBoard(players[0],players[1],game_round);
         } else if (str == "choose cards") {
             str = "attack";
             game_round++;
