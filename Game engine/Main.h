@@ -56,7 +56,7 @@ public:
     string axiePosition(axie &axie, bool is_first, string stats);
     string printAxies(player &playa1, player &playa2, vector<axie> axies);
     void PrintGameBoard(player &player1, player &player2, int round);
-    std::vector<int> selectFourNumbers();
+    std::vector<int> selectFourNumbers(player &pPlayer);
     std::vector<int> showCardsDrawn(Main::player &p, vector<axie> &axies);
     void PrintChosenCards(Main::player &p);
     player createPlayer(int team_id);

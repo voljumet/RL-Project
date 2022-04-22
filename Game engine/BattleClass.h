@@ -16,6 +16,8 @@ public:
     int reward();
 
     void setStrength(Main::axie &a);
+
+    void restock_cards(player &p);
 };
 
 
