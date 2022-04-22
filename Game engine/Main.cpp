@@ -15,7 +15,7 @@ vector<int> Main::selectFourNumbers(player &p)
         for (auto & j : axie.cards) {
             if (j.card_status == Main::card::can_be_chosen) {
                 // if the j.id is not already in the array, then push.
-                if (find(numbers.begin(), numbers.end(), j.id) == numbers.end()) {
+                if (find(numbers.begin(), numbers.end(), j.id) == numbers.end() && axie.alive) {
                     numbers.push_back(j.id);
                 }
 

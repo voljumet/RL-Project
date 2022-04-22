@@ -45,9 +45,12 @@ void BattleClass::restock_cards(player &p){
 // if all cards are used, then change the status to can_be_chosen.
     if (num_used_cards == 8){
         for (auto & a : p.axies){
-            for (auto & k : a.cards) {
-                k.card_status = Main::card::can_be_chosen;
+            if(a.alive){
+                for (auto & k : a.cards) {
+                    k.card_status = Main::card::can_be_chosen;
+                }
             }
+
         }
     }
 }
@@ -125,8 +128,11 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
     // loop through sorted_axie and finde matching axie in p1 and p2
     for (int i = 0; i < sorted_axie.size(); ++i) {
         for (int j = 0; j < 2; ++j) {
-            if (sorted_axie[i].id == attacker_axie.id) {
-                sorted_axie[i] = attacker_axie;
+            if (sorted_axie[i].id == p1.axies[j].id) {
+                sorted_axie[i] = p1.axies[j];
+            }
+            if (sorted_axie[i].id == p2.axies[j].id) {
+                sorted_axie[i] = p2.axies[j];
             }
         }
     }
