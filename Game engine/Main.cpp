@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <json/json.h>
-//#include "Main.h"
+#include "include/jsoncpp.cpp"
 #include "BattleClass.h"
 
 // a dynamic function that select maximum four numbers randomly from between 1 and 8.
@@ -191,16 +190,16 @@ string Main::printAxies(player &playa1, player &playa2, vector<axie> axies){
 
 //// prints the game board with Round, Energy and all axies
 void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round) {
-        // sort axies
-        Main main;
+    // sort axies
+    Main main;
 
-        vector<Main::axie> axies = main.sort_axies(playa1, playa2);
-        cout << "----------------------------------------------------" << endl;
-        cout << "Round: " << round << " - (attack order : type : health)" << endl;
-        cout << "Energy: " << playa1.energy << endl;
-        cout << "   back   |           front          |   back" << endl;
-        cout << main.printAxies(playa1, playa2, axies) << endl;
-    }
+    vector<Main::axie> axies = main.sort_axies(playa1, playa2);
+    cout << "----------------------------------------------------" << endl;
+    cout << "Round: " << round << " - (attack order : type : health)" << endl;
+    cout << "Energy: " << playa1.energy << endl;
+    cout << "   back   |           front          |   back" << endl;
+    cout << main.printAxies(playa1, playa2, axies) << endl;
+}
 
 //// Card selection state
 class Card_Selection_State: public State {
@@ -311,7 +310,7 @@ public:
 
 //// Create player with axies and cards, reads from JSON file.
 Main::player Main::createPlayer(int team_id){
-    ifstream file("../../axie_teams.json");
+    ifstream file("axie_teams.json");
     Json::Reader reader;
     Json::Value obj;
     reader.parse(file, obj);
@@ -411,11 +410,11 @@ int main() {
         }
     }
 
-        if (!players[0].axies[0].alive && !players[0].axies[1].alive) {
-            cout << "Player 2 has won!" << endl;
-        }
-        else if (!players[1].axies[0].alive && !players[1].axies[1].alive) {
-            cout << "Player 1 has won!" << endl;
-        }
+    if (!players[0].axies[0].alive && !players[0].axies[1].alive) {
+        cout << "Player 2 has won!" << endl;
+    }
+    else if (!players[1].axies[0].alive && !players[1].axies[1].alive) {
+        cout << "Player 1 has won!" << endl;
+    }
     return 0;
 }
