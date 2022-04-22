@@ -42,7 +42,7 @@ void BattleClass::restock_cards(player &p){
             }
         }
     }
-// if all cards are used, then change the status to can_be_chosen.
+    // if all cards are used, then change the status to can_be_chosen.
     if (num_used_cards == 8){
         for (auto & a : p.axies){
             if(a.alive){
@@ -50,7 +50,6 @@ void BattleClass::restock_cards(player &p){
                     k.card_status = Main::card::can_be_chosen;
                 }
             }
-
         }
     }
 }
