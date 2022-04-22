@@ -5,8 +5,7 @@
 #include "BattleClass.h"
 
 // a dynamic function that select maximum four numbers randomly from between 1 and 8.
-vector<int> Main::selectFourNumbers(player &p)
-{
+vector<int> Main::selectFourNumbers(player &p){
     // create a int array to store maximum 8 numbers.
     vector<int> numbers;
     // loop through p1 and p2's axies and add the card id of cards with status of can_be_chosen to the array.
@@ -22,11 +21,10 @@ vector<int> Main::selectFourNumbers(player &p)
             }
         }
     }
-// get four random numbers from numbers. if the size of numbers is less than 4, then get all numbers.
+    // get four random numbers from numbers. if the size of numbers is less than 4, then get all numbers.
     if (numbers.size() <= 4) {
         return numbers;
-    }
-    else {
+    } else {
         // create a vector to store four random numbers.
         vector<int> four_numbers;
         // loop through four times.
@@ -52,27 +50,6 @@ vector<int> Main::selectFourNumbers(player &p)
     return numbers;
 }
 
-
-
-//// RNG
-//vector<int> Main::selectFourNumbers(){
-//    // function that select four random numbers between 1 and 8, and a number can not be repeated
-//    // if the number is repeated, it will be replaced by another number
-//    // the number of numbers will be 4 and the range is 1 to 8
-//    // the function will return a vector of 4 numbers
-//    srand(time(0));
-//    vector<int> random_number;
-//    int number;
-//    int i = 0;
-//    while(i < 4){
-//        number = rand() % 8+1;
-//        if(find(random_number.begin(), random_number.end(), number) == random_number.end()){
-//            random_number.push_back(number);
-//            i++;
-//        }
-//    }
-//    return random_number;
-//}
 int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
     int num = 0;
     for (int j = 0; j < 4; ++j) {
