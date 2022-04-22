@@ -5,27 +5,75 @@
 //#include "Main.h"
 #include "BattleClass.h"
 
+// a dynamic function that select maximum four numbers randomly from between 1 and 8.
+vector<int> Main::selectFourNumbers(player &p)
+{
+    // create a int array to store maximum 8 numbers.
+    vector<int> numbers;
+    // loop through p1 and p2's axies and add the card id of cards with status of can_be_chosen to the array.
+    for (auto & axie : p.axies) {
+        for (auto & j : axie.cards) {
+            if (j.card_status == Main::card::can_be_chosen) {
+                // if the j.id is not already in the array, then push.
+                if (find(numbers.begin(), numbers.end(), j.id) == numbers.end() && axie.alive) {
+                    numbers.push_back(j.id);
+                }
+
+
+            }
+        }
+    }
+// get four random numbers from numbers. if the size of numbers is less than 4, then get all numbers.
+    if (numbers.size() <= 4) {
+        return numbers;
+    }
+    else {
+        // create a vector to store four random numbers.
+        vector<int> four_numbers;
+        // loop through four times.
+        for (int i = 0; i < 4; i++) {
+            // get a random number from numbers.
+            int random_number = numbers[rand() % numbers.size()];
+                // check if the random_number is already in four_numbers.
+                if (find(four_numbers.begin(), four_numbers.end(), random_number) != four_numbers.end()) {
+                    // if the random_number is already in four_numbers, then get another random number.
+                    i--;
+                }
+                else {
+                    // if the random_number is not in four_numbers, then push the random number to four_numbers.
+                    four_numbers.push_back(random_number);
+                }
+            // remove the random number from numbers.
+            numbers.erase(remove(numbers.begin(), numbers.end(), random_number), numbers.end());
+        }
+        // return four_numbers.
+        return four_numbers;
+    }
+
+    return numbers;
+}
+
 
 
 //// RNG
-vector<int> Main::selectFourNumbers(){
-    // function that select four random numbers between 0 and 7, and a number can not be repeated
-    // if the number is repeated, it will be replaced by another number
-    // the number of numbers will be 4 and the range is 0 to 7
-    // the function will return a vector of 4 numbers
-    srand(time(0));
-    vector<int> random_number;
-    int number;
-    int i = 0;
-    while(i < 4){
-        number = rand() % 8;
-        if(find(random_number.begin(), random_number.end(), number) == random_number.end()){
-            random_number.push_back(number);
-            i++;
-        }
-    }
-    return random_number;
-}
+//vector<int> Main::selectFourNumbers(){
+//    // function that select four random numbers between 1 and 8, and a number can not be repeated
+//    // if the number is repeated, it will be replaced by another number
+//    // the number of numbers will be 4 and the range is 1 to 8
+//    // the function will return a vector of 4 numbers
+//    srand(time(0));
+//    vector<int> random_number;
+//    int number;
+//    int i = 0;
+//    while(i < 4){
+//        number = rand() % 8+1;
+//        if(find(random_number.begin(), random_number.end(), number) == random_number.end()){
+//            random_number.push_back(number);
+//            i++;
+//        }
+//    }
+//    return random_number;
+//}
 int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
     int num = 0;
     for (int j = 0; j < 4; ++j) {
@@ -47,22 +95,20 @@ int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
 
 //// returns cards that CAN be chosen by player
 vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &axies) {
-    vector<int> cards_drawn = selectFourNumbers();
+    vector<int> cards_drawn = selectFourNumbers(p);
     // check if the number is between 0 and 3, if so find the card that have the same card id
     Main::axie &_axie1 = p.axies[0];
     Main::axie &_axie2 = p.axies[1];
     cout << "player-id " << p.id << " is choosing cards:" << endl;
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < cards_drawn.size(); ++i) {
         int uc_num = cards_drawn[i];
-        
-/// NEEDS MORE CODE TO CHECK ORDER OF AXIES, instead of printing Axie 1 or 2
-        if(uc_num >= 0 && uc_num <= 3){
-            _axie1.cards[uc_num].card_status = Main::card::can_be_chosen;
-            cout << "Axie "<< Main::returnOrderNum(_axie1,axies)  <<":"<< _axie1.cards[uc_num].type <<" - dmg:" << _axie1.cards[uc_num].damage <<" - def:"  << _axie1.cards[uc_num].defence << endl;
+        if(uc_num >= 1 && uc_num <= 4){
+//            _axie1.cards[uc_num-1].card_status = Main::card::can_be_chosen;
+            cout << _axie1.cards[uc_num-1].id << "- Axie "<< Main::returnOrderNum(_axie1,axies)  <<":"<< _axie1.cards[uc_num-1].type <<" - dmg:" << _axie1.cards[uc_num-1].damage <<" - def:"  << _axie1.cards[uc_num-1].defence << endl;
 
-        } else if(uc_num >= 4 && uc_num <= 7){
-            _axie2.cards[uc_num].card_status = Main::card::can_be_chosen;
-            cout << "Axie "<< Main::returnOrderNum(_axie2,axies)  <<":"<< _axie2.cards[uc_num-4].type <<" - dmg:"  << _axie2.cards[uc_num-4].damage <<" - def:"  << _axie2.cards[uc_num-4].defence << endl;
+        } else if(uc_num >= 5 && uc_num <= 8){
+//            _axie2.cards[uc_num-5].card_status = Main::card::can_be_chosen;
+            cout << _axie2.cards[uc_num-5].id  << "- Axie "<<Main::returnOrderNum(_axie2,axies)  <<":"<< _axie2.cards[uc_num-5].type <<" - dmg:"  << _axie2.cards[uc_num-5].damage <<" - def:"  << _axie2.cards[uc_num-5].defence << endl;
         }
     }
     return cards_drawn;
@@ -75,10 +121,10 @@ void Main::PrintChosenCards(Main::player &p) {
     //find cards that are chosen_for_attack and show them for echa axie in the player
     for (int i = 0; i < 4; ++i) {
         if(p.axies[0].cards[i].card_status == Main::card::chosen_for_attack){
-            cout << "Player " << p.id << ", card from Axie 1 is " << p.axies[0].cards[i].type <<" Chosen" << endl;
+            cout << "Player " << p.id << ", card from Axie 1 with id: " << p.axies[0].cards[i].id <<" is Chosen" << endl;
         }
         if(p.axies[1].cards[i].card_status == Main::card::chosen_for_attack){
-            cout << "Player " << p.id  << " Axie 2 card " << p.axies[1].cards[i].id << " is " << p.axies[1].cards[i].type<<" Chosen" << endl;
+            cout << "Player " << p.id << ", card from Axie 2 with id: " << p.axies[1].cards[i].id <<" is Chosen" << endl;
         }
     }
 }
@@ -178,45 +224,16 @@ public:
             cin >> choose_card_input;
             if (choose_card_input == 0)
                 break;
-
-            if (choose_card_input == 1){
-                if (cards_drawn[0] <= 3){
-                    player.axies[0].cards[cards_drawn[0]].card_status = Main::card::chosen_for_attack;
-                }
-                else if (cards_drawn[0] >= 4 && cards_drawn[0] <= 7){
-                    player.axies[1].cards[cards_drawn[0] - 4].card_status = Main::card::chosen_for_attack;
-                }
+            if (choose_card_input <= 4){
+                player.axies[0].cards[choose_card_input-1].card_status = Main::card::chosen_for_attack;
+            }
+            else if (choose_card_input <= 8){
+                player.axies[1].cards[choose_card_input- 5].card_status = Main::card::chosen_for_attack;
             }
 
-            else if (choose_card_input == 2){
-                if (cards_drawn[1] <= 3){
-                    player.axies[0].cards[cards_drawn[1]].card_status = Main::card::chosen_for_attack;
-                }
-                else if (cards_drawn[1] >= 4 && cards_drawn[1] <= 7){
-                    player.axies[1].cards[cards_drawn[1] - 4].card_status = Main::card::chosen_for_attack;
-                }
-            }
-
-            else if (choose_card_input == 3){
-                if (cards_drawn[2] <= 3){
-                    player.axies[0].cards[cards_drawn[2]].card_status = Main::card::chosen_for_attack;
-                }
-                else if (cards_drawn[2] >= 4 && cards_drawn[2] <= 7){
-                    player.axies[1].cards[cards_drawn[2] - 4].card_status = Main::card::chosen_for_attack;
-                }
-            }
-
-            else if (choose_card_input == 4){
-                if (cards_drawn[3] <= 3){
-                    player.axies[0].cards[cards_drawn[3]].card_status = Main::card::chosen_for_attack;
-                }
-                else if (cards_drawn[3] >= 4 && cards_drawn[3] <= 7){
-                    player.axies[1].cards[cards_drawn[3] - 4].card_status = Main::card::chosen_for_attack;
-                }
-            }
             player.energy -= 1;
         }
-//        main.PrintChosenCards(player);
+        main.PrintChosenCards(player);
     };
 
     // Constructor
@@ -254,6 +271,8 @@ public:
     Attack_State(Main::player &p1, Main::player &p2){
 //        cout << "Attack_State is created" << endl;
         battleclass.battle(p1, p2);
+        battleclass.restock_cards(p1);
+        battleclass.restock_cards(p2);
     }
 
     ~Attack_State(){
@@ -337,9 +356,9 @@ Main::player Main::createPlayer(int team_id){
         player.axies[axie_num].cards[2] = player.axies[axie_num].cards[0];
         player.axies[axie_num].cards[3] = player.axies[axie_num].cards[1];
 
-        int num = 0;
+        int num = 1;
         if (axie_num == 1) {
-            num = 4;
+            num = 5;
         }
 
         for (int k = 0; k < 4; ++k) {

@@ -33,6 +33,28 @@ std::vector<Main::axie> BattleClass::sort_axies_by_speed(player &playa){
     return axies_to_sort;
 }
 
+void BattleClass::restock_cards(player &p){
+    int num_used_cards = 0;
+    for (auto & axie : p.axies) {
+        for (auto & k : axie.cards) {
+            if(k.card_status == Main::card::wait_for_restock){
+                num_used_cards +=1;
+            }
+        }
+    }
+// if all cards are used, then change the status to can_be_chosen.
+    if (num_used_cards == 8){
+        for (auto & a : p.axies){
+            if(a.alive){
+                for (auto & k : a.cards) {
+                    k.card_status = Main::card::can_be_chosen;
+                }
+            }
+
+        }
+    }
+}
+
 
 void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defender_axie, Main::player &p1, Main::player &p2,int num, vector<axie> &sorted_axie) {
     // the damage is the attacker card base damage
@@ -231,7 +253,6 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
             battleclass.damageCalculator(sorted_axies[i], defender_axie, p1, p2, attackNum, sorted_axies);
         }
     }
-
 
     //attack the defender axie (the front axie of opposing team)
     //axieAttack(a1, a2, damage);
