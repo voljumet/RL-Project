@@ -6,6 +6,46 @@ using namespace std;
 
 class conv {
 public:
+//    string convertCard(Main::card &card){
+//        std::ostringstream oss;
+//        oss << R"("card":{ "id": )" << card.id
+//            << R"(, "name": ")" << card.name
+//            << R"(", "type": ")" << card.type
+//            << R"(", "damage": )" << card.damage
+//            << R"(, "defence": )" << card.defence
+//            << R"(, "status": )" << card.card_status
+//            << " }";
+//
+//        return oss.str();
+//    }
+//
+//
+//    string convertAxie(Main::axie &axie){
+//        std::ostringstream oss;
+//        oss << R"("axie":{ "id": )" << axie.id
+//            << R"(, "type": )" << axie.type
+//            << R"(, "health": )" << axie.health
+//            << R"(, "alive": )" << axie.alive
+//            << R"(, "speed": )" << axie.speed
+//            << R"(, "position": )" << axie.position
+//            << R"(, "cards": [{)" << convertCard(axie.cards[0])
+//            << R"(}, {)" << convertCard(axie.cards[1])
+//            << "}] }";
+//
+//        return oss.str();
+//    }
+//
+//    string convert_test(Main::player &playa){
+//        std::ostringstream oss;
+//        oss << R"({"player":{ "id": )" << playa.id
+//            << R"(, "energy": )" << playa.energy
+//            << R"(, "rank": )" << playa.rank
+//            << R"(, "axies": [{)" << convertAxie(playa.axies[0])
+//            << R"(}, {)" << convertAxie(playa.axies[1])
+//            << "}] }}";
+//
+//        return oss.str();
+//    }
 
     int convert_str_to_int(string type){
         //create cases for the types plant, aqua and beast and return int 0, 1 or 2
