@@ -27,11 +27,16 @@ vector<int> CreatePlayerVec(int input){
     return conv.convert_to_vec(playerToSend);
 }
 
+vector<int> lilbits(int input, int size){
+    conv conv;
+    return conv.convert_to_bits(input, size);
+}
 
 PYBIND11_MODULE(libjuice, m){
 	m.def("add", &add);
 	m.def("sub", &sub);
 	m.def("mult", &mult);
     m.def("cpv", &CreatePlayerVec);
+    m.def("lilbits", &lilbits);
 
 }

@@ -321,7 +321,6 @@ Main::player Main::createPlayer(int team_id){
         // loads two cards for each axie
         for (int card_num = 0; card_num < 2; ++card_num) {
             player.axies[axie_num].cards[card_num].type = team[json_team]["Cards"][card_num]["type"].asString();
-            player.axies[axie_num].cards[card_num].name = team[json_team]["Cards"][card_num]["name"].asString();
             player.axies[axie_num].cards[card_num].damage = team[json_team]["Cards"][card_num]["attack"].asInt();
             player.axies[axie_num].cards[card_num].defence = team[json_team]["Cards"][card_num]["defence"].asInt();
 

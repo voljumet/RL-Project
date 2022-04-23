@@ -21,7 +21,6 @@ class Main {
 public:
     struct card{
         int id = 999;
-        string name = "";
         string type = "";
         int damage = 0;
         int defence = 0;
@@ -41,7 +40,7 @@ public:
         unsigned int speed = 0;
         unsigned int skill = 0;
         enum position {front,back} position = front;
-        string strenght = "";
+        string strength = "";
         card cards[4];
     };
 
@@ -49,7 +48,9 @@ public:
         unsigned int id = 0;
         axie axies [2];
         unsigned int energy = 0; // allows player use cards in battle
-        unsigned int rank = 0; // player rank
+        unsigned int rank = 1200; // player rank
+        unsigned int wins = 0; // player wins
+        unsigned int losses = 0; // player losses
     };
 
     std::vector<Main::axie> sort_axies(player &playa1, player &playa2);
