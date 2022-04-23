@@ -23,30 +23,31 @@ public:
     // merge to vectors
     vector<int> merge_vectors(vector<int> &vector1, vector<int> vector2){
         vector<int> returnVector;
-
-        for(int i : vector1){
+        for(int i : vector1)
             returnVector.push_back(i);
-        }
 
-        for(int i : vector2){
+        for(int i : vector2)
             returnVector.push_back(i);
-        }
 
         return returnVector;
     }
 
-    int convert_to_bits(int number, int size){
-        int a[10], n, i;
-        cout<<"Enter the number to convert: ";
-        cin>>n;
-        for(i=0; n>0; i++){
-            a[i]=n%2;
-            n= n/2;
+    vector<int> convert_to_bits(int number, int size){
+        int a[size], i;
+        vector <int> returnVector1, returnVector2;
+
+        for(i = 0; number > 0; i++){
+            a[i] = number % 2;
+            number = number / 2;
         }
-        cout<<"Binary of the given number= ";
-        for(i=i-1 ;i>=0 ;i--){
-            cout<<a[i];
-        }
+
+        for(i=i-1 ;i>=0 ;i--)
+            returnVector1.push_back(a[i]);
+
+        while (returnVector1.size()+returnVector2.size() < size)
+            returnVector2.push_back(0);
+
+        return merge_vectors(returnVector2,returnVector1);
     }
 
     // create a function that converts a card into a vector of ints
