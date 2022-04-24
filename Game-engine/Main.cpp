@@ -155,10 +155,8 @@ string Main::printAxies(player &playa1, player &playa2, vector<axie> axies){
         s_position << i + 1;
         s_health << axies[i].health;
 
-        if(playa1.axies[0].id == axies[i].id){
+        if(playa1.axies[0].id == axies[i].id)
             first_axie = axiePosition(axies[i], true, (s_position.str() + ":" + axies[i].type + ":" + s_health.str()));
-
-        }
         else if(playa2.axies[0].id == axies[i].id)
             second_axie = axiePosition(axies[i], false, (s_position.str() + ":" + axies[i].type + ":" + s_health.str()));
         else if(playa1.axies[1].id == axies[i].id)
@@ -171,9 +169,9 @@ string Main::printAxies(player &playa1, player &playa2, vector<axie> axies){
 
 //// prints the game board with Round, Energy and all axies
 void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round) {
-    // sort axies
     Main main;
 
+    // sort axies by speed.
     vector<Main::axie> axies = main.sort_axies(playa1, playa2);
     cout << "----------------------------------------------------" << endl;
     cout << "Round: " << round << " - (attack order : type : health)" << endl;
@@ -182,10 +180,10 @@ void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round)
     cout << main.printAxies(playa1, playa2, axies) << endl;
 }
 
-void Main::SelectCards(Main::player &player, vector<Main::axie> axies) {
+void Main::SelectCards(Main::player &player, vector<Main::axie> all_axies_sorted) {
     Main main;
         // print the cards that are available to chose for attack
-        vector<int> cards_drawn = main.showCardsDrawn(player, axies);
+        vector<int> cards_drawn = main.showCardsDrawn(player, all_axies_sorted);
         int choose_card_input;
         cout << "Choose cards, enter 0 to skip " << endl;
 
@@ -237,16 +235,12 @@ public:
     };
 
 
-    ///
-    /// WHY DO WE USE AXIES, WHEN WE USE PLAYER.AXIES?
-    ///
-
-    void SelectCards(Main::player &player, vector<Main::axie> axies){
+    void SelectCards(Main::player &player, const vector<Main::axie> &all_axies_sorted){
         // print the cards that are available to chose for attack
-        main.SelectCards(player, axies);
+        main.SelectCards(player, all_axies_sorted);
     };
 
-    void SelectCards(Main::player &player, vector<int> input){
+    void SelectCards(Main::player &player, const vector<int> &input){
         // print the cards that are available to chose for attack
         main.SelectCards(player, input);
     };
