@@ -185,7 +185,7 @@ Main::axie Find_defender_axie(Main::player p){
         }
     }
 }
-void BattleClass::battle(Main::player &p1, Main::player &p2){
+int BattleClass::battle(Main::player &p1, Main::player &p2){
     BattleClass battleclass;
     Main main;
     //Establish the players that are battling -- done
@@ -240,7 +240,7 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
 
             Main::axie defender_axie;
             int attackNum;
-//            cout << "player-id" << axie_player_map[sorted_axies[i].id].id << endl;
+            // cout << "player-id" << axie_player_map[sorted_axies[i].id].id << endl;
             if (axie_player_map[sorted_axies[i].id].id == p1.id){
                 defender_axie = Find_defender_axie(p2);
                 attackNum = 1;
@@ -264,11 +264,13 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
     if (!p1.axies[0].alive && !p1.axies[1].alive) {
         p1.losses += 1;
         p2.wins += 1;
+        return 2;
     } else if (!p2.axies[0].alive && !p2.axies[1].alive) {
         p2.losses += 1;
         p1.wins += 1;
+        return 1;
     }
-
+    return 0;
 }
 
 

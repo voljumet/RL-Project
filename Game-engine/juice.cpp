@@ -32,8 +32,8 @@ struct PState {
             main.SelectCards(player2, input);
     }
     
-    void attack(){
-        battleClass.battle(player1, player2);
+    int attack(){
+        return battleClass.battle(player1, player2);
     }
 
     void setName(const std::string &name_) { player1.axies[0].type = name_; }
