@@ -4,7 +4,7 @@
 using namespace std;
 
 
-class conv {
+class Conv {
 public:
 //    string convertCard(Main::card &card){
 //        std::ostringstream oss;
@@ -125,6 +125,45 @@ public:
         returnVector2 = merge_vectors(returnVector1, axie_conv(playa.axies[0]));
         returnVector1 = merge_vectors(returnVector2, convert_to_bits(playa.energy,4));
         returnVector2 = merge_vectors(returnVector1, convert_to_bits(playa.rank,12)); /// can achieve rank 4096
+
+        return returnVector2;
+    }
+
+    vector<int> card_conv_TEST(Main::card &card){
+        vector<int> returnVector;
+
+        returnVector.push_back(card.card_status);
+        returnVector.push_back(convert_str_to_int(card.type));
+        returnVector.push_back(card.damage);
+        returnVector.push_back(card.defence);
+
+        return returnVector;
+    }
+
+    vector<int> axie_conv_TEST(Main::axie &axie){
+        vector<int> returnVector1, returnVector2;
+
+//        returnVector.push_back(axie.strenght); /// does not work, it will be based on card and attacker
+        returnVector1 = card_conv_TEST(axie.cards[3]);
+        returnVector2 = merge_vectors(returnVector1, card_conv_TEST(axie.cards[2]));
+        returnVector1 = merge_vectors(returnVector2, card_conv_TEST(axie.cards[1]));
+        returnVector2 = merge_vectors(returnVector1, card_conv_TEST(axie.cards[0]));
+        returnVector2.push_back(convert_str_to_int(axie.type));
+        returnVector2.push_back(axie.position);
+        returnVector2.push_back(axie.alive);
+        returnVector2.push_back(axie.speed);
+        returnVector2.push_back(axie.health);
+
+        return returnVector1;
+    }
+
+    vector<int> convert_to_vec_TEST(Main::player &playa){
+        vector<int> returnVector1, returnVector2;
+
+        returnVector1 = axie_conv_TEST(playa.axies[1]);
+        returnVector2 = merge_vectors(returnVector1, axie_conv_TEST(playa.axies[0]));
+        returnVector2.push_back(playa.energy);
+        returnVector2.push_back(playa.rank);
 
         return returnVector2;
     }

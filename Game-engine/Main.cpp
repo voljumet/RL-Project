@@ -69,6 +69,10 @@ int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
     }
 }
 
+///
+/// WHY DO WE USE AXIES, WHEN WE USE PLAYER.AXIES?
+///
+
 //// returns cards that CAN be chosen by player
 vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &axies) {
     vector<int> cards_drawn = selectFourNumbers(p);
@@ -178,21 +182,13 @@ void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round)
     cout << main.printAxies(playa1, playa2, axies) << endl;
 }
 
-//// Card selection state
-class Card_Selection_State: public State {
+void Main::SelectCards(Main::player &player, vector<Main::axie> axies) {
     Main main;
-public:
-    void UpdateState()  override{
-//        cout << "Cards are selected!"<< endl;
-    };
-
-    void SelectCards(Main::player &player, vector<Main::axie> axies){
         // print the cards that are available to chose for attack
         vector<int> cards_drawn = main.showCardsDrawn(player, axies);
         int choose_card_input;
         cout << "Choose cards, enter 0 to skip " << endl;
 
-//// what if player has saved energy? can he spend too many cards at once?
         for (int i = 0; i < 4; ++i) {
             if (player.energy == 0)
                 break;
@@ -210,6 +206,49 @@ public:
             player.energy -= 1;
         }
         main.PrintChosenCards(player);
+};
+
+void Main::SelectCards(Main::player &player, vector<int> input){
+        // print the cards that are available to chose for attack
+
+        for (int i = 0; i < 4; ++i) {
+            if (player.energy == 0)
+                break;
+
+            if (input[i] == 0)
+                break;
+            if (input[i] <= 4){
+                player.axies[0].cards[input[i]-1].card_status = Main::card::chosen_for_attack;
+            }
+            else if (input[i] <= 8){
+                player.axies[1].cards[input[i]- 5].card_status = Main::card::chosen_for_attack;
+            }
+
+            player.energy -= 1;
+        }
+};
+
+//// Card selection state
+class Card_Selection_State : public State {
+    Main main;
+public:
+    void UpdateState()  override{
+//        cout << "Cards are selected!"<< endl;
+    };
+
+
+    ///
+    /// WHY DO WE USE AXIES, WHEN WE USE PLAYER.AXIES?
+    ///
+
+    void SelectCards(Main::player &player, vector<Main::axie> axies){
+        // print the cards that are available to chose for attack
+        main.SelectCards(player, axies);
+    };
+
+    void SelectCards(Main::player &player, vector<int> input){
+        // print the cards that are available to chose for attack
+        main.SelectCards(player, input);
     };
 
     // Constructor
@@ -287,11 +326,11 @@ public:
 
 //// Create player with axies and cards, reads from JSON file.
 Main::player Main::createPlayer(int team_id){
-    ifstream file("axie_teams.json");
+    // ifstream file("../axie_teams.json"); // USE THIS WHEN EXCECUTING IN CLION
+    ifstream file("Game-engine/axie_teams.json"); // USE THIS WHEN BUILDING LIBRARY
     Json::Reader reader;
     Json::Value obj;
     reader.parse(file, obj);
-
     stringstream ss;
     string extra = "";
     ss << team_id;

@@ -19,6 +19,7 @@ public:
 
 class Main {
 public:
+
     struct card{
         int id = 999;
         string type = "";
@@ -61,6 +62,8 @@ public:
     std::vector<int> showCardsDrawn(Main::player &p, vector<axie> &axies);
     void PrintChosenCards(Main::player &p);
     player createPlayer(int team_id);
+    void SelectCards(Main::player &player, vector<Main::axie> axies);
+    void SelectCards(Main::player &player, vector<int> input);
 
     int returnOrderNum(axie &p, vector<axie> axies);
 };
