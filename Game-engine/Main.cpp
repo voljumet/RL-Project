@@ -326,8 +326,7 @@ public:
 
 //// Create player with axies and cards, reads from JSON file.
 Main::player Main::createPlayer(int team_id){
-    // ifstream file("../axie_teams.json"); // USE THIS WHEN EXCECUTING IN CLION
-    ifstream file("Game-engine/axie_teams.json"); // USE THIS WHEN BUILDING LIBRARY
+     ifstream file("axie_teams.json");
     Json::Reader reader;
     Json::Value obj;
     reader.parse(file, obj);

@@ -15,7 +15,7 @@ import numpy as np
 # newPet.setName("Peshang")
 # print(newPet.getName())
 
-
+print(lj.PrintWorkingDir())
 gameState = lj.PState(2,9)
 
 print(gameState.playerMatTEST(1))
