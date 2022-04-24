@@ -261,6 +261,14 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
     p1.energy += energy_replenishment;
     p2.energy += energy_replenishment;
 
+    if (!p1.axies[0].alive && !p1.axies[1].alive) {
+        p1.losses += 1;
+        p2.wins += 1;
+    } else if (!p2.axies[0].alive && !p2.axies[1].alive) {
+        p2.losses += 1;
+        p1.wins += 1;
+    }
+
 }
 
 

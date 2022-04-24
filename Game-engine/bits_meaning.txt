@@ -1,0 +1,15 @@
+
+Structure:
+player[axie0[card0, card1, card2, card3], axie1[card0, card1, card2, card3]]  (in reverse)
+
+|                     axie1                                            |                     axie0                                             |
+|   card3   |   card2     |   card1    |    card0    |                 |    card3   |   card2     |   card1    |    card0    |                 |        |
+|status  def|             |            |             | type    speed   |                                                     | type    speed   |        |
+|   type    |             |            |             |    pos    health|                                                     |    pos    health| energy |
+|      dmg  |             |            |             |       alive     |                                                     |       alive     |   rank |
+[0, 0, 0, 50, 0, 0, 30, 30, 0, 0, 0, 50, 0, 0, 30, 30, 0, 0, 1, 31, 516, 0, 0, 0, 50, 0, 0, 30, 30, 0, 0, 0, 50, 0, 0, 30, 30, 0, 0, 1, 31, 516, 2, 1200]
+
+
+converted to bits (number of bits representing each value):
+[0, 0, 0, 50, 0, 0, 30, 30, 0, 0, 0, 50, 0, 0, 30, 30, 0, 0, 1, 31, 516, 0, 0, 0, 50, 0, 0, 30, 30, 0, 0, 0, 50, 0, 0, 30, 30, 0, 0, 1, 31, 516, 2, 1200]
+[2, 2, 8, 7,  2, 2, 8,  7,  2, 2, 8, 7,  2, 2, 8,  7,  2, 1, 1, 6, 10,   2, 2, 8, 7,  2, 2, 8, 7,   2, 2, 8, 7,  2, 2, 8,  7,  2, 1, 1, 6, 10,   4, 12] = 208 bits

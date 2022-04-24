@@ -3,9 +3,9 @@
 #include <pybind11/stl.h> /// THIS IS NEEDED FOR CONVERSION BETWEEN CPP-VECTOR AND PYTHON-ARRAY
 #include "conversion.cpp"
 #include "Main.cpp"
+#include <filesystem>
 
 namespace py = pybind11;
-
 
 vector<int> ChooseTeam(int input){
     Conv conv;
@@ -14,12 +14,10 @@ vector<int> ChooseTeam(int input){
     return conv.convert_to_vec(playerToSend);
 }
 
-
 vector<int> lilbits(int input, int size){
     Conv conv;
     return conv.convert_to_bits(input, size);
 }
-
 
 struct PState {
     Main main;
@@ -59,10 +57,15 @@ struct PState {
     Main::player player2;
 };
 
+string PrintWorkingDir() {
+    return std::filesystem::current_path().string();
+}
+
 PYBIND11_MODULE(libjuice, m){
     m.def("ChooseTeam", &ChooseTeam);
 
     m.def("lilbits", &lilbits);
+    m.def("PrintWorkingDir", &PrintWorkingDir);
 
     py::class_<PState>(m, "PState")
         .def(py::init<const int &, const int &>())

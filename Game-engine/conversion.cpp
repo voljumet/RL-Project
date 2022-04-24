@@ -143,7 +143,6 @@ public:
     vector<int> axie_conv_TEST(Main::axie &axie){
         vector<int> returnVector1, returnVector2;
 
-//        returnVector.push_back(axie.strenght); /// does not work, it will be based on card and attacker
         returnVector1 = card_conv_TEST(axie.cards[3]);
         returnVector2 = merge_vectors(returnVector1, card_conv_TEST(axie.cards[2]));
         returnVector1 = merge_vectors(returnVector2, card_conv_TEST(axie.cards[1]));
@@ -154,7 +153,7 @@ public:
         returnVector2.push_back(axie.speed);
         returnVector2.push_back(axie.health);
 
-        return returnVector1;
+        return returnVector2;
     }
 
     vector<int> convert_to_vec_TEST(Main::player &playa){
