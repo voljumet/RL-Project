@@ -5,7 +5,7 @@
 import numpy as np
 
 # import the env class
-from Paddle.paddle import Paddle
+from paddle import Paddle
 
 # create an object of env class
 env = Paddle()

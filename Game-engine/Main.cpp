@@ -129,7 +129,7 @@ std::vector<Main::axie> Main::sort_axies(player &playa1, player &playa2){
 string Main::axiePosition(axie &axie, bool is_first, string stats){
     string pos;
     if (!axie.alive){
-        stats = "dead";
+        stats = "defeated";
     }
     if (is_first){
         if (axie.position == Main::axie::front){
@@ -168,16 +168,19 @@ string Main::printAxies(player &playa1, player &playa2, vector<axie> axies){
 }
 
 //// prints the game board with Round, Energy and all axies
-void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round) {
+string Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round) {
     Main main;
+    stringstream ss;
 
     // sort axies by speed.
     vector<Main::axie> axies = main.sort_axies(playa1, playa2);
-    cout << "----------------------------------------------------" << endl;
-    cout << "Round: " << round << " - (attack order : type : health)" << endl;
-    cout << "Energy: " << playa1.energy << endl;
-    cout << "   back   |           front          |   back" << endl;
-    cout << main.printAxies(playa1, playa2, axies) << endl;
+    ss  << "----------------------------------------------------\n"
+        << "Round: " << round << " - (attack order : type : health)\n"
+        << "Energy: " << playa1.energy 
+        << "\n   back   |           front          |   back\n"
+        << main.printAxies(playa1, playa2, axies) << endl;
+    
+    return ss.str();
 }
 
 void Main::SelectCards(Main::player &player, vector<Main::axie> all_axies_sorted) {
@@ -394,7 +397,7 @@ int main() {
     }
 
     int game_round = 1;
-    main.PrintGameBoard(players[0],players[1],game_round);
+    cout << main.PrintGameBoard(players[0],players[1],game_round) << endl;
 
     stateController.Init(players[0], players[1]);
 
@@ -411,7 +414,7 @@ int main() {
 
         if (str == "attack"){
             str = "choose cards";
-            main.PrintGameBoard(players[0],players[1],game_round);
+            cout << main.PrintGameBoard(players[0],players[1],game_round) << endl;
         } else if (str == "choose cards") {
             str = "attack";
             game_round++;

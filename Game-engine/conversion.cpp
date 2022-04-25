@@ -118,7 +118,7 @@ public:
         return returnVector1;
     }
 
-    vector<int> convert_to_vec(Main::player &playa){
+    vector<int> convert_to_vec_bit(Main::player &playa){
         vector<int> returnVector1, returnVector2;
         Main::axie axie;
         returnVector1 = axie_conv(playa.axies[1]);
@@ -156,7 +156,7 @@ public:
         return returnVector2;
     }
 
-    vector<int> convert_to_vec_TEST(Main::player &playa){
+    vector<int> convert_to_vec_decimal(Main::player &playa){
         vector<int> returnVector1, returnVector2;
 
         returnVector1 = axie_conv_TEST(playa.axies[1]);

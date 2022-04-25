@@ -8,7 +8,7 @@ from game import AxieJuiced
 
 if __name__ == 'main':
     env = AxieJuiced()
-    
+    # policy is the action to take at a given state
     # gamma = discount factor, how much we want to discount future rewards
     # epsilon = how much randomness, 0.05 is good
     # epsilon_min = minimum randomness, 0.01 is good
@@ -49,42 +49,18 @@ if __name__ == 'main':
 
 
 
+    def predict(self, observation, action_mask=None):
+        q_values = self.q(observation)  # [0.11, 0.44, 0.36, 0.77, 0.33, 0.55]
+        q_values_masked = q_values if not action_mask else q_values + ([-100, -100, -100, -100] * action_mask)
+        
+        # epsilon = how much randomness, 0.05 is good
 
-# Prints working directory, should be in the same directory as this file e.g. inside "Game-engine"
-print(lj.PrintWorkingDir())
-
-# create a new game instance
-gameState = lj.PState(1,5)
-
-
-# save the state for player1 and player2
-p1_Mat = gameState.playerMat(1)
-p2_Mat = gameState.playerMat(2)
-
-#  give cards ability to be chosen
-
-#  -------------------- Game Loop --------------------
-
-# Choose cards for players
-gameState.chooseCards(1, [1,2])
-gameState.chooseCards(2, [1,2])
-
-# run attackstate with player1 and player2 states
-state = gameState.attack()
-if state == 1:
-    print("Player 1 wins")
-elif state == 2:
-    print("Player 2 wins")
-
-# check the state for player1 and player2
-p1_Mat = gameState.playerMat(1)
-p2_Mat = gameState.playerMat(2)
-
-# give rewards
-
-
-
-
+        if epislon > random.random():
+           # nb sjekk rekkefølge
+            action = random.randint(0, 8)
+        else:
+            action = np.argmax(q_values)
+        return action
 
 
 

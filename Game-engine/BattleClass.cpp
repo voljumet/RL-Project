@@ -100,9 +100,11 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
     defender_axie.health -= total_damage;
     if (defender_axie.health <= 0) {
         defender_axie.alive = false;
-
-        // print out the defender_axie axie dead
-        std::cout << "The defender_axie axie is dead" << std::endl;
+        for (int i = 0; i < 4; i++){
+            defender_axie.cards[i].card_status = Main::card::wait_for_restock;
+        }
+        // print out the defender_axie axie defeated
+        std::cout << "The defender_axie axie is defeated" << std::endl;
     }
 
     for (int i = 0; i < 2; ++i) {
