@@ -2,11 +2,17 @@ from game import DeepAxie
 
 import random
 import numpy as np
-from keras import Sequential
+# from keras import Sequential
+# from keras.layers import Dense
+# from tensorflow.keras.optimizers import Adam
 from collections import deque
-from keras.layers import Dense
 import matplotlib.pyplot as plt
-from tensorflow.keras.optimizers import Adam
+from torch.optim import Adam
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
 
 player_1 = 5
 player_2 = 2
@@ -14,6 +20,19 @@ player_2 = 2
 
 env = DeepAxie(player_1, player_2)
 np.random.seed(0)
+
+class NeuralNet(nn.Module):
+    def __init__(self, state_space, action_space):
+        super(NeuralNet, self).__init__()
+        self.fc1 = nn.Linear(state_space, 6)
+        self.fc2 = nn.Linear(6, 1)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = torch.sigmoid(x)
+        return torch.squeeze(x)
 
 
 class DQN:
@@ -31,15 +50,22 @@ class DQN:
         self.epsilon_decay = .995
         self.learning_rate = 0.001
         self.memory = deque(maxlen=100000)
+        # self.n = NeuralNet(state_space, action_space)
         self.model = self.build_model()
+        # self.model = 
 
     def build_model(self):
         #  to dense layer på siden av hverandre
-        model = Sequential()
-        model.add(Dense(64, input_shape=(self.state_space,), activation='relu'))
-        model.add(Dense(64, activation='relu'))
-        model.add(Dense(self.action_space, activation='linear'))
-        model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
+        model = NeuralNet(self.state_space, self.action_space)
+        # model = Sequential()
+        # model.add(Dense(64, input_shape=(self.state_space,), activation='relu'))
+        # model.add(Dense(64, activation='relu'))
+        # model.add(Dense(self.action_space, activation='linear'))
+        # model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
+        criterion = nn.CrossEntropyLoss()
+        optimizer = torch.optim.Adam(model.parameters(), lr=self.learning_rate)
+        loss_fn = torch.nn.MSELoss()
+
         return model
 
     def remember(self, state, action, reward, next_state, done):
@@ -48,7 +74,8 @@ class DQN:
     def act(self, state):
 
         if np.random.rand() <= self.epsilon:
-            return random.sample(self.action_space, 2)
+            array = [0,1,2,3,4,5,6,7,8]
+            return random.sample(array, 2)
 
         act_values = self.model.predict(state)
         
@@ -107,12 +134,12 @@ def train_dqn(episode):
         loss.append(score)
     return loss
 
+print("asdfasdf")
 
-if __name__ == '__main__':
 
-    ep = 100
-    loss = train_dqn(ep)
-    plt.plot([i for i in range(ep)], loss)
-    plt.xlabel('episodes')
-    plt.ylabel('reward')
-    plt.show()
+ep = 100
+loss = train_dqn(ep)
+plt.plot([i for i in range(ep)], loss)
+plt.xlabel('episodes')
+plt.ylabel('reward')
+plt.show()

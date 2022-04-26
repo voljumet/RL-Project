@@ -47,20 +47,6 @@ class DeepAxie():
         self.board.write("{}".format(self.GameState.printGameBoard(1)), align='center', font=('Courier', 24, 'normal'),)
 
 
-    def predict(self, observation, action_mask=None):
-        q_values = self.q(observation)  # [0.11, 0.44, 0.36, 0.77, 0.33, 0.55]
-        q_values_masked = q_values if not action_mask else q_values + ([-100, -100, -100, -100] * action_mask)
-        
-        # epsilon = how much randomness, 0.05 is good
-
-        if epislon > random.random():
-           # nb sjekk rekkefølge
-            action = random.randint(0, 8)
-        else:
-            action = np.argmax(q_values)
-        return action
-
-
     def reset(self, player1, player2):
         # "restarts" the game
         self.GameState = axie.GameState(player1, player2)
@@ -81,14 +67,14 @@ class DeepAxie():
 
         for i in range(len(action_array)):
             for j in range(len(selectable_cards)):
-                if selectable_cards[i] == action_array[j]:
+                if selectable_cards[j] == action_array[i]:
                     mask_array[i] = 1
                     reward_array[i] = 0
         
         # player 
-        gameState.chooseCards(player, action)
+        self.GameState.chooseCards(player, action)
         
-        return (action*reward_array).sum()
+        return (mask_array*reward_array).sum()
     
 
     def step(self, action):
@@ -96,12 +82,12 @@ class DeepAxie():
         # self.reward = 0
         self.done = 0
 
-        self.reward1 += pickCards(1, action[0])
-        self.reward2 += pickCards(2, action[1])
+        self.reward1 += self.pickCards(1, action[0])
+        self.reward2 += self.pickCards(2, action[1])
 
         #  attack is run inside round()
         self.round()
-        state = gameState.playersMatrixDecimal()
+        state = self.GameState.playersMatrixDecimal()
 
         return self.reward1, self.reward2, state, self.done
 
