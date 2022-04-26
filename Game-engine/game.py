@@ -26,7 +26,7 @@ class DeepAxie():
         self.board.hideturtle()
         self.board.goto(0, 0)
         self.board.write("{}".format(self.GameState.printGameBoard(1)), align='center', font=('Courier', 24, 'normal'),)
-        print("hold on")
+        # print("hold on")
 
     def round(self):
 
@@ -35,12 +35,12 @@ class DeepAxie():
 
         if attack == 1:
             # player 1 wins
-            self.reward += 3
+            self.reward1 += 3
             self.done = True
         
         if attack == 2:
             # player 2 wins
-            self.reward -= 3
+            self.reward1 -= 3
             self.done = True
         
         self.board.clear()
@@ -89,28 +89,23 @@ class DeepAxie():
         return (action*reward_array).sum()
     
 
-    def step(self, action, player):
+    def step(self, action):
         #  action is an array of two actions
         # self.reward = 0
         self.done = 0
 
-        self.reward1 += pickCards(player[0], action[0])
-        self.reward2 += pickCards(player[1], action[1])
-
-        # evaluate action + give rewards
-        pickCards(1, action)
-        # if action == # use card not usable:
-        #     self.reward = -1
+        self.reward1 += pickCards(1, action[0])
+        self.reward2 += pickCards(2, action[1])
 
         #  attack is run inside round()
         self.round()
         state = gameState.playersMatrixDecimal()
 
-        return self.reward, state, self.done
+        return self.reward1, self.reward2, state, self.done
 
 
-env = DeepAxie(1,5)
+# env = DeepAxie(1,5)
 
 
 
-print("Done!")
+# print("Done!")

@@ -1,13 +1,11 @@
 import numpy as np
 from DQN import Agent
 from utils import plotLearning
-from game import AxieJuiced
+from game import DeepAxie
 
 
-
-
-if __name__ == 'main':
-    env = AxieJuiced()
+if __name__ == 'main'(player1, player2):
+    env = DeepAxie(player1, player2)
     # policy is the action to take at a given state
     # gamma = discount factor, how much we want to discount future rewards
     # epsilon = how much randomness, 0.05 is good
@@ -44,23 +42,6 @@ if __name__ == 'main':
     x = [i+1 for i in range(n_games)]
     filename = 'axies.png'
     plot_learning_curve(x, scores, eps_history, filename)
-
-
-
-
-
-    def predict(self, observation, action_mask=None):
-        q_values = self.q(observation)  # [0.11, 0.44, 0.36, 0.77, 0.33, 0.55]
-        q_values_masked = q_values if not action_mask else q_values + ([-100, -100, -100, -100] * action_mask)
-        
-        # epsilon = how much randomness, 0.05 is good
-
-        if epislon > random.random():
-           # nb sjekk rekkefølge
-            action = random.randint(0, 8)
-        else:
-            action = np.argmax(q_values)
-        return action
 
 
 

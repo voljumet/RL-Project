@@ -8,7 +8,11 @@ from keras.layers import Dense
 import matplotlib.pyplot as plt
 from keras.optimizers import Adam
 
-env = DeepAxie(5, 2)
+player_1 = 5
+player_2 = 2
+
+
+env = DeepAxie(player_1, player_2)
 np.random.seed(0)
 
 
@@ -44,9 +48,11 @@ class DQN:
     def act(self, state):
 
         if np.random.rand() <= self.epsilon:
-            return random.randrange(self.action_space)
+            return random.sample(self.action_space, 2)
+
         act_values = self.model.predict(state)
-        return np.argmax(act_values[0])
+        
+        return np.argmax([act_values[0],act_values[1]])
 
     def replay(self):
 
@@ -78,18 +84,18 @@ def train_dqn(episode):
 
     loss = []
 
-    action_space = 3
+    action_space = 9
     state_space = 5
     max_steps = 1000
 
     agent = DQN(action_space, state_space)
     for e in range(episode):
-        state = env.reset()
+        state = env.reset(player_1, player_2)
         state = np.reshape(state, (1, state_space))
         score = 0
         for i in range(max_steps):
-            action = agent.act(state)
-            reward, next_state, done = env.step(action)
+            action = [agent.act(state), agent.act(state)]
+            reward, reward2, next_state, done = env.step(action)
             score += reward
             next_state = np.reshape(next_state, (1, state_space))
             agent.remember(state, action, reward, next_state, done)
