@@ -47,7 +47,7 @@ void BattleClass::restock_cards(player &p){
         for (auto & a : p.axies){
             if(a.alive){
                 for (auto & k : a.cards) {
-                    k.card_status = Main::card::can_be_chosen;
+                    k.card_status = Main::card::cannot_be_chosen;
                 }
             }
         }
@@ -272,6 +272,10 @@ int BattleClass::battle(Main::player &p1, Main::player &p2){
         p1.wins += 1;
         return 1;
     }
+
+    battleclass.restock_cards(p1);
+    battleclass.restock_cards(p2);
+
     return 0;
 }
 

@@ -29,7 +29,7 @@ public:
         //// can_be_chosen = can be chosen by player for attack
         //// chosen_for_attack = are chosen for attack
         //// wait_for_restock = are used and must wait to be restocked before being used again
-        enum status {can_be_chosen, chosen_for_attack, wait_for_restock} card_status = can_be_chosen;
+        enum status {cannot_be_chosen, can_be_chosen, chosen_for_attack, wait_for_restock} card_status = cannot_be_chosen;
     };
 
     struct axie{
