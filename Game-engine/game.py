@@ -63,7 +63,9 @@ class DeepAxie():
 
     def reset(self, player1, player2):
         # "restarts" the game
-        self.GameState = axie.PState(player1, player2)
+        self.GameState = axie.GameState(player1, player2)
+        return self.GameState.playersMatrixDecimal()
+        
 
 
     def pickCards(self, player, action):

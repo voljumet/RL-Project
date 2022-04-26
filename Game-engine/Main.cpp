@@ -205,7 +205,7 @@ void Main::SelectCards(Main::player &player, vector<Main::axie> all_axies_sorted
     int choose_card_input;
     cout << "Choose cards, enter 0 to skip " << endl;
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 2; ++i) {
         if (player.energy == 0)
             break;
 
@@ -228,7 +228,7 @@ void Main::SelectCards(Main::player &player, vector<Main::axie> all_axies_sorted
 void Main::SelectCards(Main::player &player, vector<int> input){
     // print the cards that are available to chose for attack
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 2; ++i) {
         if (player.energy == 0)
             break;
 

@@ -6,7 +6,7 @@ from keras import Sequential
 from collections import deque
 from keras.layers import Dense
 import matplotlib.pyplot as plt
-from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 
 player_1 = 5
 player_2 = 2
@@ -84,8 +84,8 @@ def train_dqn(episode):
 
     loss = []
 
-    action_space = 9
-    state_space = 5
+    action_space = 81
+    state_space = 88
     max_steps = 1000
 
     agent = DQN(action_space, state_space)
