@@ -1,10 +1,12 @@
 import numpy as np
-from DQN import Agent
+from DQQN import Agent
 from utils import plotLearning
 from game import DeepAxie
 
+player1 = 5
+player2 = 1
 
-if __name__ == 'main'(player1, player2):
+if __name__ == '__main__':
     env = DeepAxie(player1, player2)
     # policy is the action to take at a given state
     # gamma = discount factor, how much we want to discount future rewards
@@ -16,19 +18,19 @@ if __name__ == 'main'(player1, player2):
     # n_actions = number of actions
     # batch_size = how many experiences to sample
 
-    agent = Agent(gamma=0.99, epsilon=1.0, lr=0.003, imput_dims=[8], batch_size=64, n_actions=4)
-    scores, eps_history = [], [], []
+    agent = Agent(gamma=0.99, epsilon=1.0, lr=0.003, input_dims=[88], batch_size=64, n_actions=88)
+    scores, eps_history = [], []
     n_games = 500
 
-    for i in rang(n_games):
+    for i in range(n_games):
         score = 0
         done = False
-        observation = env.reset()
+        observation = env.reset(player1,player2)
         while not done:
             action = agent.choose_action(observation)
-            observation_, reward, done = env.step(action)
+            observation_, reward, reward2, done = env.step(action)
             score += reward
-            agent.store_experience(observation, action, reward, observation_, done)
+            agent.store_transition(observation, action, reward, observation_, done)
             agent.learn()
             observation = observation_
         scores.append(score)
@@ -44,6 +46,20 @@ if __name__ == 'main'(player1, player2):
     plot_learning_curve(x, scores, eps_history, filename)
 
 
+    matrix=[[0,1,2,3,4,5,6,7,8],
+            [0,1,2,3,4,5,6,7,8],
+            [0,1,2,3,4,5,6,7,8],
+            [0,1,2,3,4,5,6,7,8],
+            [0,1,2,3,4,5,6,7,8],
+            [0,1,2,3,4,5,6,7,8],
+            [0,1,2,3,4,5,6,7,8],
+            [0,1,2,3,4,5,6,7,8],
+            [0,1,2,3,4,5,6,7,8]]
+
+    for i in range(9):
+        for j in range(9):
+            pass
+    # random number generated
 
 
 

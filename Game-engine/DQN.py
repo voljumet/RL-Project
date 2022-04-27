@@ -7,12 +7,12 @@ import numpy as np
 # from tensorflow.keras.optimizers import Adam
 from collections import deque
 import matplotlib.pyplot as plt
-from torch.optim import Adam
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+# from torch.optim import Adam
+# import torch
+# import torch.nn as nn
+# import torch.nn.functional as F
+# import torch.optim as optim
 
 player_1 = 5
 player_2 = 2
@@ -25,7 +25,7 @@ class NeuralNet(nn.Module):
     def __init__(self, state_space, action_space):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(state_space, 6)
-        self.fc2 = nn.Linear(6, 1)
+        self.fc2 = nn.Linear(6, 2)
 
     def forward(self, x):
         x = self.fc1(x)
@@ -50,21 +50,19 @@ class DQN:
         self.epsilon_decay = .995
         self.learning_rate = 0.001
         self.memory = deque(maxlen=100000)
-        # self.n = NeuralNet(state_space, action_space)
         self.model = self.build_model()
-        # self.model = 
 
     def build_model(self):
         #  to dense layer på siden av hverandre
-        model = NeuralNet(self.state_space, self.action_space)
-        # model = Sequential()
-        # model.add(Dense(64, input_shape=(self.state_space,), activation='relu'))
-        # model.add(Dense(64, activation='relu'))
-        # model.add(Dense(self.action_space, activation='linear'))
-        # model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
-        criterion = nn.CrossEntropyLoss()
-        optimizer = torch.optim.Adam(model.parameters(), lr=self.learning_rate)
-        loss_fn = torch.nn.MSELoss()
+        model = Sequential()
+        model.add(Dense(64, input_shape=(self.state_space,), activation='relu'))
+        model.add(Dense(64, activation='relu'))
+        model.add(Dense(self.action_space, activation='linear'))
+        model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
+        # model = NeuralNet(self.state_space, self.action_space)
+        # criterion = nn.CrossEntropyLoss()
+        # optimizer = torch.optim.Adam(model.parameters(), lr=self.learning_rate)
+        # loss_fn = torch.nn.MSELoss()
 
         return model
 
@@ -75,11 +73,14 @@ class DQN:
 
         if np.random.rand() <= self.epsilon:
             array = [0,1,2,3,4,5,6,7,8]
-            return random.sample(array, 2)
-
+            ints = random.sample(array, 2)
+            string_ints = [str(int) for int in ints] # Convert each integer to a string
+            str_of_ints = "".join(string_ints) # Combine each string with a comma
+            return int(str_of_ints) # Output: 1,2,3
+        
         act_values = self.model.predict(state)
         
-        return np.argmax([act_values[0],act_values[1]])
+        return np.argmax(act_values)
 
     def replay(self):
 
@@ -96,11 +97,18 @@ class DQN:
         states = np.squeeze(states)
         next_states = np.squeeze(next_states)
 
-        targets = rewards + self.gamma*(np.amax(self.model.predict_on_batch(next_states), axis=1))*(1-dones)
-        targets_full = self.model.predict_on_batch(states)
+        # tensor = torch.FloatTensor(next_states)
+        # output = self.model(tensor).cpu().detach().numpy()
+        # aMax = np.argmax(output)
+
+        targets = rewards + self.gamma*(aMax)*(1-dones)
+
+        # targets_full = self.model(torch.FloatTensor(states))
+        # targets_full = targets_full.detach().numpy()
 
         ind = np.array([i for i in range(self.batch_size)])
-        targets_full[[ind], [actions]] = targets
+
+        targets_full[ [ind], [actions] ] = targets
 
         self.model.fit(states, targets_full, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
@@ -111,7 +119,7 @@ def train_dqn(episode):
 
     loss = []
 
-    action_space = 81
+    action_space = 88
     state_space = 88
     max_steps = 1000
 
@@ -121,8 +129,8 @@ def train_dqn(episode):
         state = np.reshape(state, (1, state_space))
         score = 0
         for i in range(max_steps):
-            action = [agent.act(state), agent.act(state)]
-            reward, reward2, next_state, done = env.step(action)
+            action = agent.act(state)
+            next_state, reward, reward2, done = env.step(action)
             score += reward
             next_state = np.reshape(next_state, (1, state_space))
             agent.remember(state, action, reward, next_state, done)

@@ -61,6 +61,8 @@ class DeepAxie():
         # This function checks how good the agent has understood what cards can be chosen
         selectable_cards = self.GameState.drawCardsFromDeck(player)
 
+        action = [int(a) for a in str(action)]
+
         action_array = np.array([0,1,2,3,4,5,6,7,8])
         mask_array = np.zeros(9)
         reward_array = np.array([-100,-100,-100,-100,-100,-100,-100,-100,-100])
@@ -71,7 +73,8 @@ class DeepAxie():
                     mask_array[i] = 1
                     reward_array[i] = 0
         
-        # player 
+        
+
         self.GameState.chooseCards(player, action)
         
         return (mask_array*reward_array).sum()
@@ -82,18 +85,13 @@ class DeepAxie():
         # self.reward = 0
         self.done = 0
 
-        self.reward1 += self.pickCards(1, action[0])
-        self.reward2 += self.pickCards(2, action[1])
+        self.reward1 += self.pickCards(1, action)
+        self.reward2 += self.pickCards(2, action)
 
         #  attack is run inside round()
         self.round()
         state = self.GameState.playersMatrixDecimal()
 
-        return self.reward1, self.reward2, state, self.done
+        return state, self.reward1, self.reward2, self.done
 
 
-# env = DeepAxie(1,5)
-
-
-
-# print("Done!")
