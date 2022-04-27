@@ -143,7 +143,7 @@ print("asdfasdf")
 
 if __name__ == '__main__':
 
-    ep = 50
+    ep = 1000
     loss = train_dqn(ep)
     fig = plt.figure(figsize=(5, 5))
     plt.plot([i for i in range(ep)], loss)

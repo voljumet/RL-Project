@@ -40,13 +40,13 @@ class DeepAxie():
 
         # check if the defender axie is defeated then add 1 to the reward
         if (state[62] == 0 and previous_state[62] == 1) or (state[83] == 0 and previous_state[83] == 1):
-            self.reward1 += 1
+            self.reward1 += 5
         # check if the defender axie's health has decreased then add 0.5 to the reward
         if (state[64] < previous_state[64]) or (state[85] < previous_state[85]):
-            self.reward1 += 0.5
+            self.reward1 += 1
 
         if (state[20] < previous_state[20]) or (state[42] < previous_state[42]):
-            self.reward1 -= 0.5
+            self.reward1 -= 1
         else:
             self.reward1 += 0.5
 
