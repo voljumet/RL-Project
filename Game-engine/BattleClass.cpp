@@ -13,11 +13,11 @@ using namespace std::chrono;
 void BattleClass::setStrength(Main::axie &a){
     // print out the a.type
     if(a.type == "plant"){
-        a.strenght = "aqua";
+        a.strength = "aqua";
     }else if(a.type == "aqua"){
-        a.strenght ="beast";
+        a.strength ="beast";
     }else if(a.type == "beast"){
-        a.strenght = "plant";
+        a.strength = "plant";
     }
 }
 // create a fucntion that sorts the axies by speed when the axie's health is not 0
@@ -42,15 +42,14 @@ void BattleClass::restock_cards(player &p){
             }
         }
     }
-// if all cards are used, then change the status to can_be_chosen.
+    // if all cards are used, then change the status to can_be_chosen.
     if (num_used_cards == 8){
         for (auto & a : p.axies){
             if(a.alive){
                 for (auto & k : a.cards) {
-                    k.card_status = Main::card::can_be_chosen;
+                    k.card_status = Main::card::cannot_be_chosen;
                 }
             }
-
         }
     }
 }
@@ -75,9 +74,9 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
                 total_damage += base_damage + (base_damage * 0.1);
             }
             ////If the card class is strong against the Axie class, it will deal +15% bonus damage. Or -15% if it’s the other way.
-            if (attacker_axie.strenght == defender_axie.type) {
+            if (attacker_axie.strength == defender_axie.type) {
                 total_damage += base_damage + (base_damage * 0.15);
-            } else if (attacker_axie.type == defender_axie.strenght) {
+            } else if (attacker_axie.type == defender_axie.strength) {
                 total_damage += base_damage - (base_damage * 0.15);
             }
 
@@ -101,9 +100,11 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
     defender_axie.health -= total_damage;
     if (defender_axie.health <= 0) {
         defender_axie.alive = false;
-
-        // print out the defender_axie axie dead
-        std::cout << "The defender_axie axie is dead" << std::endl;
+        for (int i = 0; i < 4; i++){
+            defender_axie.cards[i].card_status = Main::card::wait_for_restock;
+        }
+        // print out the defender_axie axie defeated
+//        std::cout << "The defender_axie axie is defeated" << std::endl;
     }
 
     for (int i = 0; i < 2; ++i) {
@@ -186,7 +187,7 @@ Main::axie Find_defender_axie(Main::player p){
         }
     }
 }
-void BattleClass::battle(Main::player &p1, Main::player &p2){
+int BattleClass::battle(Main::player &p1, Main::player &p2){
     BattleClass battleclass;
     Main main;
     //Establish the players that are battling -- done
@@ -241,7 +242,7 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
 
             Main::axie defender_axie;
             int attackNum;
-//            cout << "player-id" << axie_player_map[sorted_axies[i].id].id << endl;
+            // cout << "player-id" << axie_player_map[sorted_axies[i].id].id << endl;
             if (axie_player_map[sorted_axies[i].id].id == p1.id){
                 defender_axie = Find_defender_axie(p2);
                 attackNum = 1;
@@ -262,6 +263,20 @@ void BattleClass::battle(Main::player &p1, Main::player &p2){
     p1.energy += energy_replenishment;
     p2.energy += energy_replenishment;
 
+    if (!p1.axies[0].alive && !p1.axies[1].alive) {
+        p1.losses += 1;
+        p2.wins += 1;
+        return 2;
+    } else if (!p2.axies[0].alive && !p2.axies[1].alive) {
+        p2.losses += 1;
+        p1.wins += 1;
+        return 1;
+    }
+
+    battleclass.restock_cards(p1);
+    battleclass.restock_cards(p2);
+
+    return 0;
 }
 
 

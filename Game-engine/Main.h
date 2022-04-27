@@ -19,9 +19,9 @@ public:
 
 class Main {
 public:
+
     struct card{
         int id = 999;
-        string name = "";
         string type = "";
         int damage = 0;
         int defence = 0;
@@ -29,7 +29,7 @@ public:
         //// can_be_chosen = can be chosen by player for attack
         //// chosen_for_attack = are chosen for attack
         //// wait_for_restock = are used and must wait to be restocked before being used again
-        enum status {can_be_chosen, chosen_for_attack, wait_for_restock} card_status = can_be_chosen;
+        enum status {cannot_be_chosen, can_be_chosen, chosen_for_attack, wait_for_restock} card_status = cannot_be_chosen;
     };
 
     struct axie{
@@ -41,7 +41,7 @@ public:
         unsigned int speed = 0;
         unsigned int skill = 0;
         enum position {front,back} position = front;
-        string strenght = "";
+        string strength = "";
         card cards[4];
     };
 
@@ -49,17 +49,21 @@ public:
         unsigned int id = 0;
         axie axies [2];
         unsigned int energy = 0; // allows player use cards in battle
-        unsigned int rank = 0; // player rank
+        unsigned int rank = 1200; // player rank
+        unsigned int wins = 0; // player wins
+        unsigned int losses = 0; // player losses
     };
 
     std::vector<Main::axie> sort_axies(player &playa1, player &playa2);
     string axiePosition(axie &axie, bool is_first, string stats);
     string printAxies(player &playa1, player &playa2, vector<axie> axies);
-    void PrintGameBoard(player &player1, player &player2, int round);
+    string PrintGameBoard(player &player1, player &player2, int round);
     std::vector<int> selectFourNumbers(player &pPlayer);
     std::vector<int> showCardsDrawn(Main::player &p, vector<axie> &axies);
     void PrintChosenCards(Main::player &p);
     player createPlayer(int team_id);
+    void SelectCards(Main::player &player, vector<Main::axie> axies);
+    void SelectCards(Main::player &player, vector<int> input);
 
     int returnOrderNum(axie &p, vector<axie> axies);
 };

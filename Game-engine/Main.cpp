@@ -1,33 +1,35 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <json/json.h>
-//#include "Main.h"
+#include "include/jsoncpp.cpp"
 #include "BattleClass.h"
 
 // a dynamic function that select maximum four numbers randomly from between 1 and 8.
-vector<int> Main::selectFourNumbers(player &p)
-{
+vector<int> Main::selectFourNumbers(player &p){
+    BattleClass battleState;
+    battleState.restock_cards(p);
+    for (auto & axie : p.axies) {
+        for (auto & j : axie.cards) {
+            if (j.card_status == Main::card::can_be_chosen) {
+                j.card_status = Main::card::cannot_be_chosen;
+            }
+        }
+    }
     // create a int array to store maximum 8 numbers.
     vector<int> numbers;
     // loop through p1 and p2's axies and add the card id of cards with status of can_be_chosen to the array.
     for (auto & axie : p.axies) {
         for (auto & j : axie.cards) {
-            if (j.card_status == Main::card::can_be_chosen) {
+            if (j.card_status == Main::card::cannot_be_chosen) {
                 // if the j.id is not already in the array, then push.
                 if (find(numbers.begin(), numbers.end(), j.id) == numbers.end() && axie.alive) {
                     numbers.push_back(j.id);
                 }
-
-
             }
         }
     }
-// get four random numbers from numbers. if the size of numbers is less than 4, then get all numbers.
-    if (numbers.size() <= 4) {
-        return numbers;
-    }
-    else {
+    // get four random numbers from numbers. if the size of numbers is less than 4, then get all numbers.
+    if (numbers.size() > 4) {
         // create a vector to store four random numbers.
         vector<int> four_numbers;
         // loop through four times.
@@ -47,33 +49,21 @@ vector<int> Main::selectFourNumbers(player &p)
             numbers.erase(remove(numbers.begin(), numbers.end(), random_number), numbers.end());
         }
         // return four_numbers.
-        return four_numbers;
+        numbers = four_numbers;
     }
 
+    for_each(numbers.begin(), numbers.end(), [&](int &i) {
+        for (auto &axie : p.axies) {
+            for (auto &card : axie.cards) {
+                if (card.id == i) {
+                    card.card_status = Main::card::can_be_chosen;
+                }
+            }
+        }
+    });
     return numbers;
 }
 
-
-
-//// RNG
-//vector<int> Main::selectFourNumbers(){
-//    // function that select four random numbers between 1 and 8, and a number can not be repeated
-//    // if the number is repeated, it will be replaced by another number
-//    // the number of numbers will be 4 and the range is 1 to 8
-//    // the function will return a vector of 4 numbers
-//    srand(time(0));
-//    vector<int> random_number;
-//    int number;
-//    int i = 0;
-//    while(i < 4){
-//        number = rand() % 8+1;
-//        if(find(random_number.begin(), random_number.end(), number) == random_number.end()){
-//            random_number.push_back(number);
-//            i++;
-//        }
-//    }
-//    return random_number;
-//}
 int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
     int num = 0;
     for (int j = 0; j < 4; ++j) {
@@ -93,8 +83,13 @@ int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
     }
 }
 
+///
+/// WHY DO WE USE AXIES, WHEN WE USE PLAYER.AXIES?
+///
+
 //// returns cards that CAN be chosen by player
 vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &axies) {
+
     vector<int> cards_drawn = selectFourNumbers(p);
     // check if the number is between 0 and 3, if so find the card that have the same card id
     Main::axie &_axie1 = p.axies[0];
@@ -149,7 +144,7 @@ std::vector<Main::axie> Main::sort_axies(player &playa1, player &playa2){
 string Main::axiePosition(axie &axie, bool is_first, string stats){
     string pos;
     if (!axie.alive){
-        stats = "dead";
+        stats = "defeated";
     }
     if (is_first){
         if (axie.position == Main::axie::front){
@@ -175,10 +170,8 @@ string Main::printAxies(player &playa1, player &playa2, vector<axie> axies){
         s_position << i + 1;
         s_health << axies[i].health;
 
-        if(playa1.axies[0].id == axies[i].id){
+        if(playa1.axies[0].id == axies[i].id)
             first_axie = axiePosition(axies[i], true, (s_position.str() + ":" + axies[i].type + ":" + s_health.str()));
-
-        }
         else if(playa2.axies[0].id == axies[i].id)
             second_axie = axiePosition(axies[i], false, (s_position.str() + ":" + axies[i].type + ":" + s_health.str()));
         else if(playa1.axies[1].id == axies[i].id)
@@ -190,50 +183,84 @@ string Main::printAxies(player &playa1, player &playa2, vector<axie> axies){
 }
 
 //// prints the game board with Round, Energy and all axies
-void Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round) {
-        // sort axies
-        Main main;
+string Main::PrintGameBoard(Main::player &playa1, Main::player &playa2, int round) {
+    Main main;
+    stringstream ss;
 
-        vector<Main::axie> axies = main.sort_axies(playa1, playa2);
-        cout << "----------------------------------------------------" << endl;
-        cout << "Round: " << round << " - (attack order : type : health)" << endl;
-        cout << "Energy: " << playa1.energy << endl;
-        cout << "   back   |           front          |   back" << endl;
-        cout << main.printAxies(playa1, playa2, axies) << endl;
+    // sort axies by speed.
+    vector<Main::axie> axies = main.sort_axies(playa1, playa2);
+    ss  << "----------------------------------------------------\n"
+        << "Round: " << round << " - (attack order : type : health)\n"
+        << "Energy: " << playa1.energy 
+        << "\n   back   |           front          |   back\n"
+        << main.printAxies(playa1, playa2, axies) << endl;
+    
+    return ss.str();
+}
+
+void Main::SelectCards(Main::player &player, vector<Main::axie> all_axies_sorted) {
+    Main main;
+    // print the cards that are available to chose for attack
+    vector<int> cards_drawn = main.showCardsDrawn(player, all_axies_sorted);
+    int choose_card_input;
+    cout << "Choose cards, enter 0 to skip " << endl;
+
+    for (int i = 0; i < 2; ++i) {
+        if (player.energy == 0)
+            break;
+
+        cin >> choose_card_input;
+        if (choose_card_input == 0)
+            break;
+        if (choose_card_input <= 4 && player.axies[0].cards[choose_card_input-1].card_status == Main::card::can_be_chosen){
+            player.axies[0].cards[choose_card_input-1].card_status = Main::card::chosen_for_attack;
+        }
+        else if (choose_card_input <= 8 && player.axies[1].cards[choose_card_input-5].card_status == Main::card::can_be_chosen){
+            player.axies[1].cards[choose_card_input-5].card_status = Main::card::chosen_for_attack;
+        }
+
+        player.energy -= 1;
     }
 
+    main.PrintChosenCards(player);
+};
+
+void Main::SelectCards(Main::player &player, vector<int> input){
+    // print the cards that are available to chose for attack
+
+    for (int i = 0; i < 2; ++i) {
+        if (player.energy == 0)
+            break;
+
+        if (input[i] == 0)
+            break;
+        if (input[i] <= 4 && player.axies[0].cards[input[i]-1].card_status == Main::card::can_be_chosen){
+            player.axies[0].cards[input[i]-1].card_status = Main::card::chosen_for_attack;
+        }
+        else if (input[i] <= 8 && player.axies[1].cards[input[i]-5].card_status == Main::card::can_be_chosen){
+            player.axies[1].cards[input[i]- 5].card_status = Main::card::chosen_for_attack;
+        }
+        player.energy -= 1;
+    }
+};
+
 //// Card selection state
-class Card_Selection_State: public State {
+class Card_Selection_State : public State {
     Main main;
 public:
     void UpdateState()  override{
 //        cout << "Cards are selected!"<< endl;
     };
 
-    void SelectCards(Main::player &player, vector<Main::axie> axies){
+
+    void SelectCards(Main::player &player, const vector<Main::axie> &all_axies_sorted){
         // print the cards that are available to chose for attack
-        vector<int> cards_drawn = main.showCardsDrawn(player, axies);
-        int choose_card_input;
-        cout << "Choose cards, enter 0 to skip " << endl;
+        main.SelectCards(player, all_axies_sorted);
+    };
 
-//// what if player has saved energy? can he spend too many cards at once?
-        for (int i = 0; i < 4; ++i) {
-            if (player.energy == 0)
-                break;
-
-            cin >> choose_card_input;
-            if (choose_card_input == 0)
-                break;
-            if (choose_card_input <= 4){
-                player.axies[0].cards[choose_card_input-1].card_status = Main::card::chosen_for_attack;
-            }
-            else if (choose_card_input <= 8){
-                player.axies[1].cards[choose_card_input- 5].card_status = Main::card::chosen_for_attack;
-            }
-
-            player.energy -= 1;
-        }
-        main.PrintChosenCards(player);
+    void SelectCards(Main::player &player, const vector<int> &input){
+        // print the cards that are available to chose for attack
+        main.SelectCards(player, input);
     };
 
     // Constructor
@@ -271,8 +298,6 @@ public:
     Attack_State(Main::player &p1, Main::player &p2){
 //        cout << "Attack_State is created" << endl;
         battleclass.battle(p1, p2);
-        battleclass.restock_cards(p1);
-        battleclass.restock_cards(p2);
     }
 
     ~Attack_State(){
@@ -311,11 +336,10 @@ public:
 
 //// Create player with axies and cards, reads from JSON file.
 Main::player Main::createPlayer(int team_id){
-    ifstream file("../../axie_teams.json");
+     ifstream file("axie_teams.json");
     Json::Reader reader;
     Json::Value obj;
     reader.parse(file, obj);
-
     stringstream ss;
     string extra = "";
     ss << team_id;
@@ -345,7 +369,6 @@ Main::player Main::createPlayer(int team_id){
         // loads two cards for each axie
         for (int card_num = 0; card_num < 2; ++card_num) {
             player.axies[axie_num].cards[card_num].type = team[json_team]["Cards"][card_num]["type"].asString();
-            player.axies[axie_num].cards[card_num].name = team[json_team]["Cards"][card_num]["name"].asString();
             player.axies[axie_num].cards[card_num].damage = team[json_team]["Cards"][card_num]["attack"].asInt();
             player.axies[axie_num].cards[card_num].defence = team[json_team]["Cards"][card_num]["defence"].asInt();
 
@@ -387,7 +410,7 @@ int main() {
     }
 
     int game_round = 1;
-    main.PrintGameBoard(players[0],players[1],game_round);
+    cout << main.PrintGameBoard(players[0],players[1],game_round) << endl;
 
     stateController.Init(players[0], players[1]);
 
@@ -404,18 +427,18 @@ int main() {
 
         if (str == "attack"){
             str = "choose cards";
-            main.PrintGameBoard(players[0],players[1],game_round);
+            cout << main.PrintGameBoard(players[0],players[1],game_round) << endl;
         } else if (str == "choose cards") {
             str = "attack";
             game_round++;
         }
     }
 
-        if (!players[0].axies[0].alive && !players[0].axies[1].alive) {
-            cout << "Player 2 has won!" << endl;
-        }
-        else if (!players[1].axies[0].alive && !players[1].axies[1].alive) {
-            cout << "Player 1 has won!" << endl;
-        }
+    if (!players[0].axies[0].alive && !players[0].axies[1].alive) {
+        cout << "Player 2 has won!" << endl;
+    }
+    else if (!players[1].axies[0].alive && !players[1].axies[1].alive) {
+        cout << "Player 1 has won!" << endl;
+    }
     return 0;
 }

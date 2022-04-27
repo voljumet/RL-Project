@@ -12,7 +12,7 @@ public:
     void damageCalculator(Main::axie &attacker, Main::axie &defender_axie, Main::player &player1, Main::player &player2, int num, vector<axie> &sorted_axie);
     std::vector<Main::axie> sort_axies_by_speed(player &player);
     void axieattack();
-    void battle(player &player1, player &player2);
+    int battle(player &player1, player &player2);
     int reward();
 
     void setStrength(Main::axie &a);
