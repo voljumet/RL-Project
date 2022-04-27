@@ -1,6 +1,6 @@
 import DeepAxie as axie
 
-import turtle as t
+
 import numpy as np
 
 class DeepAxie():
@@ -14,19 +14,19 @@ class DeepAxie():
         self.GameState = axie.GameState(player1, player2)
 
         # window setup
-        self.window = t.Screen()
-        self.window.title('DeepAxie')
-        self.window.bgcolor('black')
-        self.window.setup(width=900, height=400)
+        #self.window = t.Screen()
+        #self.window.title('DeepAxie')
+        #self.window.bgcolor('black')
+        #self.window.setup(width=900, height=400)
 
         # print game board
-        self.board = t.Turtle()
-        self.board.speed(0)
-        self.board.color('white')
-        self.board.penup()
-        self.board.hideturtle()
-        self.board.goto(0, 0)
-        self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
+        #self.board = t.Turtle()
+        #self.board.speed(0)
+        #self.board.color('white')
+        #self.board.penup()
+        #self.board.hideturtle()
+        #self.board.goto(0, 0)
+        #self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
         # print("hold on")
 
     def round(self):
@@ -46,8 +46,8 @@ class DeepAxie():
             self.done = True
             self.roundCounter = 1
         
-        self.board.clear()
-        self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
+        #self.board.clear()
+        #self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
 
 
     def reset(self, player1, player2):

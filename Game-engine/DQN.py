@@ -6,15 +6,14 @@ from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import Adam
 
-
 from collections import deque
 import matplotlib.pyplot as plt
+
 # from torch.optim import Adam
-#
 # import torch
 # import torch.nn as nn
 # import torch.nn.functional as F
-import torch.optim as optim
+#import torch.optim as optim
 
 player_1 = 5
 player_2 = 2
