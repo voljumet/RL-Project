@@ -2,12 +2,11 @@ from paddle import Paddle
 
 import random
 import numpy as np
-from keras import Sequential
+from tensorflow.keras import Sequential
 from collections import deque
-from keras.layers import Dense
+from tensorflow.keras.layers import Dense
 import matplotlib.pyplot as plt
-from keras.optimizers import Adam
-
+from tensorflow.keras.optimizers import Adam
 env = Paddle()
 np.random.seed(0)
 
@@ -35,7 +34,7 @@ class DQN:
         model.add(Dense(64, input_shape=(self.state_space,), activation='relu'))
         model.add(Dense(64, activation='relu'))
         model.add(Dense(self.action_space, activation='linear'))
-        model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
+        model.compile(loss='mse', optimizer=Adam(learning_rate=self.learning_rate))
         return model
 
     def remember(self, state, action, reward, next_state, done):

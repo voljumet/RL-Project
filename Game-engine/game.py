@@ -9,6 +9,7 @@ class DeepAxie():
         self.energy = 0
         self.reward1 = 0
         self.reward2 = 0
+        self.roundCounter= 1
         # init game
         self.GameState = axie.GameState(player1, player2)
 
@@ -25,26 +26,28 @@ class DeepAxie():
         self.board.penup()
         self.board.hideturtle()
         self.board.goto(0, 0)
-        self.board.write("{}".format(self.GameState.printGameBoard(1)), align='center', font=('Courier', 24, 'normal'),)
+        self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
         # print("hold on")
 
     def round(self):
-
+        self.roundCounter += 1
         # attack
         attack = self.GameState.attack()
 
         if attack == 1:
             # player 1 wins
-            self.reward1 += 3
+            self.reward1 += 10
             self.done = True
+            self.roundCounter = 1
         
         if attack == 2:
             # player 2 wins
             self.reward1 -= 3
             self.done = True
+            self.roundCounter = 1
         
         self.board.clear()
-        self.board.write("{}".format(self.GameState.printGameBoard(1)), align='center', font=('Courier', 24, 'normal'),)
+        self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
 
 
     def reset(self, player1, player2):
@@ -59,22 +62,31 @@ class DeepAxie():
         # the pickcards array should be the same every round, even if the cards cannot be chosen
 
         # This function checks how good the agent has understood what cards can be chosen
+        reward = 0
         selectable_cards = self.GameState.drawCardsFromDeck(player)
+        action = [int(a) for a in str(action)]
 
         action_array = np.array([0,1,2,3,4,5,6,7,8])
-        mask_array = np.zeros(9)
-        reward_array = np.array([-100,-100,-100,-100,-100,-100,-100,-100,-100])
+        selectable_mask_array = np.zeros(9)
+        action_mask_array = np.zeros(9)
 
         for i in range(len(action_array)):
             for j in range(len(selectable_cards)):
                 if selectable_cards[j] == action_array[i]:
-                    mask_array[i] = 1
-                    reward_array[i] = 0
-        
-        # player 
+                    selectable_mask_array[i] = 1
+
+        for i in range(len(action_array)):
+            for j in range(len(action)):
+                if action[j] == action_array[i]:
+                    action_mask_array[i] = 1
+
+        for i in range(len(action_array)):
+            if action_mask_array[i] == 1 and selectable_mask_array[i] == 0:
+                reward -=1
+        # player
         self.GameState.chooseCards(player, action)
         
-        return (mask_array*reward_array).sum()
+        return (reward)
     
 
     def step(self, action):
@@ -82,8 +94,8 @@ class DeepAxie():
         # self.reward = 0
         self.done = 0
 
-        self.reward1 += self.pickCards(1, action[0])
-        self.reward2 += self.pickCards(2, action[1])
+        self.reward1 += self.pickCards(1, action)
+        self.reward2 += self.pickCards(2, action)
 
         #  attack is run inside round()
         self.round()
