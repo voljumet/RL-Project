@@ -89,3 +89,22 @@ PYBIND11_MODULE(DeepAxie, m){
         ;
 
 }
+
+PYBIND11_MODULE(DeepAxieLinux, m){
+    m.def("ChooseTeam", &ChooseTeam);
+
+    m.def("lilbits", &lilbits);
+    m.def("PrintWorkingDir", &PrintWorkingDir);
+
+    py::class_<GameState>(m, "GameState")
+        .def(py::init<const int &, const int &>())
+        .def("drawCardsFromDeck", &GameState::drawCardsFromDeck)
+        .def("chooseCards", &GameState::chooseCards)
+        .def("attack", &GameState::attack)
+        .def("playersMatrixBits", &GameState::playersMatrixBits)
+        .def("playersMatrixDecimal", &GameState::playersMatrixDecimal)
+        .def("printGameBoard", &GameState::printGameBoard)
+        .def("getName", &GameState::getName)
+        ;
+
+}

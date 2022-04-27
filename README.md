@@ -15,7 +15,7 @@ clang -O3 -Wall -shared -undefined dynamic_lookup -std=c++17 -fPIC $(python3 -m 
 
 compile on linux:
 ```
-g++ -O3 -Wall -shared -std=c++17 -fPIC $(python3 -m pybind11 --includes) DeepAxie.cpp -o DeepAxie.so
+g++ -O3 -Wall -shared -std=c++17 -fPIC $(python3 -m pybind11 --includes) DeepAxie.cpp -o DeepAxieLinux.so
 ```
 
 
