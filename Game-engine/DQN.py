@@ -1,5 +1,6 @@
 from game import DeepAxie
 
+import datetime
 import random
 import numpy as np
 from tensorflow.keras import Sequential
@@ -17,7 +18,7 @@ import matplotlib.pyplot as plt
 import torch.optim as optim
 
 player_1 = 5
-player_2 = 2
+player_2 = 4
 
 
 env = DeepAxie(player_1, player_2)
@@ -77,7 +78,7 @@ class DQN:
 
         act_values = self.model.predict(state)
         
-        return np.argmax(act_values)
+        return np.argmax(act_values[0])
 
     def replay(self):
 
@@ -120,14 +121,19 @@ def train_dqn(episode):
         score = 0
         for i in range(max_steps):
             action = agent.act(state)
-            reward, reward2, next_state, done = env.step(action)
+            reward, reward2, next_state, done, p1win, p2win = env.step(action)
             score += reward
             next_state = np.reshape(next_state, (1, state_space))
             agent.remember(state, action, reward, next_state, done)
             state = next_state
             agent.replay()
             if done:
-                print("episode: {}/{}, score: {}".format(e, episode, score))
+                if p1win:
+                    winner = "player1"
+                elif p2win:
+                    winner = "player2"
+
+                print("episode: {}/{}, round: {}, score: {}, {}".format(e, episode, i, round(score,3), winner))
                 break
         loss.append(score)
     return loss
@@ -139,7 +145,9 @@ if __name__ == '__main__':
 
     ep = 50
     loss = train_dqn(ep)
+    fig = plt.figure(figsize=(5, 5))
     plt.plot([i for i in range(ep)], loss)
     plt.xlabel('episodes')
     plt.ylabel('reward')
+    fig.savefig("log/training " + str(datetime.datetime.today()) + '.jpg', bbox_inches='tight', dpi=150)
     plt.show()

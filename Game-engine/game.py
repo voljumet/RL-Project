@@ -1,5 +1,5 @@
 import DeepAxie as axie
-
+import random
 import turtle as t
 import numpy as np
 
@@ -9,7 +9,9 @@ class DeepAxie():
         self.energy = 0
         self.reward1 = 0
         self.reward2 = 0
-        self.roundCounter= 1
+        self.roundCounter = 1
+        self.p1win = False
+        self.p2win = False
         # init game
         self.GameState = axie.GameState(player1, player2)
 
@@ -32,20 +34,39 @@ class DeepAxie():
     def round(self):
         self.roundCounter += 1
         # attack
+        previous_state = self.GameState.playersMatrixDecimal()
         attack = self.GameState.attack()
+        state = self.GameState.playersMatrixDecimal()
+
+        # check if the defender axie is defeated then add 1 to the reward
+        if (state[62] == 0 and previous_state[62] == 1) or (state[83] == 0 and previous_state[83] == 1):
+            self.reward1 += 1
+        # check if the defender axie's health has decreased then add 0.5 to the reward
+        if (state[64] < previous_state[64]) or (state[85] < previous_state[85]):
+            self.reward1 += 0.5
+
+        if (state[20] < previous_state[20]) or (state[42] < previous_state[42]):
+            self.reward1 -= 0.5
+        else:
+            self.reward1 += 0.5
 
         if attack == 1:
             # player 1 wins
-            self.reward1 += 10
-            self.done = True
+            self.reward1 += 3
             self.roundCounter = 1
-        
+            self.done = True
+            self.p1win = True
+
         if attack == 2:
             # player 2 wins
             self.reward1 -= 3
-            self.done = True
             self.roundCounter = 1
-        
+            self.done = True
+            self.p2win = True
+
+        if self.roundCounter % 1 == 0 and self.done == False:
+            self.reward1 -= 0.1 * self.roundCounter
+
         self.board.clear()
         self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
 
@@ -54,7 +75,7 @@ class DeepAxie():
         # "restarts" the game
         self.GameState = axie.GameState(player1, player2)
         return self.GameState.playersMatrixDecimal()
-        
+
 
 
     def pickCards(self, player, action):
@@ -82,26 +103,36 @@ class DeepAxie():
 
         for i in range(len(action_array)):
             if action_mask_array[i] == 1 and selectable_mask_array[i] == 0:
-                reward -=1
+                reward -= .1
         # player
         self.GameState.chooseCards(player, action)
-        
-        return (reward)
-    
+
+        return reward
+
+    def action_2(self):
+        array = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        ints = random.sample(array, 2)
+        string_ints = [str(int) for int in ints]  # Convert each integer to a string
+        str_of_ints = "".join(string_ints)  # Combine each string with a comma
+        return int(str_of_ints)  # Output: 1,2,3
+
 
     def step(self, action):
         #  action is an array of two actions
-        # self.reward = 0
         self.done = 0
+        self.reward1 = 0
+        self.reward2 = 0
+        self.p1win = False
+        self.p2win = False
 
         self.reward1 += self.pickCards(1, action)
-        self.reward2 += self.pickCards(2, action)
+        self.reward2 += self.pickCards(2, self.action_2())
 
         #  attack is run inside round()
         self.round()
         state = self.GameState.playersMatrixDecimal()
 
-        return self.reward1, self.reward2, state, self.done
+        return self.reward1, self.reward2, state, self.done, self.p1win, self.p2win
 
 
 # env = DeepAxie(1,5)
