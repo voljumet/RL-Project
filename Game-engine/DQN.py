@@ -7,15 +7,14 @@ from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import Adam
 
-
 from collections import deque
 import matplotlib.pyplot as plt
+
 # from torch.optim import Adam
-#
 # import torch
 # import torch.nn as nn
 # import torch.nn.functional as F
-import torch.optim as optim
+#import torch.optim as optim
 
 player_1 = 5
 player_2 = 4
@@ -133,12 +132,12 @@ def train_dqn(episode):
                 elif p2win:
                     winner = "player2"
 
-                print("episode: {}/{}, round: {}, score: {}, {}".format(e, episode, i, round(score,3), winner))
+                print("episode: {}/{}, rounds: {}, score: {}, winner: {}".format(e, episode, i, round(score,3), winner))
                 break
         loss.append(score)
     return loss
 
-print("asdfasdf")
+print("Let's GOOOO")
 
 
 if __name__ == '__main__':

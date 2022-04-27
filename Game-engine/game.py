@@ -1,8 +1,23 @@
-import DeepAxie as axie
+from sys import platform
+if platform == "linux" or platform == "linux2":
+    import DeepAxieLinux as axie
+elif platform == "darwin":
+    import DeepAxie as axie
+elif platform == "win32":
+    # Windows...
+    pass
+
+display_game_window = False
+try:
+    import turtle as t
+    display_game_window = True
+except:
+    print(" Game-window is not loadable, problem loading turtle (tkinter package)")
+
 import random
-import turtle as t
 import numpy as np
 
+    
 class DeepAxie():
     def __init__(self, player1, player2):
         self.done = False
@@ -14,21 +29,22 @@ class DeepAxie():
         self.p2win = False
         # init game
         self.GameState = axie.GameState(player1, player2)
+        
+        if display_game_window:
+            # window setup
+            self.window = t.Screen()
+            self.window.title('DeepAxie')
+            self.window.bgcolor('black')
+            self.window.setup(width=900, height=400)
 
-        # window setup
-        self.window = t.Screen()
-        self.window.title('DeepAxie')
-        self.window.bgcolor('black')
-        self.window.setup(width=900, height=400)
-
-        # print game board
-        self.board = t.Turtle()
-        self.board.speed(0)
-        self.board.color('white')
-        self.board.penup()
-        self.board.hideturtle()
-        self.board.goto(0, 0)
-        self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
+            # print game board
+            self.board = t.Turtle()
+            self.board.speed(0)
+            self.board.color('white')
+            self.board.penup()
+            self.board.hideturtle()
+            self.board.goto(0, 0)
+            self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
         # print("hold on")
 
     def round(self):
@@ -66,9 +82,10 @@ class DeepAxie():
 
         if self.roundCounter % 1 == 0 and self.done == False:
             self.reward1 -= 0.1 * self.roundCounter
-
-        self.board.clear()
-        self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
+            
+        if display_game_window:
+            self.board.clear()
+            self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
 
 
     def reset(self, player1, player2):
@@ -108,6 +125,7 @@ class DeepAxie():
         self.GameState.chooseCards(player, action)
 
         return reward
+    
 
     def action_2(self):
         array = [0, 1, 2, 3, 4, 5, 6, 7, 8]
