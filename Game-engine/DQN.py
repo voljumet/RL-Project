@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 #import torch.optim as optim
 
 player_1 = 5
-player_2 = 2
+player_2 = 4
 
 
 env = DeepAxie(player_1, player_2)
@@ -132,7 +132,7 @@ def train_dqn(episode):
                 elif p2win:
                     winner = "player2"
 
-                print("episode: {}/{}, round: {}, score: {}, winner: {}".format(e, episode, i, round(score,3), winner))
+                print("episode: {}/{}, rounds: {}, score: {}, winner: {}".format(e, episode, i, round(score,3), winner))
                 break
         loss.append(score)
     return loss

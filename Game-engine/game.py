@@ -24,7 +24,9 @@ class DeepAxie():
         self.energy = 0
         self.reward1 = 0
         self.reward2 = 0
-        self.roundCounter= 1
+        self.roundCounter = 1
+        self.p1win = False
+        self.p2win = False
         # init game
         self.GameState = axie.GameState(player1, player2)
         
@@ -90,7 +92,7 @@ class DeepAxie():
         # "restarts" the game
         self.GameState = axie.GameState(player1, player2)
         return self.GameState.playersMatrixDecimal()
-        
+
 
 
     def pickCards(self, player, action):
