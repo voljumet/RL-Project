@@ -71,13 +71,13 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
             total_damage += base_damage;
             ////  If the Axie type is the same as the axie card type, the card will deal an extra 10% damage
             if (attacker_axie.cards[i].type == attacker_axie.type) {
-                total_damage += base_damage + (base_damage * 0.1);
+                total_damage += base_damage * 0.1;
             }
             ////If the card class is strong against the Axie class, it will deal +15% bonus damage. Or -15% if it’s the other way.
             if (attacker_axie.strength == defender_axie.type) {
-                total_damage += base_damage + (base_damage * 0.15);
+                total_damage += base_damage * 0.15;
             } else if (attacker_axie.type == defender_axie.strength) {
-                total_damage += base_damage - (base_damage * 0.15);
+                total_damage -= base_damage * 0.15;
             }
 
             //// set the used card to wait_for_restock
