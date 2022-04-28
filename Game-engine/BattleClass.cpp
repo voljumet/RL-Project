@@ -142,51 +142,33 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
 
 
 Main::axie Find_defender_axie(Main::player p){
-    //// find the defending axie taking the position in account.  /// done
-    for (auto & i : p.axies) {
-        int front = 0;
-        int back = 0;
-        for (auto & i : p.axies){
-            if(i.position == Main::axie::position::front && i.alive){
-                front += 1;
-            }
-            if(i.position == Main::axie::position::back && i.alive){
-                back += 1;
-            }
-
-        }
-        // if front is 2, then chose an axie randomly
-        if (front == 2) {
-            srand(time(0));
-            int random_num = rand() % 2;
-            if (random_num == 0) {
-                return p.axies[0];
-            }
-            else {
-                return p.axies[1];
-            }
-        }
-
-        // if back is 2, then chose an axie randomly
-        if (back == 2) {
-            srand(time(0));
-            int random_num = rand() % 2;
-            if (random_num == 0) {
-                return p.axies[0];
-            }
-            else {
-                return p.axies[1];
-            }
-        }
-        if (i.alive && front != 2) {
-            if(i.position == Main::axie::position::front){
-                return  i;
-            }else if (i.position == Main::axie::position::back){
-                return  i;
-            }
+    
+    //  if only one axie is alive:
+    if (p.axies[0].alive && !p.axies[1].alive){
+        return p.axies[0];
+    } else if (!p.axies[0].alive && p.axies[1].alive){
+        return p.axies[1];
+    }
+    // if both axies are alive and one is front, then choose the front axie:
+    if (p.axies[0].position == Main::axie::position::front && p.axies[1].position == Main::axie::position::back){
+        return p.axies[0];
+    } else if (p.axies[0].position == Main::axie::position::back && p.axies[1].position == Main::axie::position::front){
+        return p.axies[1];
+    }
+    
+    //  if both are alive, pick a random axie
+    if (p.axies[0].position == Main::axie::position::back && p.axies[1].position == Main::axie::position::back || 
+        p.axies[0].position == Main::axie::position::front && p.axies[1].position == Main::axie::position::front){
+        srand(time(0));
+        int random_num = rand() % 2;
+        if (random_num == 0) {
+            return p.axies[0];
+        } else {
+            return p.axies[1];
         }
     }
 }
+
 int BattleClass::battle(Main::player &p1, Main::player &p2){
     BattleClass battleclass;
     Main main;
