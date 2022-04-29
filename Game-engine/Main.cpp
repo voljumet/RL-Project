@@ -117,7 +117,7 @@ vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &axies) {
     Main::axie &_axie1 = p.axies[0];
     Main::axie &_axie2 = p.axies[1];
     cout << "player-id " << p.id << " is choosing cards:" << endl;
-    for (int i = 0; i < cards_drawn.size(); ++i) {
+    for (unsigned int i = 0; i < cards_drawn.size(); ++i) {
         int uc_num = cards_drawn[i];
         if(uc_num >= 1 && uc_num <= 4){
 //            _axie1.cards[uc_num-1].card_status = Main::card::can_be_chosen;

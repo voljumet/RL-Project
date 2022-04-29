@@ -74,7 +74,7 @@ public:
         return returnVector;
     }
 
-    vector<int> convert_to_bits(int number, int size){
+    vector<int> convert_to_bits(int number, unsigned int size){
         int a[size], i;
         vector <int> returnVector1, returnVector2;
 
