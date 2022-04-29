@@ -3,6 +3,19 @@
 #include <fstream>
 #include "include/jsoncpp.cpp"
 #include "BattleClass.h"
+#include <cstdlib>   // rand and srand
+#include <ctime>     // For the time function
+
+void setStrength(Main::axie &a){
+    // print out the a.type
+    if(a.type == "plant"){
+        a.strength = "aqua";
+    }else if(a.type == "aqua"){
+        a.strength ="beast";
+    }else if(a.type == "beast"){
+        a.strength = "plant";
+    }
+}
 
 // a dynamic function that select maximum four numbers randomly from between 1 and 8.
 vector<int> Main::selectFourNumbers(player &p){
@@ -34,8 +47,15 @@ vector<int> Main::selectFourNumbers(player &p){
         vector<int> four_numbers;
         // loop through four times.
         for (int i = 0; i < 4; i++) {
+            // Get the system time.
+            unsigned seed = time(0);
+
+            // Seed the random number generator.
+            srand(seed);
+
             // get a random number from numbers.
             int random_number = numbers[rand() % numbers.size()];
+            cout << "random number: " << random_number << endl;
                 // check if the random_number is already in four_numbers.
                 if (find(four_numbers.begin(), four_numbers.end(), random_number) != four_numbers.end()) {
                     // if the random_number is already in four_numbers, then get another random number.
@@ -358,6 +378,7 @@ Main::player Main::createPlayer(int team_id){
         // set axie id, type, health (calcultated), speed, skille, morale
         player.axies[axie_num].id = team[json_team]["Axie-id"].asInt();
         player.axies[axie_num].type = team[json_team]["Type"].asString();
+        setStrength(player.axies[axie_num]);
         player.axies[axie_num].health = team[json_team]["Health"].asInt() * 6 + 150;
         player.axies[axie_num].speed = team[json_team]["Speed"].asInt();
         player.axies[axie_num].skill = team[json_team]["Skill"].asInt();
