@@ -101,6 +101,8 @@ int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
             return num;
         }
     }
+    cout << "There is an ERROR with your numer in --> Main.cpp:104 <--" << endl;
+    return -1;
 }
 
 ///

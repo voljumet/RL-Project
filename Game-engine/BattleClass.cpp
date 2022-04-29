@@ -131,7 +131,7 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
         }
 
         // loop through sorted_axie and find matching axie in p1 and p2 to update the sorted_axies array with the new health and card states
-        for (int j = 0; j < sorted_axies.size(); ++j) {
+        for (unsigned int j = 0; j < sorted_axies.size(); ++j) {
             if (sorted_axies[j].id == p1.axies[i].id) {
                 sorted_axies[j] = p1.axies[i];
             }
@@ -159,8 +159,8 @@ Main::axie Find_defender_axie(Main::player p){
     }
     
     //  if both are alive, pick a random axie
-    if (p.axies[0].position == Main::axie::position::back && p.axies[1].position == Main::axie::position::back || 
-        p.axies[0].position == Main::axie::position::front && p.axies[1].position == Main::axie::position::front){
+    if ((p.axies[0].position == Main::axie::position::back && p.axies[1].position == Main::axie::position::back) ||
+            (p.axies[0].position == Main::axie::position::front && p.axies[1].position == Main::axie::position::front)){
         srand(time(0));
         int random_num = rand() % 2;
         if (random_num == 0) {
@@ -169,6 +169,8 @@ Main::axie Find_defender_axie(Main::player p){
             return p.axies[1];
         }
     }
+    cout << "There is an ERROR with your Axie in --> BattleClass.cpp:172 <--" << endl;
+    return Main::axie();
 }
 
 int BattleClass::battle(Main::player &p1, Main::player &p2){
@@ -187,7 +189,7 @@ int BattleClass::battle(Main::player &p1, Main::player &p2){
     vector<axie> sorted_axies = main.sort_axies(p1, p2);
 
     // for each axie in sorted_axies, check if any axie has a card that is chosen_for_attack, if not pop from the vector
-    for (int i = 0, non_attacking_cards = 0; i < sorted_axies.size(); i++) {
+    for (unsigned int i = 0, non_attacking_cards = 0; i < sorted_axies.size(); i++) {
         for (auto & card : sorted_axies[i].cards) {
             if(card.card_status != Main::card::chosen_for_attack){
                 non_attacking_cards += 1;
@@ -201,7 +203,7 @@ int BattleClass::battle(Main::player &p1, Main::player &p2){
     // create a mapping with axie as key and player as value
     std::map<int, Main::player> axie_player_map;
 
-    for (int i = 0; i < sorted_axies.size(); i++) {
+    for (unsigned int i = 0; i < sorted_axies.size(); i++) {
         for (int j = 0; j < 2; j++){
             if (sorted_axies[i].id == p1.axies[j].id) {
                 axie_player_map.insert(pair<int, Main::player>(sorted_axies[i].id, p1));
@@ -214,12 +216,12 @@ int BattleClass::battle(Main::player &p1, Main::player &p2){
 
 
     //// while at least one axie on each player is alive
-    for (int i = 0; i < sorted_axies.size() ; i++){
+    for (unsigned int i = 0; i < sorted_axies.size() ; i++){
         if ((p1.axies[0].alive || p1.axies[1].alive)  && (p2.axies[0].alive || p2.axies[1].alive)) {
             // setStrength(sorted_axies[i]);
 
             Main::axie defender_axie;
-            int attackNum;
+            int attackNum = 0;
             // cout << "player-id" << axie_player_map[sorted_axies[i].id].id << endl;
             if (axie_player_map[sorted_axies[i].id].id == p1.id){
                 defender_axie = Find_defender_axie(p2);

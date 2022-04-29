@@ -41,6 +41,9 @@ struct GameState {
             return main.selectFourNumbers(player1);
         else if (player == 2) 
             return main.selectFourNumbers(player2);
+        
+        cout << "There is an ERROR with your player in --> DeepAxie.cpp:45 <--" << endl;
+        return {};
     }
     
     vector<int> playersMatrixBits() {

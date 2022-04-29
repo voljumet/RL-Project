@@ -58,6 +58,8 @@ public:
         else if(type == "beast"){
             return 2;
         }
+        cout << "There is an ERROR with your Axie in --> conversion.cpp:61 <--" << endl;
+        return -1;
     }
 
     // merge to vectors
