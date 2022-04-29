@@ -68,39 +68,39 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
         if (attacker_axie.cards[i].card_status == Main::card::chosen_for_attack) {
             //// base damage is the card damage
             base_damage = attacker_axie.cards[i].damage;
-            cout << "base damage: " << base_damage << endl;
+            if (debug) std::cout << "base_damage: " << base_damage << std::endl;
             total_damage += base_damage;
             ////  If the Axie type is the same as the axie card type, the card will deal an extra 10% damage
             if (attacker_axie.cards[i].type == attacker_axie.type) {
                 total_damage += base_damage * 0.1;
-                cout << "added damage! total now: " << total_damage << endl;
+                if (debug) cout << "added damage! total now: " << total_damage << endl;
             }
             ////If the card class is strong against the Axie class, it will deal +15% bonus damage. Or -15% if it’s the other way.
             if (attacker_axie.strength == defender_axie.type) {
                 total_damage += base_damage * 0.15;
-                cout << "added damage! total now: " << total_damage << endl;
+                if (debug) cout << "added damage! total now: " << total_damage << endl;
             } else if (attacker_axie.type == defender_axie.strength) {
                 total_damage -= base_damage * 0.15;
-                cout << "decreased damage! total now: " << total_damage << endl;
+                if (debug) cout << "decreased damage! total now: " << total_damage << endl;
             }
         }
 
         //// reduce the health of the defender_axie by total_damage
         if (defender_axie.cards[i].card_status == Main::card::chosen_for_attack) {
             total_damage -= defender_axie.cards[i].defence;
-            cout << "defending with " << defender_axie.cards[i].defence << ", new total: " << total_damage << endl;
+            if (debug) cout << "defending with " << defender_axie.cards[i].defence << ", new total: " << total_damage << endl;
         }
     }
 
     // axie should not gain health if it defence is higher than the total_damage
     if (total_damage < 0){
-        cout << "total damage lower than 0 ! " << total_damage <<"... setting damage to zero" << endl;
+        if (debug) cout << "total damage lower than 0 ! " << total_damage <<"... setting damage to zero" << endl;
         total_damage = 0;
     }
 
     // check if health is less than 0, then set axie.alive to false
-    cout << "attacker: axie id " << attacker_axie.id << " with " << total_damage << " damage!"<< endl;
-    cout << "defender: axie id " << defender_axie.id << " entered battle with " << defender_axie.health << " health!" << endl;
+    if (debug) cout << "attacker: axie id " << attacker_axie.id << " with " << total_damage << " damage!"<< endl;
+    if (debug) cout << "defender: axie id " << defender_axie.id << " entered battle with " << defender_axie.health << " health!" << endl;
     defender_axie.health -= total_damage;
     if (defender_axie.health <= 0) {
         defender_axie.alive = false;
@@ -109,8 +109,8 @@ void BattleClass::damageCalculator(Main::axie &attacker_axie, Main::axie &defend
             defender_axie.cards[i].card_status = Main::card::wait_for_restock;
         }
     }
-    cout << "defender axie updated health: " << defender_axie.health << endl;
-    cout << "-------------------------------------------------------" << endl;
+    if (debug) cout << "defender axie updated health: " << defender_axie.health << endl;
+    if (debug) cout << "-------------------------------------------------------" << endl;
     // store the damage in the playe vectors
     for (int i = 0; i < 2; ++i) {
         if (attackNum == 1) {

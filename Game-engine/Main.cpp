@@ -55,7 +55,7 @@ vector<int> Main::selectFourNumbers(player &p){
 
             // get a random number from numbers.
             int random_number = numbers[rand() % numbers.size()];
-            cout << "random number: " << random_number << endl;
+            if (debug) cout << "random number: " << random_number << endl;
                 // check if the random_number is already in four_numbers.
                 if (find(four_numbers.begin(), four_numbers.end(), random_number) != four_numbers.end()) {
                     // if the random_number is already in four_numbers, then get another random number.
