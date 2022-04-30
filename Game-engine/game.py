@@ -56,32 +56,33 @@ class DeepAxie():
 
         # check if the defender axie is defeated then add 1 to the reward
         if (state[62] == 0 and previous_state[62] == 1) or (state[83] == 0 and previous_state[83] == 1):
-            self.reward1 += 1
-        # check if the defender axie's health has decreased then add 0.5 to the reward
+            self.reward1 += 0.1
+            
+        # check if the oponents axie's health has decreased and reward
         if (state[64] < previous_state[64]) or (state[85] < previous_state[85]):
-            self.reward1 += 0.5
-
+            self.reward1 += 0.1
+        
+        # check if player axie's health has adjusted and reward
         if (state[20] < previous_state[20]) or (state[42] < previous_state[42]):
-            self.reward1 -= 0.5
+            self.reward1 -= 0.1
         else:
-            self.reward1 += 0.5
+            self.reward1 += 0.1
 
         if attack == 1:
             # player 1 wins
-            self.reward1 += 3
+            self.reward1 += 1
             self.roundCounter = 1
             self.done = True
             self.p1win = True
 
         if attack == 2:
             # player 2 wins
-            self.reward1 -= 3
+            self.reward1 -= 1
             self.roundCounter = 1
             self.done = True
             self.p2win = True
 
-        if self.roundCounter % 1 == 0 and self.done == False:
-            self.reward1 -= 0.1 * self.roundCounter
+        
             
         if display_game_window:
             self.board.clear()
@@ -120,7 +121,7 @@ class DeepAxie():
 
         for i in range(len(action_array)):
             if action_mask_array[i] == 1 and selectable_mask_array[i] == 0:
-                reward -= .1
+                reward -= .05
         # player
         self.GameState.chooseCards(player, action)
 

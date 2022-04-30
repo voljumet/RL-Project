@@ -1,10 +1,12 @@
 from game import DeepAxie
-
+import shutil
+import os
 import datetime
 import random
 import numpy as np
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.optimizers import Adam
 
 from collections import deque
@@ -16,7 +18,7 @@ import matplotlib.pyplot as plt
 # import torch.nn.functional as F
 #import torch.optim as optim
 
-player_1 = 5
+player_1 = 7
 player_2 = 4
 
 
@@ -108,10 +110,14 @@ class DQN:
 def train_dqn(episode):
 
     loss = []
+    ratio = []
 
     action_space = 88
     state_space = 88
     max_steps = 1000
+    
+    p1 = 0
+    calc = 0
 
     agent = DQN(action_space, state_space)
     for e in range(episode):
@@ -128,25 +134,46 @@ def train_dqn(episode):
             agent.replay()
             if done:
                 if p1win:
+                    p1 += 1
                     winner = "player1"
+                    
                 elif p2win:
                     winner = "player2"
 
-                print("episode: {}/{}, rounds: {}, score: {}, winner: {}".format(e, episode, i, round(score,3), winner))
+                calc = round((p1+0.0000001)/(e+1), 3)
+                ratio.append(calc)
+                print("episode: {}/{}, rounds: {}, score: {}, winner: {}, win-ratio: {}".format(e, episode, i, round(score,3), winner, calc))
                 break
         loss.append(score)
-    return loss
+    return loss, ratio
 
 print("Let's GOOOO")
 
 
 if __name__ == '__main__':
 
-    ep = 50
-    loss = train_dqn(ep)
-    fig = plt.figure(figsize=(5, 5))
+    ep = 10000
+    loss, ratio = train_dqn(ep)
+    
+    time = str(datetime.datetime.today())
+    os.chdir('log')
+    os.mkdir(time)
+
+    
+    fig = plt.figure(figsize=(12, 6))
     plt.plot([i for i in range(ep)], loss)
     plt.xlabel('episodes')
     plt.ylabel('reward')
-    fig.savefig("log/training " + str(datetime.datetime.today()) + '.jpg', bbox_inches='tight', dpi=150)
+    fig.savefig(time +"/training" +  '.jpg', bbox_inches='tight', dpi=150)
     plt.show()
+    
+    fig2 = plt.figure(figsize=(12, 6))
+    plt.plot([i for i in range(ep)], ratio)
+    plt.xlabel('episodes')
+    plt.ylabel('win-ratio')
+    fig2.savefig(time +"/win-loss" +  '.jpg', bbox_inches='tight', dpi=150)
+    plt.show()
+    
+    # save files to save the configuration
+    shutil.copy('../DQN.py', time+'/DQN.txt')
+    shutil.copy('../game.py', time+'/game.txt')
