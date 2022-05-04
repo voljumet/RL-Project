@@ -19,6 +19,7 @@ public:
 
 class Main {
 public:
+    bool debug = false;
 
     struct card{
         int id = 999;

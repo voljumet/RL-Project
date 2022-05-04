@@ -3,6 +3,19 @@
 #include <fstream>
 #include "include/jsoncpp.cpp"
 #include "BattleClass.h"
+#include <cstdlib>   // rand and srand
+#include <ctime>     // For the time function
+
+void setStrength(Main::axie &a){
+    // print out the a.type
+    if(a.type == "plant"){
+        a.strength = "aqua";
+    }else if(a.type == "aqua"){
+        a.strength ="beast";
+    }else if(a.type == "beast"){
+        a.strength = "plant";
+    }
+}
 
 // a dynamic function that select maximum four numbers randomly from between 1 and 8.
 vector<int> Main::selectFourNumbers(player &p){
@@ -34,8 +47,15 @@ vector<int> Main::selectFourNumbers(player &p){
         vector<int> four_numbers;
         // loop through four times.
         for (int i = 0; i < 4; i++) {
+            // Get the system time.
+            unsigned seed = time(0);
+
+            // Seed the random number generator.
+            srand(seed);
+
             // get a random number from numbers.
             int random_number = numbers[rand() % numbers.size()];
+            if (debug) cout << "random number: " << random_number << endl;
                 // check if the random_number is already in four_numbers.
                 if (find(four_numbers.begin(), four_numbers.end(), random_number) != four_numbers.end()) {
                     // if the random_number is already in four_numbers, then get another random number.
@@ -81,6 +101,8 @@ int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
             return num;
         }
     }
+    cout << "There is an ERROR with your numer in --> Main.cpp:104 <--" << endl;
+    return -1;
 }
 
 ///
@@ -95,7 +117,7 @@ vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &axies) {
     Main::axie &_axie1 = p.axies[0];
     Main::axie &_axie2 = p.axies[1];
     cout << "player-id " << p.id << " is choosing cards:" << endl;
-    for (int i = 0; i < cards_drawn.size(); ++i) {
+    for (unsigned int i = 0; i < cards_drawn.size(); ++i) {
         int uc_num = cards_drawn[i];
         if(uc_num >= 1 && uc_num <= 4){
 //            _axie1.cards[uc_num-1].card_status = Main::card::can_be_chosen;
@@ -358,6 +380,7 @@ Main::player Main::createPlayer(int team_id){
         // set axie id, type, health (calcultated), speed, skille, morale
         player.axies[axie_num].id = team[json_team]["Axie-id"].asInt();
         player.axies[axie_num].type = team[json_team]["Type"].asString();
+        setStrength(player.axies[axie_num]);
         player.axies[axie_num].health = team[json_team]["Health"].asInt() * 6 + 150;
         player.axies[axie_num].speed = team[json_team]["Speed"].asInt();
         player.axies[axie_num].skill = team[json_team]["Skill"].asInt();

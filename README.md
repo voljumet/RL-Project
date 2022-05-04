@@ -21,6 +21,9 @@ g++ -O3 -Wall -shared -std=c++17 -fPIC $(python3 -m pybind11 --includes) DeepAxi
 
 windows might want to use "g++" or "gcc" instead of "clang"
 
+To run code with library on M1 mac, try the following link:
+https://github.com/apple/tensorflow_macos
 
 
-Compiling lib for other OS, check "Target Triple" here: https://clang.llvm.org/docs/CrossCompilation.html
+For compiling library on different operating systems, check "Target Triple" from this link:
+https://clang.llvm.org/docs/CrossCompilation.html

@@ -58,6 +58,8 @@ public:
         else if(type == "beast"){
             return 2;
         }
+        cout << "There is an ERROR with your Axie in --> conversion.cpp:61 <--" << endl;
+        return -1;
     }
 
     // merge to vectors
@@ -72,7 +74,7 @@ public:
         return returnVector;
     }
 
-    vector<int> convert_to_bits(int number, int size){
+    vector<int> convert_to_bits(int number, unsigned int size){
         int a[size], i;
         vector <int> returnVector1, returnVector2;
 
