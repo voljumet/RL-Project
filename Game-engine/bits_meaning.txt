@@ -16,3 +16,4 @@ converted to bits (number of bits representing each value):
 
 [2, 2, 8, 7,  2, 2, 8,  7,  2, 2, 8, 7,  2, 2, 8,  7,  2, 1, 1, 6, 10,   2, 2, 8, 7,  2, 2, 8, 7,   2, 2, 8, 7,  2, 2, 8,  7,  2, 1, 1, 6, 10,   4, 12] = 208 bits
 
+all from player, + card[ type, dmg, def] x4, type, pos, alive, speed, health

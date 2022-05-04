@@ -19,16 +19,15 @@ import numpy as np
 
     
 class DeepAxie():
-    def __init__(self, player1, player2):
+    def __init__(self, player_0, player_1):
         self.done = False
         self.energy = 0
-        self.reward1 = 0
-        self.reward2 = 0
         self.roundCounter = 1
-        self.p1win = False
-        self.p2win = False
+        self.player_0 = player_0
+        self.player_1 = player_1
+
         # init game
-        self.GameState = axie.GameState(player1, player2)
+        self.GameState = axie.GameState(player_0, player_1)
         
         if display_game_window:
             # window setup
@@ -47,53 +46,71 @@ class DeepAxie():
             self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
         # print("hold on")
 
-    def round(self):
+        
+    def set_terminal(self, dones, value):
+        for agent in dones.keys():
+            dones[agent] = value
+        
+    def round(self, dones, rewards, infos):
         self.roundCounter += 1
         # attack
-        previous_state = self.GameState.playersMatrixDecimal()
-        attack = self.GameState.attack()
-        state = self.GameState.playersMatrixDecimal()
-
-        # check if the defender axie is defeated then add 1 to the reward
-        if (state[62] == 0 and previous_state[62] == 1) or (state[83] == 0 and previous_state[83] == 1):
-            self.reward1 += 0.1
+        previous_state = self.get_state()
+        winner = self.GameState.attack()
+        state = self.get_state()
+        has_winner = False
+        player_id = 0
+        for (agent, previous_state), (_, state) in zip(previous_state.items() , state.items() ):
+            player_id +=1 # todo null indexing
             
-        # check if the oponents axie's health has decreased and reward
-        if (state[64] < previous_state[64]) or (state[85] < previous_state[85]):
-            self.reward1 += 0.1
+            # check if the defender axie is defeated then add 1 to the reward
+            if (state[62] == 0 and previous_state[62] == 1) or (state[83] == 0 and previous_state[83] == 1):
+                rewards[agent] += 0.1
+
+            # check if the oponents axie's health has decreased and reward
+            if (state[64] < previous_state[64]) or (state[85] < previous_state[85]):
+                rewards[agent] += 0.1
+
+            # check if player axie's health has adjusted and reward
+            if (state[20] < previous_state[20]) or (state[42] < previous_state[42]):
+                rewards[agent] -= 0.1
+            else:
+                rewards[agent] += 0.1
+
+            if winner == player_id:
+                # player 1 wins
+                rewards[agent] += 1
+                self.set_terminal(dones, True) 
+                has_winner = True
+
+        # if has_winner:
+        # todo implement if negative rewards is needed for losing
+    
         
-        # check if player axie's health has adjusted and reward
-        if (state[20] < previous_state[20]) or (state[42] < previous_state[42]):
-            self.reward1 -= 0.1
-        else:
-            self.reward1 += 0.1
-
-        if attack == 1:
-            # player 1 wins
-            self.reward1 += 1
-            self.roundCounter = 1
-            self.done = True
-            self.p1win = True
-
-        if attack == 2:
-            # player 2 wins
-            self.reward1 -= 1
-            self.roundCounter = 1
-            self.done = True
-            self.p2win = True
-
-        
+        self.roundCounter = 1
+        #if self.roundCounter % 1 == 0 and self.done == False:
+        #    self.reward1 -= 0.1 * self.roundCounter
             
         if display_game_window:
             self.board.clear()
             self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
+        return dones, rewards, infos
 
-
-    def reset(self, player1, player2):
+    def get_state(self):
+        
+        state_0 = self.GameState.playersMatrixDecimal()
+        state_1 = state_0[43:]+state_0[:43]
+        
+        return dict(
+                player_0 = state_0,
+                player_1 = state_1 )
+    
+    
+    def reset(self):
         # "restarts" the game
-        self.GameState = axie.GameState(player1, player2)
-        return self.GameState.playersMatrixDecimal()
-
+        self.GameState = axie.GameState(self.player_0, self.player_1)
+        
+        
+        return self.get_state()
 
 
     def pickCards(self, player, action):
@@ -118,11 +135,18 @@ class DeepAxie():
             for j in range(len(action)):
                 if action[j] == action_array[i]:
                     action_mask_array[i] = 1
-
-        for i in range(len(action_array)):
-            if action_mask_array[i] == 1 and selectable_mask_array[i] == 0:
-                reward -= .05
-        # player
+        
+        #print(selectable_cards)
+        #print(selectable_mask_array)
+        #print(action_mask_array)
+        
+        if player == 1:
+            for i in range(len(action_array)):
+                if action_mask_array[i] == 1 and selectable_mask_array[i] == 1:
+                    reward += .1
+        
+        # not that many zeroes are chosen, reason for many rounds is choosing cards that are not available
+                
         self.GameState.chooseCards(player, action)
 
         return reward
@@ -136,22 +160,24 @@ class DeepAxie():
         return int(str_of_ints)  # Output: 1,2,3
 
 
-    def step(self, action):
+    def step(self, actions):
         #  action is an array of two actions
-        self.done = 0
-        self.reward1 = 0
-        self.reward2 = 0
-        self.p1win = False
-        self.p2win = False
-
-        self.reward1 += self.pickCards(1, action)
-        self.reward2 += self.pickCards(2, self.action_2())
+        
+        rewards = dict()
+        dones = dict()
+        terminals = dict()
+        infos = dict()
+        
+        for i, (agent, action) in enumerate(actions.items()):
+            dones[agent] = 0
+            rewards[agent] = self.pickCards(i+1, action)
+            infos[agent] = dict()
 
         #  attack is run inside round()
-        self.round()
+        self.round(dones, rewards, infos)
         state = self.GameState.playersMatrixDecimal()
 
-        return self.reward1, self.reward2, state, self.done, self.p1win, self.p2win
+        return self.get_state(), rewards, dones, infos
 
 
 # env = DeepAxie(1,5)

@@ -48,11 +48,11 @@ class DQN:
         self.action_space = action_space
         self.state_space = state_space
         self.epsilon = 1
-        self.gamma = .98
+        self.gamma = .95
         self.batch_size = 64
         self.epsilon_min = .01
         self.epsilon_decay = .995
-        self.learning_rate = 0.0001
+        self.learning_rate = 0.001
         self.memory = deque(maxlen=100000)
         self.model = self.build_model()
 
@@ -77,9 +77,10 @@ class DQN:
             str_of_ints = "".join(string_ints)  # Combine each string with a comma
             return int(str_of_ints)  # Output: 1,2,3
 
-        act_values = self.model.predict(state)
+        act_values1 = self.model.predict(state)
+        act_values2 = self.model.predict(state)
         
-        return np.argmax(act_values[0])
+        return np.argmax(act_values1[0], act_values2[0])
 
     def replay(self):
 
@@ -105,9 +106,14 @@ class DQN:
         self.model.fit(states, targets_full, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
-
-def post_process_state(state, state_space):
-    return np.reshape(state, (1, state_space))/1200
+        
+        def getStates(self, state):
+            
+            player1_state = [state[], state[], state[], state[], ]
+            
+            player2_state
+            
+            return player1_state, player2_state
 
 def train_dqn(episode):
 
@@ -121,35 +127,31 @@ def train_dqn(episode):
     
     p1 = 0
     calc = 0
-    selected_player = "player_1"
+
     agent = DQN(action_space, state_space)
     for e in range(episode):
-        states = env.reset()
-        states = {k: post_process_state(v, state_space) for k, v in states.items()}
+        state = env.reset(player_1, player_2)
+        player1_state, player2_state = self.getStates(state)
+        state = np.reshape(state, (1, state_space))
         score = 0
         for rounds in range(max_steps):
-
-            actions = dict(
-                #player_0 = random.randint(0,8),
-                player_0 = agent.act(states["player_0"]),
-                player_1 = random.randint(0,8)
-            )
-            
-            next_states, rewards, dones, infos = env.step(actions)
-            next_states = {k: post_process_state(v,state_space) for k, v in next_states.items()}
-
-            score += rewards[selected_player]
-            for (agent_name, state), (_, action), (_, reward), (_, next_state), (_, done) in zip(states.items(), actions.items(), rewards.items(), next_states.items(), dones.items()):  
-                agent.remember(state, action, reward, next_state, done)
-            states = next_states
+            action1, action2 = agent.act(state)
+            reward, reward2, next_state, done, p1win, p2win = env.step(action1, action2)
+            score += reward
+            next_state = np.reshape(next_state, (1, state_space))
+            agent.remember(state, action, reward, next_state, done)
+            state = next_state
             agent.replay()
-            if any(dones.values()):
-                if rewards["player_0"] > rewards["player_1"]:
-                    winner = "player_0"
+            if done:
+                if p1win:
                     p1 += 1
-                else:
-                    winner = "player_1"
-                # todo legge til player til info i step function
+                    winner = "player1"
+                    
+                elif p2win:
+                    winner = "player2"
+                
+                if rounds < 50:
+                    score += 10
 
                 calc = round((p1+0.0000001)/(e+1), 3)
                 ratio.append(calc)
@@ -168,17 +170,15 @@ if __name__ == '__main__':
     time = str(datetime.datetime.today())
     os.chdir('log')
     os.mkdir(time)
-    
     # save files to save the configuration
     shutil.copy('../DQN.py', time+'/DQN.txt')
     shutil.copy('../game.py', time+'/game.txt')
     
-    os.chdir('..')
-    
-    ep = 4000
+    ep = 10000
     loss, ratio, rounds = train_dqn(ep)
     
-    os.chdir('log')
+
+    
     if ratio.__len__() < ep:
         ratio.append(0)
     
