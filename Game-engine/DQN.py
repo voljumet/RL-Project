@@ -4,6 +4,12 @@ import os
 import datetime
 import random
 import numpy as np
+import pandas as pd
+
+from numpy import asarray
+from numpy import savetxt
+
+
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import SGD
@@ -111,13 +117,13 @@ def post_process_state(state, state_space):
 
 def train_dqn(episode):
 
-    loss = []
+    returnrewards = []
     ratio = []
     tot_rounds = []
 
     action_space = 88
     state_space = 88
-    max_steps = 1000
+    max_steps = 100
     
     p1 = 0
     calc = 0
@@ -155,15 +161,19 @@ def train_dqn(episode):
                 ratio.append(calc)
                 print("episode: {}/{}, rounds: {}, score: {}, winner: {}, win-ratio: {}".format(e, episode, rounds, round(score,3), winner, calc))
                 break
-        loss.append(score)
+        returnrewards.append(score)
         tot_rounds.append(rounds)
         
-    return loss, ratio, tot_rounds
+    return returnrewards, ratio, tot_rounds
 
 print("Let's GOOOO")
 
 
 if __name__ == '__main__':
+    # define data
+    # data = asarray([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]])
+    # save to csv file
+    
 
     time = str(datetime.datetime.today())
     os.chdir('log')
@@ -175,8 +185,8 @@ if __name__ == '__main__':
     
     os.chdir('..')
     
-    ep = 4000
-    loss, ratio, rounds = train_dqn(ep)
+    ep = 3
+    returnrewards, ratio, rounds = train_dqn(ep)
     
     os.chdir('log')
     if ratio.__len__() < ep:
@@ -187,20 +197,23 @@ if __name__ == '__main__':
     plt.xlabel('episodes')
     plt.ylabel('win-ratio')
     fig.savefig(time +"/training" +  '.jpg', bbox_inches='tight', dpi=150)
-    plt.show()
+    # plt.show()
     
     fig = plt.figure(figsize=(12, 6))
-    plt.plot([i for i in range(ep)], loss, label="reward")
+    plt.plot([i for i in range(ep)], returnrewards, label="reward")
     plt.xlabel('episodes')
     plt.ylabel('reward')
     fig.savefig(time +"/reward" +  '.jpg', bbox_inches='tight', dpi=150)
-    plt.show()
+    # plt.show()
     
     fig = plt.figure(figsize=(12, 6))
     plt.plot([i for i in range(ep)], rounds, label="rounds")
     plt.xlabel('episodes')
-    plt.ylabel('reward')
+    plt.ylabel('rounds')
     fig.savefig(time +"/rounds" +  '.jpg', bbox_inches='tight', dpi=150)
-    plt.show()
+    # plt.show()
     
-    
+    # savetxt(time +"/numbers.csv", (ep, ratio, returnrewards, rounds), delimiter=',')
+    # np.savetxt(time +"/numbers.csv", ( ,ratio ,returnrewards, rounds), delimiter=',')
+    df = pd.DataFrame({"episode" : np.arange(ep), "win-loss ratio" : ratio, "reward" : returnrewards, "rounds" : rounds})
+    df.to_csv(time +"/numbers.csv", index=False)
