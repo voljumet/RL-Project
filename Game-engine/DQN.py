@@ -18,31 +18,14 @@ from tensorflow.keras.optimizers import Adam
 from collections import deque
 import matplotlib.pyplot as plt
 
-# from torch.optim import Adam
-# import torch
-# import torch.nn as nn
-# import torch.nn.functional as F
-#import torch.optim as optim
 
 player_1 = 7
 player_2 = 4
 
+time = str(datetime.datetime.today())
 
 env = DeepAxie(player_1, player_2)
 np.random.seed(0)
-
-# class NeuralNet(nn.Module):
-#     def __init__(self, state_space, action_space):
-#         super(NeuralNet, self).__init__()
-#         self.fc1 = nn.Linear(state_space, 6)
-#         self.fc2 = nn.Linear(6, 1)
-#
-#     def forward(self, x):
-#         x = self.fc1(x)
-#         x = F.relu(x)
-#         x = self.fc2(x)
-#         x = torch.sigmoid(x)
-#         return torch.squeeze(x)
 
 
 class DQN:
@@ -138,7 +121,8 @@ def train_dqn(episode):
             actions = dict(
                 #player_0 = random.randint(0,8),
                 player_0 = agent.act(states["player_0"]),
-                player_1 = random.randint(0,8)
+                # player_1 = random.randint(0,8)
+                player_1 = agent.act(states["player_1"])
             )
             
             next_states, rewards, dones, infos = env.step(actions)
@@ -149,6 +133,7 @@ def train_dqn(episode):
                 agent.remember(state, action, reward, next_state, done)
             states = next_states
             agent.replay()
+
             if any(dones.values()):
                 if rewards["player_0"] > rewards["player_1"]:
                     winner = "player_0"
@@ -161,9 +146,28 @@ def train_dqn(episode):
                 ratio.append(calc)
                 print("episode: {}/{}, rounds: {}, score: {}, winner: {}, win-ratio: {}".format(e, episode, rounds, round(score,3), winner, calc))
                 break
+
+
+            if rounds == (max_steps-1):
+                calc = round((p1+0.0000001)/(e+1), 3)
+                ratio.append(calc)
+                print("episode: {}/{}, rounds: {}, score: {}, winner: Draw, win-ratio: {}".format(e, episode, rounds, round(score,3), calc))
+                break
+
         returnrewards.append(score)
         tot_rounds.append(rounds)
-        
+    
+    # save model each 100th episode
+    if e % 10 == 0:
+        torch.save({
+            'episode': e,
+            'returnrewards': returnrewards,
+            'ratio': ratio,
+            'tot_rounds': tot_rounds,
+            'model_state_dict': self.model.state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict(),
+            'loss': LOSS,
+            }, time +"/training")
     return returnrewards, ratio, tot_rounds
 
 print("Let's GOOOO")
@@ -175,7 +179,6 @@ if __name__ == '__main__':
     # save to csv file
     
 
-    time = str(datetime.datetime.today())
     os.chdir('log')
     os.mkdir(time)
     
@@ -185,7 +188,7 @@ if __name__ == '__main__':
     
     os.chdir('..')
     
-    ep = 3
+    ep = 1000
     returnrewards, ratio, rounds = train_dqn(ep)
     
     os.chdir('log')
@@ -212,8 +215,6 @@ if __name__ == '__main__':
     plt.ylabel('rounds')
     fig.savefig(time +"/rounds" +  '.jpg', bbox_inches='tight', dpi=150)
     # plt.show()
-    
-    # savetxt(time +"/numbers.csv", (ep, ratio, returnrewards, rounds), delimiter=',')
-    # np.savetxt(time +"/numbers.csv", ( ,ratio ,returnrewards, rounds), delimiter=',')
+
     df = pd.DataFrame({"episode" : np.arange(ep), "win-loss ratio" : ratio, "reward" : returnrewards, "rounds" : rounds})
     df.to_csv(time +"/numbers.csv", index=False)

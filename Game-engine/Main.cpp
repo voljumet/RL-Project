@@ -258,11 +258,13 @@ void Main::SelectCards(Main::player &player, vector<int> input){
             break;
         if (input[i] <= 4 && player.axies[0].cards[input[i]-1].card_status == Main::card::can_be_chosen){
             player.axies[0].cards[input[i]-1].card_status = Main::card::chosen_for_attack;
+            player.energy -= 1;
         }
         else if (input[i] <= 8 && player.axies[1].cards[input[i]-5].card_status == Main::card::can_be_chosen){
             player.axies[1].cards[input[i]- 5].card_status = Main::card::chosen_for_attack;
+            player.energy -= 1;
         }
-        player.energy -= 1;
+        
     }
 };
 

@@ -17,6 +17,8 @@ except:
 import random
 import numpy as np
 
+ENERGY = 42
+
     
 class DeepAxie():
     def __init__(self, player_0, player_1):
@@ -52,7 +54,7 @@ class DeepAxie():
             dones[agent] = value
         
     def round(self, dones, rewards, infos):
-        self.roundCounter += 1
+        # self.roundCounter += 1
         # attack
         previous_state = self.get_state()
         winner = self.GameState.attack()
@@ -64,31 +66,39 @@ class DeepAxie():
             
             # check if the defender axie is defeated then add 1 to the reward
             if (state[62] == 0 and previous_state[62] == 1) or (state[83] == 0 and previous_state[83] == 1):
-                rewards[agent] += 0.1
+                rewards[agent] += 1
 
             # check if the oponents axie's health has decreased and reward
             if (state[64] < previous_state[64]) or (state[85] < previous_state[85]):
-                rewards[agent] += 0.1
+                rewards[agent] += 1
 
             # check if player axie's health has adjusted and reward
             if (state[20] < previous_state[20]) or (state[42] < previous_state[42]):
-                rewards[agent] -= 0.1
+                rewards[agent] -= 1
             else:
-                rewards[agent] += 0.1
+                rewards[agent] += 1
+
+            if state[ENERGY] <= previous_state[ENERGY]:
+                rewards[agent] += 1
+            else:
+                rewards[agent] -= 1
+                
 
             if winner == player_id:
-                # player 1 wins
-                rewards[agent] += 1
+                rewards[agent] += 10
                 self.set_terminal(dones, True) 
                 has_winner = True
 
-        # if has_winner:
-        # todo implement if negative rewards is needed for losing
+            # if has_winner:
+            # todo implement if negative rewards is needed for losing
     
-        
-        self.roundCounter = 1
-        #if self.roundCounter % 1 == 0 and self.done == False:
-        #    self.reward1 -= 0.1 * self.roundCounter
+            # minus reward if energy increases?
+            # kanskje vi må endre slik at den ikke trekker energy for "feil" kort
+            # Legge inn if forrige == next energy gi minus poeng
+            # self.roundCounter = 1
+
+            if self.roundCounter % 1 == 0 and self.done == False:
+                self.rewards[agent] -= 0.1 * self.roundCounter
             
         if display_game_window:
             self.board.clear()
@@ -107,9 +117,9 @@ class DeepAxie():
     
     def reset(self):
         # "restarts" the game
+        self.roundCounter = 1
         self.GameState = axie.GameState(self.player_0, self.player_1)
-        
-        
+            
         return self.get_state()
 
 
@@ -140,10 +150,10 @@ class DeepAxie():
         #print(selectable_mask_array)
         #print(action_mask_array)
         
-        if player == 1:
-            for i in range(len(action_array)):
-                if action_mask_array[i] == 1 and selectable_mask_array[i] == 1:
-                    reward += .1
+        for i in range(len(action_array)):
+            if action_mask_array[i] == 1 and selectable_mask_array[i] == 1:
+                reward += 0
+
         
         # not that many zeroes are chosen, reason for many rounds is choosing cards that are not available
                 
@@ -175,6 +185,7 @@ class DeepAxie():
 
         #  attack is run inside round()
         self.round(dones, rewards, infos)
+        self.roundCounter += 1
         state = self.GameState.playersMatrixDecimal()
 
         return self.get_state(), rewards, dones, infos
