@@ -105,12 +105,9 @@ int Main::returnOrderNum(Main::axie &a, vector<axie> axies) {
     return -1;
 }
 
-///
-/// WHY DO WE USE AXIES, WHEN WE USE PLAYER.AXIES?
-///
 
 //// returns cards that CAN be chosen by player
-vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &axies) {
+vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &all_axies_sorted) {
 
     vector<int> cards_drawn = selectFourNumbers(p);
     // check if the number is between 0 and 3, if so find the card that have the same card id
@@ -121,11 +118,11 @@ vector<int> Main::showCardsDrawn(Main::player &p, vector<axie> &axies) {
         int uc_num = cards_drawn[i];
         if(uc_num >= 1 && uc_num <= 4){
 //            _axie1.cards[uc_num-1].card_status = Main::card::can_be_chosen;
-            cout << _axie1.cards[uc_num-1].id << "- Axie "<< Main::returnOrderNum(_axie1,axies)  <<":"<< _axie1.cards[uc_num-1].type <<" - dmg:" << _axie1.cards[uc_num-1].damage <<" - def:"  << _axie1.cards[uc_num-1].defence << endl;
+            cout << _axie1.cards[uc_num-1].id << "- Axie "<< Main::returnOrderNum(_axie1,all_axies_sorted)  <<":"<< _axie1.cards[uc_num-1].type <<" - dmg:" << _axie1.cards[uc_num-1].damage <<" - def:"  << _axie1.cards[uc_num-1].defence << endl;
 
         } else if(uc_num >= 5 && uc_num <= 8){
 //            _axie2.cards[uc_num-5].card_status = Main::card::can_be_chosen;
-            cout << _axie2.cards[uc_num-5].id  << "- Axie "<<Main::returnOrderNum(_axie2,axies)  <<":"<< _axie2.cards[uc_num-5].type <<" - dmg:"  << _axie2.cards[uc_num-5].damage <<" - def:"  << _axie2.cards[uc_num-5].defence << endl;
+            cout << _axie2.cards[uc_num-5].id  << "- Axie "<<Main::returnOrderNum(_axie2,all_axies_sorted)  <<":"<< _axie2.cards[uc_num-5].type <<" - dmg:"  << _axie2.cards[uc_num-5].damage <<" - def:"  << _axie2.cards[uc_num-5].defence << endl;
         }
     }
     return cards_drawn;

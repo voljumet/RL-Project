@@ -10,7 +10,7 @@ elif platform == "win32":
 display_game_window = False
 try:
     import turtle as t
-    display_game_window = True
+    display_game_window = False
 except:
     print(" Game-window is not loadable, problem loading turtle (tkinter package)")
 
@@ -24,7 +24,7 @@ class DeepAxie():
     def __init__(self, player_0, player_1):
         self.done = False
         self.energy = 0
-        self.roundCounter = 1
+        self.roundCounter = 0
         self.player_0 = player_0
         self.player_1 = player_1
 
@@ -48,13 +48,42 @@ class DeepAxie():
             self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
         # print("hold on")
 
+        self.axie = []
+
+    def axie_live(self):
+        
+        boardStat = self.GameState.playersMatrixDecimal()
+        types = [boardStat[16],boardStat[37],boardStat[60],boardStat[81]]
+
+        pos = [[-50,-20],[-50,-120],[50,-120],[50,-20]]
+        positions = [boardStat[17],boardStat[38],boardStat[61],boardStat[82]]
+        health = [boardStat[20],boardStat[41],boardStat[64],boardStat[85]]
+        for i in range(4):
+            if positions[i] == 1:
+                if i < 2:
+                    pos[i][0] = -150
+                else:
+                    pos[i][0] = 150
+
+            self.axie.append(t.Turtle())
+            self.axie[i].goto(pos[i])
+            self.axie[i].speed(100000000)
+            self.axie[i].shape('circle')
+            self.axie[i].shapesize(stretch_wid=4, stretch_len=4)
+            if types[i] == 0:
+                self.axie[i].color('green')
+            elif types[i] == 1:
+                self.axie[i].color('blue')
+            elif types[i] == 2:
+                self.axie[i].color('orange')
+
         
     def set_terminal(self, dones, value):
         for agent in dones.keys():
             dones[agent] = value
         
     def round(self, dones, rewards, infos):
-        # self.roundCounter += 1
+        self.roundCounter += 1
         # attack
         previous_state = self.get_state()
         winner = self.GameState.attack()
@@ -62,53 +91,72 @@ class DeepAxie():
         has_winner = False
         player_id = 0
         for (agent, previous_state), (_, state) in zip(previous_state.items() , state.items() ):
-            player_id +=1 # todo null indexing
+            player_id += 1 # todo null indexing
             
             # check if the defender axie is defeated then add 1 to the reward
-            if (state[62] == 0 and previous_state[62] == 1) or (state[83] == 0 and previous_state[83] == 1):
-                rewards[agent] += 1
+            # if (state[62] == 0 and previous_state[62] == 1) or (state[83] == 0 and previous_state[83] == 1):
+            #     rewards[agent] += 10
 
             # check if the oponents axie's health has decreased and reward
-            if (state[64] < previous_state[64]) or (state[85] < previous_state[85]):
-                rewards[agent] += 1
+            # if (state[64] < previous_state[64]) or (state[85] < previous_state[85]):
+            #     rewards[agent] += 10
 
             # check if player axie's health has adjusted and reward
-            if (state[20] < previous_state[20]) or (state[42] < previous_state[42]):
-                rewards[agent] -= 1
-            else:
-                rewards[agent] += 1
+            # if (state[20] >= previous_state[20]) or (state[42] >= previous_state[42]):
+                # rewards[agent] += 1
+            # else:
+                # rewards[agent] -= 1
 
-            if state[ENERGY] <= previous_state[ENERGY]:
-                rewards[agent] += 1
-            else:
-                rewards[agent] -= 1
+            # check if player spends energy each round
+            # if state[ENERGY] <= previous_state[ENERGY]:
+                # rewards[agent] += 1
+            # else:
+                # rewards[agent] -= 1
                 
 
             if winner == player_id:
-                rewards[agent] += 10
+                # rewards[agent] += 10
                 self.set_terminal(dones, True) 
                 has_winner = True
+                self.axie.clear()
+                #  f(x) = (1000 /(x+10) ) - 1  okok, promising
+                #  f(x) = (100 /(x+1) ) + 0.1 
+                #  f(x) = 100-self.roundCounter
+                rewards[agent] += (100 / (self.roundCounter-5.00001))-0.1
+
 
             # if has_winner:
-            # todo implement if negative rewards is needed for losing
+            # TODO implement if negative rewards is needed for losing
     
             # minus reward if energy increases?
             # kanskje vi må endre slik at den ikke trekker energy for "feil" kort
             # Legge inn if forrige == next energy gi minus poeng
             # self.roundCounter = 1
 
-            if self.roundCounter % 1 == 0 and self.done == False:
-                self.rewards[agent] -= 0.1 * self.roundCounter
+            # if self.roundCounter % 1 == 0 and self.done == False:
+            #     rewards[agent] -= 1 #* self.roundCounter
             
         if display_game_window:
             self.board.clear()
             self.board.write("{}".format(self.GameState.printGameBoard(self.roundCounter)), align='center', font=('Courier', 24, 'normal'),)
+            boardStat = self.GameState.playersMatrixDecimal()
+            health = [boardStat[20],boardStat[41],boardStat[64],boardStat[85]]
+            if any(n <= 0 for n in health):
+                for i in range(4):
+                    if health[i] <= 0:
+                        try:
+                            self.axie[i].color('grey')
+                        except:
+                            print("dead")
+
+
         return dones, rewards, infos
 
     def get_state(self):
         
         state_0 = self.GameState.playersMatrixDecimal()
         state_1 = state_0[43:]+state_0[:43]
+        # state_1 = state_0[207:]+state_0[:207]
         
         return dict(
                 player_0 = state_0,
@@ -117,6 +165,8 @@ class DeepAxie():
     
     def reset(self):
         # "restarts" the game
+        if display_game_window:
+            self.axie_live()
         self.roundCounter = 1
         self.GameState = axie.GameState(self.player_0, self.player_1)
             
@@ -150,9 +200,9 @@ class DeepAxie():
         #print(selectable_mask_array)
         #print(action_mask_array)
         
-        for i in range(len(action_array)):
-            if action_mask_array[i] == 1 and selectable_mask_array[i] == 1:
-                reward += 0
+        # for i in range(len(action_array)):
+        #     if action_mask_array[i] == 1 and selectable_mask_array[i] == 1:
+        #         reward += 1
 
         
         # not that many zeroes are chosen, reason for many rounds is choosing cards that are not available
@@ -185,8 +235,9 @@ class DeepAxie():
 
         #  attack is run inside round()
         self.round(dones, rewards, infos)
-        self.roundCounter += 1
+        # self.roundCounter += 1
         state = self.GameState.playersMatrixDecimal()
+        # state = self.GameState.playersMatrixBits()
 
         return self.get_state(), rewards, dones, infos
 

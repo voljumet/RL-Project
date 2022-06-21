@@ -9,7 +9,7 @@ import pandas as pd
 from numpy import asarray
 from numpy import savetxt
 
-
+from tensorflow import keras
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import SGD
@@ -18,9 +18,8 @@ from tensorflow.keras.optimizers import Adam
 from collections import deque
 import matplotlib.pyplot as plt
 
-
-player_1 = 7
-player_2 = 4
+player_1 = 4
+player_2 = 7
 
 time = str(datetime.datetime.today())
 
@@ -38,7 +37,7 @@ class DQN:
         self.state_space = state_space
         self.epsilon = 1
         self.gamma = .98
-        self.batch_size = 64
+        self.batch_size = 128
         self.epsilon_min = .1
         self.epsilon_decay = .999
         self.learning_rate = 0.0001
@@ -106,6 +105,9 @@ class DQN:
         self.model.save("log/"+time +"/model.h5")
         # print("file saved!")
 
+    def load(self):
+        self.model = keras.models.load_model("model.h5")
+
 def post_process_state(state, state_space):
     return np.reshape(state, (1, state_space))#/1200
 
@@ -118,7 +120,11 @@ def train_dqn(episode, load_model):
     ratio2 = []
     tot_rounds = []
 
+    # Actions are chosen as separate integers that are merged together, 
+    # 00 being the lowest and 88 being the highest. (09,19,29,39,49,59,69,79 is not possible to get).
     action_space = 88
+
+    # number of decimal numbers in the state.
     state_space = 88
     max_steps = 1000
     
@@ -128,29 +134,33 @@ def train_dqn(episode, load_model):
     # TODO sjekk om selected player ødelegger alt før det ble fikset!
     # selected_player = "player_1"
     agent = DQN(action_space, state_space, load_model)
+    if load_model:
+        agent.load()
+        print("model loaded!")
+
     for e in range(episode):
         states = env.reset()
-        inni = states['player_0'].__len__()
-        states2 = {k: post_process_state(v, state_space) for k, v in states.items()}
-        inn2 = states2['player_0'].__len__()
+        # inni = states['player_0'].__len__()
+        states = {k: post_process_state(v, state_space) for k, v in states.items()}
+        # inn2 = states2['player_0'].__len__()
         score1 = 0
         score2 = 0
         for rounds in range(max_steps):
             actions = dict(
                 #player_0 = random.randint(0,81),
-                player_0 = agent.act(states2["player_0"]),
-                player_1 = 0
-                # player_1 = agent.act(states["player_1"])
+                player_0 = agent.act(states["player_0"]),
+                # player_1 = 0
+                player_1 = agent.act(states["player_1"])
             )
             # pick two random numbers between 0 and 8
 
 
             
             next_states, rewards, dones, infos = env.step(actions)
-            inn3 = next_states['player_0'].__len__()
+            # inn3 = next_states['player_0'].__len__()
 
-            next_states2 = {k: post_process_state(v,state_space) for k, v in next_states.items()}
-            inn4 = next_states2.__len__()
+            next_states = {k: post_process_state(v,state_space) for k, v in next_states.items()}
+            # inn4 = next_states2.__len__()
 
             # score += rewards[selected_player]
             score1 += rewards["player_0"]
@@ -212,7 +222,7 @@ if __name__ == '__main__':
     shutil.copy('DQN.py', "log/"+time+'/DQN.txt')
     shutil.copy('game.py', "log/"+time+'/game.txt')
     
-    load_model = False
+    load_model = True
     ep = 10000
     returnrewards1, returnrewards2, ratio, rounds = train_dqn(ep, load_model)
     

@@ -17,9 +17,6 @@ compile lib on Mac for arm (M1)
 clang -O3 -Wall -shared -undefined dynamic_lookup -std=c++17 -fPIC $(python3 -m pybind11 --includes) DeepAxie.cpp -o DeepAxie.so -target arm64e-apple-darwin-macho
 ```
 
-
-
-
 compile on linux:
 ```
 g++ -O3 -Wall -shared -std=c++17 -fPIC $(python3 -m pybind11 --includes) DeepAxie.cpp -o DeepAxieLinux.so
